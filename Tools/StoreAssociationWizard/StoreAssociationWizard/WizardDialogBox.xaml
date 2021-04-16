@@ -1,0 +1,8 @@
+﻿<NavigationWindow
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Wizard.NavigationWindow"
+    Title="Associate your Game with the Microsoft Store"
+    ShowsNavigationUI="False" Width="800" Height="600"
+    ResizeMode="NoResize"
+    WindowStyle="ToolWindow"/>

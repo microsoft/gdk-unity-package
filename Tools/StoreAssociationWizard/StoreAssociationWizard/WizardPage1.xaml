@@ -1,0 +1,55 @@
+﻿<PageFunction
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Wizard" 
+    x:Class="Wizard.WizardPage1"
+    x:TypeArguments="local:WizardResult"
+    KeepAlive="True"
+    WindowTitle="Associate your Game with the Microsoft Store"
+    FontFamily="Segoe UI"
+    Foreground="White"
+    >
+    <Grid Background="#353535">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Foreground="White" FontSize="24px" Margin="10" TextAlignment="Left">
+            Associate your Game with the Microsoft Store
+        </TextBlock>
+        <StackPanel Orientation="Vertical" Grid.Row="1" Background="#3C3C3C">
+            <TextBlock Margin="30,30,30,15" TextWrapping="Wrap" Text="You can associate your game with the Microsoft Store and we will automatically download the following values to your local Microsoft.GameConfig:​" />
+            <Grid Margin="0,0,0,15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="20" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="1">Package Display Name</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1">Package Name</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1">Store ID</TextBlock>
+                <TextBlock Grid.Row="3" Grid.Column="1">Title ID</TextBlock>
+                <TextBlock Grid.Row="4" Grid.Column="1">MSA App ID</TextBlock>
+                <TextBlock Grid.Row="5" Grid.Column="1">Sandbox IDs</TextBlock>
+            </Grid>
+            <TextBlock Margin="30,0,30,15" TextWrapping="Wrap" Text="After these values are inserted in the Microsoft.GameConfig, you can test various Sign in, Xbox Live, Multiplayer and purchase features.​" />
+            <TextBlock Margin="30,0,30,0" TextWrapping="Wrap">
+                To associate your game with the Microsoft Store, you must sign in to a Store account with a Microsoft account. For more information about the Microsoft Store and Store association, click <Hyperlink NavigateUri="https://docs.microsoft.com/en-us/gaming/xbox-live/get-started/setup-partner-center/live-setup-partner-center-partners" RequestNavigate="Hyperlink_RequestNavigate">here</Hyperlink>.
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Background="#353535">
+            <Button Name="backButton" IsEnabled="False" Width="50" Margin="0,5,5,5" xml:space="preserve">&lt; _Back</Button>
+            <Button Name="nextButton" Click="nextButton_Click" Width="50" Margin="0,5,5,5" xml:space="preserve" IsDefault="True" IsEnabled="True">_Next &gt;</Button>
+            <Button Name="cancelButton" Click="cancelButton_Click" Width="50" Margin="0,5,5,5" IsCancel="True">_Cancel</Button>
+            <Button Name="finishButton" IsEnabled="False" Width="50" Margin="0,5,30,5">_Finish</Button>
+        </StackPanel>
+    </Grid>
+</PageFunction>

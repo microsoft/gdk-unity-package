@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>TestGame</RootNamespace>
+    <AssemblyName>TestGame</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\Gaming.Desktop.x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\Gaming.Desktop.x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AccessibilityForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccessibilityForm.Designer.cs">
+      <DependentUpon>AccessibilityForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameSaveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameSaveForm.Designer.cs">
+      <DependentUpon>GameSaveForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameUIForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameUIForm.Designer.cs">
+      <DependentUpon>GameUIForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LicenseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LicenseForm.Designer.cs">
+      <DependentUpon>LicenseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XblProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XblProfileForm.Designer.cs">
+      <DependentUpon>XblProfileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XblMultiplayerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XblMultiplayerForm.Designer.cs">
+      <DependentUpon>XblMultiplayerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiplayerActivityForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MultiplayerActivityForm.Designer.cs">
+      <DependentUpon>MultiplayerActivityForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiplayerManagerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MultiplayerManagerForm.Designer.cs">
+      <DependentUpon>MultiplayerManagerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PresenceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PresenceForm.Designer.cs">
+      <DependentUpon>PresenceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PrivacyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PrivacyForm.Designer.cs">
+      <DependentUpon>PrivacyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PackageForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PackageForm.Designer.cs">
+      <DependentUpon>PackageForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PurchaseForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PurchaseForm.Designer.cs">
+      <DependentUpon>PurchaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="QueriesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QueriesForm.Designer.cs">
+      <DependentUpon>QueriesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ThreadForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ThreadForm.Designer.cs">
+      <DependentUpon>ThreadForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserForm.Designer.cs">
+      <DependentUpon>UserForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XboxLiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="XboxLiveForm.Designer.cs">
+      <DependentUpon>XboxLiveForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AccessibilityForm.resx">
+      <DependentUpon>AccessibilityForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameSaveForm.resx">
+      <DependentUpon>GameSaveForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameUIForm.resx">
+      <DependentUpon>GameUIForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LicenseForm.resx">
+      <DependentUpon>LicenseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XblProfileForm.resx">
+      <DependentUpon>XblProfileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XblMultiplayerForm.resx">
+      <DependentUpon>XblMultiplayerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiplayerActivityForm.resx">
+      <DependentUpon>MultiplayerActivityForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiplayerManagerForm.resx">
+      <DependentUpon>MultiplayerManagerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PresenceForm.resx">
+      <DependentUpon>PresenceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PrivacyForm.resx">
+      <DependentUpon>PrivacyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="PackageForm.resx">
+      <DependentUpon>PackageForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PurchaseForm.resx">
+      <DependentUpon>PurchaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="QueriesForm.resx">
+      <DependentUpon>QueriesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThreadForm.resx">
+      <DependentUpon>ThreadForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserForm.resx">
+      <DependentUpon>UserForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XboxLiveForm.resx">
+      <DependentUpon>XboxLiveForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

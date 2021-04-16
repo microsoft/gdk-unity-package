@@ -1,0 +1,1230 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.Xbox.Services.DevTools</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Xbox.Services.DevTools.Authentication.DevAccount">
+            <summary>
+             Class represents a developer account.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.DevAccount.Id">
+            <summary>
+             ID of the developer account
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.DevAccount.Name">
+            <summary>
+            User name of the developer account
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.DevAccount.AccountId">
+            <summary>
+            The Id of the account under which the developer is acting. Also known as publisher ID
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.DevAccount.AccountType">
+            <summary>
+            The account type under which the developer is acting.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.DevAccount.AccountMoniker">
+            <summary>
+            The moniker of the account for which the token is issued. 
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.DevAccount.AccountSource">
+            <summary>
+            The account source where the account was registered.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.Authentication.DevAccountSource">
+            <summary>
+            Enum type of XboxLive dev account source.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.Authentication.DevAccountSource.XboxDeveloperPortal">
+            <summary>
+            Account is from Xbox developer portal: xdp.xboxlive.com
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.Authentication.DevAccountSource.WindowsDevCenter">
+            <summary>
+            Account is from Windows Dev Center: developer.microsoft.com/windows
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.Authentication.ToolAuthentication">
+            <summary>
+            Class for XboxLive developer account authentication.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.Authentication.ToolAuthentication.LoadLastSignedInUser">
+            <summary>
+            Load the last signed in user from local cache and set as sign in info.
+            </summary>
+            <returns>The DevAccount object represents the last signed in dev account</returns>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.Authentication.ToolAuthentication.GetDevTokenSilentlyAsync(System.String,System.String)">
+            <summary>
+            Attempt to fetch a developer eToken without triggering any UI.
+            </summary>
+            <param name="serviceConfigurationId">The target service configuration ID (SCID) for the eToken, when empty, the token won't have access to a particular service configure</param>
+            <param name="sandbox">The target sandbox for the eToken, when empty, the token won't have any access to a particular sandbox</param>
+            <returns>Developer eToken for specific serviceConfigurationId and sandbox</returns>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.Authentication.ToolAuthentication.GetDevTokenSilentlyAsync(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Attempt to fetch a developer eToken without triggering any UI.
+            </summary>
+            <param name="serviceConfigurationId">The target service configuration ID (SCID) for the eToken,  when empty, the token won't have access to a particular service configure</param>
+            <param name="sandboxes">The target sandbox list for the eToken, when empty, the token won't have any access to a particular sandbox</param>
+            <returns>Developer eToken for specific serviceConfigurationId and sandbox</returns>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.Authentication.ToolAuthentication.SignInAsync(Microsoft.Xbox.Services.DevTools.Authentication.DevAccountSource,System.String)">
+            <summary>
+            Attempt to sign in developer account, UI will be triggered if necessary 
+            </summary>
+            <param name="accountSource">The account source where the developer account was registered.</param>
+            <param name="userName">The user name of the account, optional.</param>
+            <returns>DevAccount object contains developer account info.</returns>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.Authentication.ToolAuthentication.SignOut">
+            <summary>
+            Sign out the current signed in developer account.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.XdtsTokenResponse.IssueInstant">
+            <summary>
+            Gets or sets the issue instant for the token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.XdtsTokenResponse.NotAfter">
+            <summary>
+            Gets or sets the expiration date/time for the token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.XdtsTokenResponse.Token">
+            <summary>
+            Gets or sets the encrypted and signed token.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Authentication.XdtsTokenResponse.DisplayClaims">
+            <summary>
+            Gets or sets a collection of claims that are 
+            non-encrypted and available publicly.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.Common.RequestParameters">
+            <summary>
+            Represents the parameters needed for setting up a request.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Common.RequestParameters.TitleId">
+            <summary>
+            Gets or sets the service configuration ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Common.RequestParameters.Scid">
+            <summary>
+            Gets or sets the service configuration ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Common.RequestParameters.AccountId">
+            <summary>
+            Gets or sets the account ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Common.RequestParameters.Sandboxes">
+            <summary>
+            Gets or sets a sandbox.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.Common.RequestParameters.AutoAttachAuthHeader">
+            <summary>
+            Gets or sets a boolean value indicating whether to automatically attach an authorization token header.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.Common.TestHook">
+            <summary>
+            Internal test hook for mocking HttpClient's response
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.Common.XboxLiveException">
+            <summary>
+            Represents errors that occur when working with Xbox Live services.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.Common.XboxLiveException.#ctor(System.String)">
+            <summary>
+            Creates a new <see cref="T:Microsoft.Xbox.Services.DevTools.Common.XboxLiveException"/> object with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.PlayerReset.JobProviderStatus">
+            <summary>
+            Class contains details of one player reset job provider status
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.PlayerReset.JobProviderStatus.Provider">
+            <summary>
+            The Name of the player reset job provider.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.PlayerReset.JobProviderStatus.Status">
+            <summary>
+            The provider status of reset job.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.PlayerReset.JobProviderStatus.ErrorMessage">
+            <summary>
+            The error message of the provider reset job
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.PlayerReset.PlayerReset">
+            <summary>
+            Class for PlayerReset tooling functionality.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.PlayerReset.PlayerReset.ResetPlayerDataAsync(System.String,System.String,System.String)">
+            <summary>
+            Reset one player's data in test sandboxes, includes: achievements, leaderboards, player stats and title history. 
+            </summary>
+            <param name="serviceConfigurationId">The service configuration ID (SCID) of the title for player data resetting</param>
+            <param name="sandbox">The target sandbox id for player resetting</param>
+            <param name="xboxUserId">The Xbox user id of the player to be reset</param>
+            <returns>The UserResetResult object for the reset result</returns>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetOverallResult">
+            <summary>
+            Over all status of one player resetting job.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetOverallResult.Succeeded">
+            <summary>
+            Job Succeeded
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetOverallResult.CompletedError">
+            <summary>
+            Job has completed but one or more errors occurred.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetOverallResult.Timeout">
+            <summary>
+            Job has timeout
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetOverallResult.Unknown">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus">
+            <summary>
+            Status of provider status of player reset job.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus.Queued">
+            <summary>
+            The job has queued.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus.NotStarted">
+            <summary>
+            The job has not started.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus.InProgress">
+            <summary>
+            Resetting is in progress.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus.CompletedSuccess">
+            <summary>
+            The job has successfully completed.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus.CompletedPartialSuccess">
+            <summary>
+            The job was partial success.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus.CompletedError">
+            <summary>
+            The job has finished but some error.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.PlayerReset.ResetProviderStatus.Abandoned">
+            <summary>
+            The job was abandoned.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.PlayerReset.UserResetResult">
+            <summary>
+            Class contains player resetting result
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.PlayerReset.UserResetResult.OverallResult">
+            <summary>
+            The overall status of resetting job
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.PlayerReset.UserResetResult.ProviderStatus">
+            <summary>
+            A collection of player reset provider status. 
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.TitleStorage.GlobalStorageQuotaInfo">
+            <summary>
+            Class contains the amount of storage space allocated and used.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.GlobalStorageQuotaInfo.UsedBytes">
+            <summary>
+            Number of bytes used
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.GlobalStorageQuotaInfo.QuotaBytes">
+            <summary>
+            Maximum number of bytes that can be used.
+            Note that this is a soft limit and the used bytes may actually exceed this value.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorage">
+            <summary>
+            Class for TitleStorage tooling functionality.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorage.GetGlobalStorageQuotaAsync(System.String,System.String)">
+            <summary>
+            Get title global storage quota information.
+            </summary>
+            <param name="serviceConfigurationId">The service configuration ID (SCID) of the title</param>
+            <param name="sandbox">The target sandbox id for title storage</param>
+            <returns>GlobalStorageQuotaInfo object contains quota info</returns>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorage.GetGlobalStorageBlobMetaDataAsync(System.String,System.String,System.String,System.UInt32,System.UInt32)">
+            <summary>
+            Gets a list of blob metadata objects under a given path for the title global storage.
+            </summary>
+            <param name="serviceConfigurationId">The service configuration ID (SCID) of the title</param>
+            <param name="sandbox">The target sandbox id for title storage</param>
+            <param name="path">The root path to enumerate.  Results will be for blobs contained in this path and all subpaths.(Optional)</param>
+            <param name="maxItems">The maximum number of items to return.</param>
+            <param name="skipItems">The number of items to skip before returning results.</param>
+            <returns>TitleStorageBlobMetadataResult object contains result collection.</returns>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorage.UploadGlobalStorageBlobAsync(System.String,System.String,System.String,Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobType,System.Byte[])">
+            <summary>
+            Uploads blob data to title storage.
+            </summary>
+            <param name="serviceConfigurationId">The service configuration ID (SCID) of the title</param>
+            <param name="sandbox">The target sandbox id for title storage</param>
+            <param name="pathAndFileName">Blob path and file name to store on XboxLive service.(example: "foo\bar\blob.txt")</param>
+            <param name="blobType">Title storage blob type</param>
+            <param name="blobBytes">The byte array contains the blob data to upload.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorage.DownloadGlobalStorageBlobAsync(System.String,System.String,System.String,Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobType)">
+            <summary>
+            Downloads blob data from title storage.
+            </summary>
+            <param name="serviceConfigurationId">The service configuration ID (SCID) of the title</param>
+            <param name="sandbox">The target sandbox id for title storage</param>
+            <param name="pathAndFileName">Blob path and file name to store on XboxLive service.(example: "foo\bar\blob.txt")</param>
+            <param name="blobType">Title storage blob type</param>
+            <returns>The byte array contains downloaded blob data</returns>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorage.DeleteGlobalStorageBlobAsync(System.String,System.String,System.String,Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobType)">
+            <summary>
+            Deletes a blob from title storage.
+            </summary>
+            <param name="serviceConfigurationId">The service configuration ID (SCID) of the title</param>
+            <param name="sandbox">The target sandbox id for title storage</param>
+            <param name="pathAndFileName">Blob path and file name to store on XboxLive service.(example: "foo\bar\blob.txt")</param>
+            <param name="blobType">Title storage blob type</param>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadata">
+            <summary>
+            Metadata of a title storage blob.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadata.Path">
+            <summary>
+            Blob path that conforms to a SubPath\file format (example: "foo\bar\blob.txt").
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadata.Type">
+            <summary>
+            Type of blob data. Possible values are: Binary, Json, and Config.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadata.Size">
+            <summary>
+            Gets the number of bytes of the blob data.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadataResult">
+            <summary>
+            Class contains title storage metadata collection result.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadataResult.Items">
+            <summary>
+            Collection of TitleStorageBlobMetadata objects returned by a service request.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadataResult.HasNext">
+            <summary>
+            If current result collection has next page.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadataResult.TotalItems">
+            <summary>
+            Total count of the items.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobMetadataResult.GetNextAsync(System.UInt32)">
+            <summary>
+            Get next page of the current result collection.
+            </summary>
+            <param name="maxItems">The maximum number of items to return. (Optional)</param>
+            <returns>TitleStorageBlobMetadataResult object contains result collection.</returns>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobType">
+            <summary>
+            Defines values used to indicate title storage blob type.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobType.Binary">
+            <summary>Binary blob type.</summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobType.Json">
+            <summary>JSON blob type.</summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.TitleStorage.TitleStorageBlobType.Config">
+            <summary>Config blob type. </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage">
+            <summary>
+            Represents an uploaded achievement image.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.AssetId">
+            <summary>
+            Gets or sets the asset ID of the achievement image.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.CdnUrl">
+            <summary>
+            Gets or sets the URL of the image on the CDN.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.HeightInPixels">
+            <summary>
+            Gets or sets the height of the image in pixels.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.ImageType">
+            <summary>
+            Gets or sets the type of image that was uploaded.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.IsPublic">
+            <summary>
+            Gets or sets a boolean value indicating if the image is public or not.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.Scid">
+            <summary>
+            Gets or sets the service configuration ID of the product the image was uploaded for.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.ThumbnailCdnUrl">
+            <summary>
+            Gets or sets the URO of the thumbnail version of the image on the CDN.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AchievementImage.WidthInPixels">
+            <summary>
+            Gets or sets the width of the image in pixels.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.AlternateId">
+            <summary>
+            Represents an alternate ID of a product.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AlternateId.AlternateIdType">
+            <summary>
+            Gets or sets the type of this alternate ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.AlternateId.Value">
+            <summary>
+            Gets or sets the ID value.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.AlternateId.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.AlternateIdType">
+            <summary>
+            Represents the type of an alternate ID.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.AlternateIdType.SellerAccountId">
+            <summary>
+            Indicates that the alternate ID is a seller account ID.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.AlternateIdType.AppId">
+            <summary>
+            Indicates that the alternate ID is an application in Dev Center.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper">
+            <summary>
+            Assists in the creation of certificate signing requests and exporting certificates.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper.CanGenerateCertRequest">
+            <summary>
+            Gets a boolean value indicating that the current user can generate a cert request (i.e. running as an administrator).
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper.GenerateCertRequest">
+            <summary>
+            Generates a certificate signing request for use with Xbox Live.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper.ExportPfx(System.Byte[],System.Security.SecureString)">
+            <summary>
+            Exports a PFX certificate with a given password.
+            </summary>
+            <param name="certificate">The certificate returned from Xbox Live from the associated signing request.</param>
+            <param name="password">The password to secure the password with.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper.Dispose">
+            <summary>
+            Releases all resources used by the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper.Dispose(System.Boolean)">
+            <summary>
+            Releases all resources used by the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.CertificateHelper"/>.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream">
+            <summary>
+            Represents an Xbox Live configuration file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream.#ctor(System.String,System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream"/> class.
+            </summary>
+            <param name="name">The name of the file.</param>
+            <param name="stream">The stream containing the contents of the configuration file.</param>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream.Name">
+            <summary>
+            Gets the name of the configuration file.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream.Stream">
+            <summary>
+            Gets the stream of the contents of the configuration file.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream.Dispose">
+            <summary>
+            Releases all resources used by the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream.Dispose(System.Boolean)">
+            <summary>
+            Releases all resources used by the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream"/>.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigResponseBase">
+            <summary>
+            Represents the abstract base class for configuiration responses.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigResponseBase.CorrelationId">
+            <summary>
+            Gets the correlation ID or correlation vector for the response.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager">
+            <summary>
+            Provides methods for configuring Xbox Live.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetSandboxDocumentsAsync(System.Guid,System.String)">
+            <summary>
+            Asynchronously gets sandbox level documents for a given SCID.
+            </summary>
+            <param name="scid">The service configuration ID.</param>
+            <param name="sandbox">The sandbox.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.CommitSandboxDocumentsAsync(System.Collections.Generic.IEnumerable{System.IO.FileStream},System.Guid,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Asynchronously commits sandbox level documents back to Xbox Live.
+            </summary>
+            <param name="files">A collection of <see cref="T:System.IO.FileStream"/> objects pointing to files to commit.</param>
+            <param name="scid">The service configuration ID to commit to.</param>
+            <param name="sandbox">The sandbox to commit to.</param>
+            <param name="eTag">The ETag of the previous commit used for concurrency checks. If null, the ETag from the latest commit will be used.</param>
+            <param name="validateOnly">Set to 'true' if a test commit should be performed without persisting the data resulting in validation only; 'false' persists the commit.</param>
+            <param name="message">The commit message asssociated with this changeset.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.CommitSandboxDocumentsAsync(System.Collections.Generic.IEnumerable{System.String},System.Guid,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            Asynchronously commits sandbox level documents back to Xbox Live.
+            </summary>
+            <param name="filePaths">A collection of file paths to commit.</param>
+            <param name="scid">The service configuration ID to commit to.</param>
+            <param name="sandbox">The sandbox to commit to.</param>
+            <param name="eTag">The ETag of the previous commit used for concurrency checks. If null, the ETag from the latest commit will be used.</param>
+            <param name="validateOnly">Set to 'true' if a test commit should be performed without persisting the data resulting in validation only; 'false' persists the commit.</param>
+            <param name="message">The commit message asssociated with this changeset.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetAccountDocumentsAsync(System.Guid,System.String)">
+            <summary>
+            Asynchronously gets a specific account level document.
+            </summary>
+            <param name="accountId">The account ID of the user to obtain documents for.</param>
+            <param name="filename">The filename of the file to retrieve.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetAccountDocumentsAsync(System.Guid)">
+            <summary>
+            Asynchronously gets account level documents.
+            </summary>
+            <param name="accountId">The account ID of the user to obtain documents for.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.CommitAccountDocumentsAsync(System.Collections.Generic.IEnumerable{System.IO.FileStream},System.Guid,System.String,System.Boolean,System.String)">
+            <summary>
+            Commits account level documents back to Xbox Live.
+            </summary>
+            <param name="files">A collection of <see cref="T:System.IO.FileStream"/> objects containing the files to commit.</param>
+            <param name="accountId">The account ID of the user account which owns these files.</param>
+            <param name="eTag">The ETag of the previous commit used for concurrency checks. If null, the ETag from the latest commit will be used.</param>
+            <param name="validateOnly">Set to 'true' if a test commit should be performed without persisting the data resulting in validation only; 'false' persists the commit.</param>
+            <param name="message">The commit message asssociated with this changeset.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.CommitAccountDocumentsAsync(System.Collections.Generic.IEnumerable{System.String},System.Guid,System.String,System.Boolean,System.String)">
+            <summary>
+            Commits account level documents back to Xbox Live.
+            </summary>
+            <param name="filePaths">A collection of file paths to commit.</param>
+            <param name="accountId">The account ID of the user account which owns these files.</param>
+            <param name="eTag">The ETag of the previous commit used for concurrency checks. If null, the ETag from the latest commit will be used.</param>
+            <param name="validateOnly">Set to 'true' if a test commit should be performed without persisting the data resulting in validation only; 'false' persists the commit.</param>
+            <param name="message">The commit message asssociated with this changeset.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetRelyingPartiesAsync(System.Guid)">
+            <summary>
+            Asynchronously gets a list of relying party documents for a given account.
+            </summary>
+            <param name="accountId">The account ID of the account that owns the documents.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetRelyingPartyDocumentAsync(System.Guid,System.String)">
+            <summary>
+            Asynchronously gets a specific relying party document for a given account.
+            </summary>
+            <param name="accountId">The account ID of the account that owns the document.</param>
+            <param name="filename">The filename of the document to retrieve.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetWebServicesAsync(System.Guid)">
+            <summary>
+            Gets a collection of web services for a given account.
+            </summary>
+            <param name="accountId">The account ID associated with the web services.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.CreateWebServiceAsync(System.Guid,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a web service.
+            </summary>
+            <param name="accountId">The account ID associated with the web service.</param>
+            <param name="name">The name of the web service.</param>
+            <param name="telemetryAccess">A boolean value which enables your service to retrieve game telemetry data for any of your games.</param>
+            <param name="appChannelsAccess">A boolean value which gives the media provider owning the service the authority to programmatically publish app channels for consumption on console through the OneGuide twist.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.CreateWebServiceAsync(Microsoft.Xbox.Services.DevTools.XblConfig.WebService)">
+            <summary>
+            Creates a web service.
+            </summary>
+            <param name="webService">An object containing the parameters for the web service.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.UpdateWebServiceAsync(System.Guid,System.Guid,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Updates the properties of a web service.
+            </summary>
+            <param name="serviceId">The web service ID.</param>
+            <param name="accountId">The account ID associated with the web service.</param>
+            <param name="name">The name of the web service.</param>
+            <param name="telemetryAccess">A boolean value which enables your service to retrieve game telemetry data for any of your games.</param>
+            <param name="appChannelsAccess">A boolean value which gives the media provider owning the service the authority to programmatically publish app channels for consumption on console through the OneGuide twist.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.UpdateWebServiceAsync(Microsoft.Xbox.Services.DevTools.XblConfig.WebService)">
+            <summary>
+            Updates the properties of a web service.
+            </summary>
+            <param name="webService">An object containing the parameters for the web service.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.DeleteWebServiceAsync(System.Guid,System.Guid)">
+            <summary>
+            Deletes a web service.
+            </summary>
+            <param name="accountId">The account ID associated with the web service.</param>
+            <param name="serviceId">The web service ID.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GenerateWebServiceCertificateAsync(System.Guid,System.Guid,System.Security.SecureString)">
+            <summary>
+            Generates a certificate with corresponding private key for a given service ID and password.
+            </summary>
+            <param name="accountId">The account ID of the user.</param>
+            <param name="serviceId">The web service ID.</param>
+            <param name="password">The password to secure the certificate with.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetHistoryAsync(System.Guid,System.String,Microsoft.Xbox.Services.DevTools.XblConfig.View,System.Int32)">
+            <summary>
+            Asynchronously gets the history of past commits.
+            </summary>
+            <param name="scid">The service configuration ID.</param>
+            <param name="sandbox">The sandbox to obtain history for.</param>
+            <param name="view">Which view to obtain history commits for.</param>
+            <param name="count">The max number of history entries to obtain.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetProductsAsync(System.Guid)">
+            <summary>
+            Asynchronously gets a collection of products associated with an account.
+            </summary>
+            <param name="accountId">The account ID associated with the products.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetProductAsync(System.Guid)">
+            <summary>
+            Asynchronously gets a single product by product ID.
+            </summary>
+            <param name="productId">The ID of the product to obtain.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetProductAsync(System.String)">
+            <summary>
+            Asynchronously gets a single product by a title ID.
+            </summary>
+            <param name="titleId">The Title ID of the product to obtain.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetProductFromScidAsync(System.Guid)">
+            <summary>
+            Asynchronously gets a single product by scid.
+            </summary>
+            <param name="scid">The service configuration ID to obtain.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetSchemaTypesAsync">
+            <summary>
+            Asynchronously gets a collection of document schema types. 
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetSchemaVersionsAsync(System.String)">
+            <summary>
+            Asynchronously gets a collection of versions available for a given document schema type.
+            </summary>
+            <param name="schemaType">The type of the schema to obtain the versions for.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetSchemaAsync(System.String,System.Int32)">
+            <summary>
+            Asynchronously gets a specific schema.
+            </summary>
+            <param name="schemaType">The type of the document schema to obtain.</param>
+            <param name="version">The version of the document schema.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetSandboxesAsync(System.Guid)">
+            <summary>
+            Asynchronously gets a list of sandboxes for a given account.
+            </summary>
+            <param name="accountId">The account ID associated with the list of sandboxes.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.PublishAsync(System.Guid,System.String,System.String,System.Boolean,System.UInt64)">
+            <summary>
+            Asynchronously performs a publish.
+            </summary>
+            <param name="scid">The service configuration ID to publish.</param>
+            <param name="sourceSandbox">The sandbox to publish from.</param>
+            <param name="destinationSandbox">The sandbox to publish to.</param>
+            <param name="validateOnly">A boolean value indicating whether to only validate a publish call.</param>
+            <param name="version">The changeset version to publish.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.PublishAsync(System.Guid,System.String,System.String,System.Boolean)">
+            <summary>
+            Asynchronously performs a publish with the latest version.
+            </summary>
+            <param name="scid">The service configuration ID to publish.</param>
+            <param name="sourceSandbox">The sandbox to publish from.</param>
+            <param name="destinationSandbox">The sandbox to publish to.</param>
+            <param name="validateOnly">A boolean value indicating whether to only validate a publish call.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetPublishStatusAsync(System.Guid,System.String)">
+            <summary>
+            Gets the publish status for a given sandbox.
+            </summary>
+            <param name="scid">The service configuration ID to get the status for.</param>
+            <param name="destinationSandbox">The sandbox that configuration was published to.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetAchievementImageAsync(System.Guid,System.Guid)">
+            <summary>
+            Asynchronously gets the details of an achievement image.
+            </summary>
+            <param name="scid">The service configuration ID that this image is for.</param>
+            <param name="assetId">The asset ID associated with this image.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.GetAchievementImagesAsync(System.Guid)">
+            <summary>
+            Asynchronously gets a list of achievement images associated with a given SCID.
+            </summary>
+            <param name="scid">The service configuration ID that these images are for.</param>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigurationManager.UploadAchievementImageAsync(System.Guid,System.String,System.IO.Stream)">
+            <summary>
+            Asynchronously uploads an achievement image for a given sandbox.
+            </summary>
+            <param name="scid">The service configuration ID that this image is for.</param>
+            <param name="filename">The name of the file. i.e. file.png</param>
+            <param name="file">A stream containing the achievement image.</param>
+            <exception cref="T:System.ArgumentException">Throws when image is not 1920x1080 pixels.</exception>
+            <exception cref="T:System.ArgumentNullException">Throws if filename is null or empty.</exception>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute">
+            <summary>
+            Provides rendering tips for members of objects, both as a single object and as a list.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute.Name">
+            <summary>
+            Gets or sets the display name of the property.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute.Order">
+            <summary>
+            Gets or sets the order in which the property should be displayed as a single object.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute.Omit">
+            <summary>
+            Gets or sets a boolean value indicating whether a property's value should be omitted from the displayed single object.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute.ListOrder">
+            <summary>
+            Gets or sets the order in which the property should be displayed in a list.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute.ListOmit">
+            <summary>
+            Gets or sets a boolean value indicating whether a property's value should be omitted from a list of objects.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute.GetOrder">
+            <summary>
+            Gets the order in which the property should be displayed as a single object.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.DisplayAttribute.GetListOrder">
+            <summary>
+            Gets the order in which the property should be displayed in a list.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse">
+            <summary>
+            Represents a response of configuration documents from Xbox Live.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse.#ctor(System.IO.Stream,System.Net.Http.Headers.HttpResponseHeaders)">
+            <summary>
+            Creates a new instance of the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse"/> object.
+            </summary>
+            <param name="documentsStream">A stream of a zip file containing the configuration documents.</param>
+            <param name="headers">The collection of headers that came back during the request.</param>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse.Version">
+            <summary>
+            Gets the version of the changeset.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse.ETag">
+            <summary>
+            Gets the ETag associated with the changeset.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse.Documents">
+            <summary>
+            Gets a collection of <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigFileStream"/> objects containing the documents in this changeset.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse.Dispose">
+            <summary>
+            Releases all resources used by the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse"/>.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse.Dispose(System.Boolean)">
+            <summary>
+            Releases all resources used by the <see cref="T:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentsResponse"/>.
+            </summary>
+            <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentType">
+            <summary>
+            Represents the types of configuration documents in Xbox Live.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentType.Sandbox">
+            <summary>
+            The document type is tied to a specific sandbox.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.DocumentType.Account">
+            <summary>
+            The document type is tied to an account.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigResponse`1">
+            <summary>
+            Represents a configuration response of type T.
+            </summary>
+            <typeparam name="T">The strongly typed result of the response.</typeparam>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigResponse`1.Result">
+            <summary>
+            Gets or sets result of the response.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.ConfigResponse">
+            <summary>
+            Represents a configuration response.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.History">
+            <summary>
+            Represents a history entry for a document commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.CommitTime">
+            <summary>
+            Gets or sets the <see cref="T:System.DateTime"/> that the commit happened.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.ETag">
+            <summary>
+            Gets or sets the ETag associated with a commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.Message">
+            <summary>
+            Gets or sets the message saved during the commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.User">
+            <summary>
+            Gets or sets the user ID of the user that initiated the commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.Version">
+            <summary>
+            Gets or sets the version of the changeset.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.Documents">
+            <summary>
+            Gets or sets the collection of documents associated with the changeset.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.History.DocumentHashSet">
+            <summary>
+            Represents a name/value pair of documents and their hash.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.DocumentHashSet.Hash">
+            <summary>
+            Gets or sets a hash associated with a document.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.History.DocumentHashSet.Name">
+            <summary>
+            Gets or sets the name of the document.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.Product">
+            <summary>
+            Represents a product within Dev Center.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.AccountId">
+            <summary>
+            Gets or sets the account ID associated with this product.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.AlternateIds">
+            <summary>
+            Gets or sets any alternate IDs for this product.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.IsTest">
+            <summary>
+            Gets or sets a value indicating if this product is a test product or not.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.MsaAppId">
+            <summary>
+            Gets or sets the Microsoft Account application ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.PfnId">
+            <summary>
+            Gets or sets the package family name ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.PrimaryServiceConfigId">
+            <summary>
+            Gets or sets the primary service configuration ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.ProductId">
+            <summary>
+            Gets or sets the product ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.TitleId">
+            <summary>
+            Gets or sets the title ID.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.XboxLiveTier">
+            <summary>
+            Gets or sets the Xbox Live tier.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.ProductName">
+            <summary>
+            Gets or sets the product name.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.Product.BoundTitleId">
+            <summary>
+            Gets or sets the product name.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.PublishResponse">
+            <summary>
+            Represents the response of an attempted publish.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.PublishResponse.Status">
+            <summary>
+            Gets or sets the status of the publish job.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.PublishResponse.StatusMessage">
+            <summary>
+            Gets or sets the status message of the publish job.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.PublishResponse.ValidationResult">
+            <summary>
+            Gets or sets a list of validation results from the attempted publish.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.PublishResponse.SourceVersion">
+            <summary>
+            Gets or sets the changeset version of the source sandbox.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.PublishResponse.Version">
+            <summary>
+            Gets or sets the changeset version of the publish.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.PublishResponse.JobId">
+            <summary>
+            Gets or sets the publish job ID.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.RelyingParty">
+            <summary>
+            Represents relying party information.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.RelyingParty.AccountId">
+            <summary>
+             Gets or sets the account ID associated with the relying party.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.RelyingParty.Filename">
+            <summary>
+            Gets or sets the filename associated with a relying party.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.RelyingParty.Name">
+            <summary>
+            Gets or sets the name associated with a relying party.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.SchemaVersion">
+            <summary>
+            Represents the version and namespace of a configuration document schema.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.SchemaVersion.Version">
+            <summary>
+            Gets or sets the version of the schema.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.SchemaVersion.Namespace">
+            <summary>
+            Gets or sets the namespace for this version of the schema.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.Severity">
+            <summary>
+            Severity of the validation error.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.Severity.Informational">
+            <summary>
+            These don't necessarily prevent an action but indicate something that should be considered.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.Severity.Warning">
+            <summary>
+            Warning level failures. These indicate that something that will cause breaks if published.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.Severity.Error">
+            <summary>
+            Error level failures. Blocks the current action.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationInfo">
+            <summary>
+            Represents the validation information associated with an attempted commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationInfo.DocumentName">
+            <summary>
+            Gets or sets the name of the document.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationInfo.Message">
+            <summary>
+            Gets or sets the message detailing the validation information.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationInfo.Error">
+            <summary>
+            Gets or sets an error associated with the validation information.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationInfo.Severity">
+            <summary>
+            Gets or sets the severity.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationInfo.Context">
+            <summary>
+            Gets or sets information detailing the context of where the validation information comes from.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationResponse">
+            <summary>
+            Represents the validation response from an attempted documents commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationResponse.CanCommit">
+            <summary>
+            Gets or sets a boolean value indicating whether a commit can occur.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationResponse.Committed">
+            <summary>
+            Gets or sets a boolean value indicating whether the commit occurred.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationResponse.ETag">
+            <summary>
+            Gets or sets the ETag string associated with the commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationResponse.Version">
+            <summary>
+            Gets or sets the version associated with the commit.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationResponse.ValidationInfo">
+            <summary>
+            Gets or sets a collection of <see cref="P:Microsoft.Xbox.Services.DevTools.XblConfig.ValidationResponse.ValidationInfo"/> objects describing any warnings or errors.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.View">
+            <summary>
+            The type of view associated with the document.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.View.Working">
+            <summary>
+            Indicates the working documents that developers use manage.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.View.Published">
+            <summary>
+            Indicates the published documents that are used by Xbox Live.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.WebService">
+            <summary>
+            Represents a web service entry associated with an account.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.WebService.AccountId">
+            <summary>
+            Gets or sets the account ID associated with the web service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.WebService.Name">
+            <summary>
+            Gets or sets the name of the web service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.WebService.ServiceId">
+            <summary>
+            Gets or sets the service ID of the web service.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.WebService.TelemetryAccess">
+            <summary>
+            Gets or sets a boolean value which enables your service to retrieve game telemetry data for any of your games.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Xbox.Services.DevTools.XblConfig.WebService.AppChannelsAccess">
+            <summary>
+            Gets or sets a boolean value which gives the media provider owning the service the authority to programmatically publish app channels for consumption on console through the OneGuide twist.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Xbox.Services.DevTools.XblConfig.XboxLiveTier">
+            <summary>
+            Represents the Xbox Live Tier associated with a product.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.XboxLiveTier.Open">
+            <summary>
+            Indicates that the product is part of the Xbox Live Creator's Program.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Xbox.Services.DevTools.XblConfig.XboxLiveTier.Full">
+            <summary>
+            Indicates that the product is a full Xbox Live product.
+            </summary>
+        </member>
+    </members>
+</doc>

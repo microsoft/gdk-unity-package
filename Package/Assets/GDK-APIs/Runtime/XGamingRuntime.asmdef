@@ -1,0 +1,13 @@
+{
+    "name": "XGamingRuntime",
+    "references": [],
+    "includePlatforms": [
+        "Editor",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "autoReferenced": true,
+    "noEngineReferences": false
+}
