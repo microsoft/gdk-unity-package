@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Microsoft.Xbox;
 
-#if UNITY_GAME_CORE
+#if UNITY_GAMECORE
 using Unity.GameCore;
 #endif
 #if MICROSOFT_GAME_CORE
@@ -20,7 +20,7 @@ public class SampleInGamePurchasableItem : MonoBehaviour {
 	public Text priceUIElement;
     public Text ownedUIElement;
 
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
     private XStoreProduct storeProduct;
 
     public void UpdateUI(XStoreProduct product)
@@ -34,12 +34,12 @@ public class SampleInGamePurchasableItem : MonoBehaviour {
 
     public void Purchase()
     {
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
         Gdk.Helpers.ShowPurchaseUIAsync(storeProduct, ShowPurchaseCallback);
 #endif
     }
 
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
     public void ShowPurchaseCallback(int hresult, XStoreProduct product)
     {
         if (hresult >= 0)
