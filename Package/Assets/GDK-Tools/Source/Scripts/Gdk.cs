@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-#if UNITY_GAME_CORE
+#if UNITY_GAMECORE
 using Unity.GameCore;
 #endif
 #if MICROSOFT_GAME_CORE
@@ -36,7 +36,7 @@ namespace Microsoft.Xbox
         }
     }
 
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
     public delegate void ShowPurchaseUICallback(Int32 hresult, XStoreProduct storeProduct);
     public delegate void GetAssociatedProductsCallback(Int32 hresult, List<XStoreProduct> associatedProducts);
 #endif
@@ -52,7 +52,7 @@ namespace Microsoft.Xbox
         private static bool _initialized;
         private static Dictionary<int, string> _hresultToFriendlyErrorLookup;
 
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
         private XStoreContext _storeContext = null;
         private XUserHandle _userHandle;
         private XblContextHandle _xblContextHandle;
@@ -121,7 +121,7 @@ namespace Microsoft.Xbox
 
             DontDestroyOnLoad(gameObject);
 
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             if (!Succeeded(SDK.XGameRuntimeInitialize(), "Initialize gaming runtime"))
             {
                 return;
@@ -153,14 +153,14 @@ namespace Microsoft.Xbox
 
         public void SignIn()
         {
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             SignInImpl();
 #endif
         }
 
         public void Save(byte[] data)
         {
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             _gameSaveHelper.Save(
                 _GameSaveContainerName,
                 _GameSaveBlobName,
@@ -171,7 +171,7 @@ namespace Microsoft.Xbox
 
         public void LoadSaveData()
         {
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             _gameSaveHelper.Load(
                 _GameSaveContainerName,
                 _GameSaveBlobName,
@@ -181,12 +181,12 @@ namespace Microsoft.Xbox
 
         public void UnlockAchievement(string achievementId)
         {
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             UnlockAchievementImpl(achievementId);
 #endif
         }
 
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
         private void SignInImpl()
         {
             XUserAddOptions options = XUserAddOptions.AddDefaultUserAllowingUI;
@@ -370,7 +370,7 @@ namespace Microsoft.Xbox
         // Update is called once per frame
         void Update()
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAME_CORE) && !UNITY_EDITOR
+#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
             SDK.XTaskQueueDispatch();
 #endif
         }

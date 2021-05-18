@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.Xbox;
 
-#if UNITY_GAME_CORE
+#if UNITY_GAMECORE
 using Unity.GameCore;
 #endif
 #if MICROSOFT_GAME_CORE
@@ -25,13 +25,13 @@ public class StoreSampleLogic : MonoBehaviour {
 
     public void ShowDLC()
     {
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
         // Get the list of In game purchasable items.
         Gdk.Helpers.GetAssociatedProductsAsync(GetAssociatedProductsAsyncCallback);
 #endif        
     }
 
-#if MICROSOFT_GAME_CORE || UNITY_GAME_CORE
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
     public void GetAssociatedProductsAsyncCallback(Int32 hresult, List<XStoreProduct> associatedProducts)
     {
         for (int i = 0; i < associatedProducts.Count; i++)
