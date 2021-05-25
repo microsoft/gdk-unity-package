@@ -121,6 +121,9 @@ namespace Microsoft.Xbox
 
             DontDestroyOnLoad(gameObject);
 
+            _hresultToFriendlyErrorLookup = new Dictionary<int, string>();
+            InitializeHresultToFriendlyErrorLookup();
+
 #if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             if (!Succeeded(SDK.XGameRuntimeInitialize(), "Initialize gaming runtime"))
             {
@@ -135,8 +138,6 @@ namespace Microsoft.Xbox
             }
 
             _gameSaveHelper = new XGameSaveWrapper();
-            _hresultToFriendlyErrorLookup = new Dictionary<int, string>();
-            InitializeHresultToFriendlyErrorLookup();
             if (signInOnStart)
             {
                SignIn();
@@ -146,6 +147,11 @@ namespace Microsoft.Xbox
 
         private void InitializeHresultToFriendlyErrorLookup()
         {
+            if (_hresultToFriendlyErrorLookup == null)
+            {
+                return;
+            }
+
             _hresultToFriendlyErrorLookup.Add(-2143330041, "IAP_UNEXPECTED: Does the player you are signed in as have a license for the game? " +
                 "You can get one by downloading your game from the store and purchasing it first. If you can't find your game in the store, " +
                 "have you published it in Partner Center?");

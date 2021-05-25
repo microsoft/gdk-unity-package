@@ -45,6 +45,7 @@ public class GameSaveSampleLogic : MonoBehaviour
 
     public void Load()
     {
+        Gdk.Helpers.OnGameSaveLoaded -= OnGameSaveLoaded;
         Gdk.Helpers.OnGameSaveLoaded += OnGameSaveLoaded;
         Gdk.Helpers.LoadSaveData();
     }
