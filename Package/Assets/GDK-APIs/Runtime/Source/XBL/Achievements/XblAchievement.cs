@@ -1,30 +1,49 @@
 ﻿using System;
+using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
     public class XblAchievement
     {
-        internal XblAchievement(Interop.XblAchievement interopAchievement)
+        internal unsafe XblAchievement(Interop.XblAchievement* interopAchievement)
         {
-            this.Id = interopAchievement.id.GetString();
-            this.ServiceConfigurationId = interopAchievement.serviceConfigurationId.GetString();
-            this.Name = interopAchievement.name.GetString();
-            this.TitleAssociations = interopAchievement.GetTitleAssociations(ta =>new XblAchievementTitleAssociation(ta));
-            this.ProgressState = interopAchievement.progressState;
-            this.Progression = new XblAchievementProgression(interopAchievement.progression);
-            this.MediaAssets = interopAchievement.GetMediaAssets(ma =>new XblAchievementMediaAsset(ma));
-            this.PlatformsAvailableOn = interopAchievement.GetPlatformsAvailableOn();
-            this.IsSecret = interopAchievement.isSecret;
-            this.UnlockedDescription = interopAchievement.unlockedDescription.GetString();
-            this.LockedDescription = interopAchievement.lockedDescription.GetString();
-            this.ProductId = interopAchievement.productId.GetString();
-            this.Type = interopAchievement.type;
-            this.ParticipationType = interopAchievement.participationType;
-            this.Available = new XblAchievementTimeWindow(interopAchievement.available);
-            this.Rewards = interopAchievement.GetRewards(reward =>new XblAchievementReward(reward));
-            this.EstimatedUnlockTime = interopAchievement.estimatedUnlockTime;
-            this.DeepLink = interopAchievement.deepLink.GetString();
-            this.IsRevoked = interopAchievement.isRevoked;
+            this.Id = Converters.PtrToStringUTF8(interopAchievement->id);
+            this.ServiceConfigurationId = Converters.PtrToStringUTF8(interopAchievement->serviceConfigurationId);
+            this.Name = Converters.PtrToStringUTF8(interopAchievement->name);
+            this.TitleAssociations = Converters.PtrToClassArray
+                                        <XblAchievementTitleAssociation, Interop.XblAchievementTitleAssociation>(
+                                            (IntPtr)interopAchievement->titleAssociations,
+                                            interopAchievement->titleAssociationsCount,
+                                            ta => new XblAchievementTitleAssociation(ta)
+                                        );
+            this.ProgressState = (XblAchievementProgressState)interopAchievement->progressState;
+            this.Progression = new XblAchievementProgression(interopAchievement->progression);
+            this.MediaAssets = Converters.PtrToClassArray
+                                    <XblAchievementMediaAsset, Interop.XblAchievementMediaAsset>(
+                                        (IntPtr)interopAchievement->mediaAssets,
+                                        interopAchievement->mediaAssetsCount,
+                                        ma => new XblAchievementMediaAsset(ma)
+                                    );
+            this.PlatformsAvailableOn = Converters.StringPtrToArray(
+                                                interopAchievement->platformsAvailableOn,
+                                                interopAchievement->platformsAvailableOnCount
+                                            );
+            this.IsSecret = interopAchievement->isSecret;
+            this.UnlockedDescription = Converters.PtrToStringUTF8(interopAchievement->unlockedDescription);
+            this.LockedDescription = Converters.PtrToStringUTF8(interopAchievement->lockedDescription);
+            this.ProductId = Converters.PtrToStringUTF8(interopAchievement->productId);
+            this.Type = (XblAchievementType)interopAchievement->type;
+            this.ParticipationType = (XblAchievementParticipationType)interopAchievement->participationType;
+            this.Available = new XblAchievementTimeWindow(interopAchievement->available);
+            this.Rewards = Converters.PtrToClassArray
+                                <XblAchievementReward, Interop.XblAchievementReward>(
+                                    (IntPtr)interopAchievement->rewards,
+                                    interopAchievement->rewardsCount,
+                                    r => new XblAchievementReward(r)
+                                );
+            this.EstimatedUnlockTime = interopAchievement->estimatedUnlockTime;
+            this.DeepLink = Converters.PtrToStringUTF8(interopAchievement->deepLink);
+            this.IsRevoked = interopAchievement->isRevoked;
         }
 
         public string Id { get; private set; }

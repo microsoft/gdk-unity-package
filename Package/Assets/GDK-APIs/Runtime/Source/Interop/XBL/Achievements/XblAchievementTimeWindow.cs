@@ -1,18 +1,11 @@
-﻿using System.Runtime.InteropServices;
-
 namespace XGamingRuntime.Interop
 {
-    //typedef struct XblAchievementTimeWindow
-    //{
-    //    time_t startDate;
-    //    time_t endDate;
-    //}
-    //XblAchievementTimeWindow;
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct XblAchievementTimeWindow
+    public partial struct XblAchievementTimeWindow
     {
-        internal readonly TimeT startDate;
-        internal readonly TimeT endDate;
+        [NativeTypeName("time_t")]
+        public long startDate;
+
+        [NativeTypeName("time_t")]
+        public long endDate;
     }
 }

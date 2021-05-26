@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
     public class XblAchievementTitleAssociation
     {
-        internal XblAchievementTitleAssociation(Interop.XblAchievementTitleAssociation interopTitleAssociation)
+        internal unsafe XblAchievementTitleAssociation(Interop.XblAchievementTitleAssociation interopTitleAssociation)
         {
-            this.Name = interopTitleAssociation.name.GetString();
+            this.Name = Converters.PtrToStringUTF8(interopTitleAssociation.name);
             this.TitleId = interopTitleAssociation.titleId;
         }
 

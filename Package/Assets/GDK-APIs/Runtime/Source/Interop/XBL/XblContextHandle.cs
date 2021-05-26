@@ -12,4 +12,12 @@ namespace XGamingRuntime.Interop
     {
         internal readonly IntPtr handle;
     }
+
+
+    /// <summary>
+    /// Handle to an Xbox live context. Needed to interact with Xbox live services.
+    /// </summary>
+    public struct XblContext
+    {
+    }
 }

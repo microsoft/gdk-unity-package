@@ -1,15 +1,17 @@
-﻿namespace XGamingRuntime
+﻿using XGamingRuntime.Interop;
+
+namespace XGamingRuntime
 {
     public class XblAchievementReward
     {
-        internal XblAchievementReward(Interop.XblAchievementReward interopReward)
+        internal unsafe XblAchievementReward(Interop.XblAchievementReward interopReward)
         {
-            this.Name = interopReward.name.GetString();
-            this.Description = interopReward.description.GetString();
-            this.Value = interopReward.value.GetString();
+            this.Name = Converters.PtrToStringUTF8(interopReward.name);
+            this.Description = Converters.PtrToStringUTF8(interopReward.description);
+            this.Value = Converters.PtrToStringUTF8(interopReward.value);
             this.RewardType = interopReward.rewardType;
-            this.ValueType = interopReward.valueType.GetString();
-            this.MediaAsset = interopReward.GetMediaAsset(ma =>new XblAchievementMediaAsset(ma));
+            this.ValueType = Converters.PtrToStringUTF8(interopReward.valueType);
+            this.MediaAsset = new XblAchievementMediaAsset(*interopReward.mediaAsset);
         }
 
         public string Name { get; private set; }

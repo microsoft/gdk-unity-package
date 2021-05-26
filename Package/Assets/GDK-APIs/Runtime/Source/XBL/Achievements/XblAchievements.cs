@@ -21,19 +21,21 @@ namespace XGamingRuntime
                     achievements = null;
                     return HR.E_INVALIDARG;
                 }
-
-                IntPtr interopAchievements;
-                SizeT achievementsCount;
-                Int32 hresult = XblInterop.XblAchievementsResultGetAchievements(resultHandle.InteropHandle, out interopAchievements, out achievementsCount);
-
-                if (HR.FAILED(hresult))
+                unsafe
                 {
-                    achievements = null;
+                    Interop.XblAchievement* interopAchievements;
+                    uint achievementsCount;
+                    Int32 hresult = XblInterop.XblAchievementsResultGetAchievements(resultHandle.InteropHandle, &interopAchievements, &achievementsCount);
+
+                    if (HR.FAILED(hresult))
+                    {
+                        achievements = null;
+                        return hresult;
+                    }
+
+                    achievements = Converters.PtrToClassArray<XblAchievement, Interop.XblAchievement>((IntPtr)interopAchievements, achievementsCount, a => new XblAchievement(&a));
                     return hresult;
                 }
-
-                achievements = Converters.PtrToClassArray<XblAchievement, Interop.XblAchievement>(interopAchievements, achievementsCount, a =>new XblAchievement(a));
-                return hresult;
             }
 
             public static Int32 XblAchievementsResultHasNext(XblAchievementsResultHandle resultHandle, out bool hasNext)
@@ -44,7 +46,14 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                return XblInterop.XblAchievementsResultHasNext(resultHandle.InteropHandle, out hasNext);
+                unsafe
+                {
+                    bool result = default(bool);
+                    var hr = XblInterop.XblAchievementsResultHasNext(resultHandle.InteropHandle, &result);
+                    hasNext = result;
+
+                    return hr;
+                }
             }
 
             public static void XblAchievementsResultGetNextAsync(XblAchievementsResultHandle resultHandle, UInt32 maxItems, XblAchievementsResultGetNextResult completionRoutine)
@@ -55,27 +64,33 @@ namespace XGamingRuntime
                     return;
                 }
 
-                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) => 
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
                 {
-                    Interop.XblAchievementsResultHandle interopHandle;
-                    Int32 hresult = XblInterop.XblAchievementsResultGetNextResult(block, out interopHandle);
+                    unsafe
+                    {
+                        Interop.XblAchievementsResult* interopHandle;
+                        Int32 hresult = XblInterop.XblAchievementsResultGetNextResult(block.Ptr, &interopHandle);
 
-                    if (HR.SUCCEEDED(hresult))
-                    {
-                        completionRoutine(hresult, new XblAchievementsResultHandle(interopHandle));
-                    }
-                    else
-                    {
-                        completionRoutine(hresult, default(XblAchievementsResultHandle));
+                        if (HR.SUCCEEDED(hresult))
+                        {
+                            completionRoutine(hresult, new XblAchievementsResultHandle(interopHandle));
+                        }
+                        else
+                        {
+                            completionRoutine(hresult, default(XblAchievementsResultHandle));
+                        }
                     }
                 });
 
-                Int32 hr = XblInterop.XblAchievementsResultGetNextAsync(resultHandle.InteropHandle, maxItems, asyncBlock);
-
-                if (HR.FAILED(hr))
+                unsafe
                 {
-                    AsyncHelpers.CleanupAsyncBlock(asyncBlock);
-                    completionRoutine(hr, default(XblAchievementsResultHandle));
+                    Int32 hr = XblInterop.XblAchievementsResultGetNextAsync(resultHandle.InteropHandle, maxItems, asyncBlock.Ptr);
+
+                    if (HR.FAILED(hr))
+                    {
+                        AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                        completionRoutine(hr, default(XblAchievementsResultHandle));
+                    }
                 }
             }
 
@@ -96,40 +111,46 @@ namespace XGamingRuntime
                     return;
                 }
 
-                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) => 
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
                 {
-                    Interop.XblAchievementsResultHandle interopHandle;
-                    Int32 hresult = XblInterop.XblAchievementsGetAchievementsForTitleIdResult(block, out interopHandle);
+                    unsafe
+                    {
+                        Interop.XblAchievementsResult* interopHandle;
+                        Int32 hresult = XblInterop.XblAchievementsGetAchievementsForTitleIdResult(block.Ptr, &interopHandle);
 
-                    if (HR.SUCCEEDED(hresult))
-                    {
-                        completionRoutine(hresult, new XblAchievementsResultHandle(interopHandle));
-                    }
-                    else
-                    {
-                        completionRoutine(hresult, default(XblAchievementsResultHandle));
+                        if (HR.SUCCEEDED(hresult))
+                        {
+                            completionRoutine(hresult, new XblAchievementsResultHandle(interopHandle));
+                        }
+                        else
+                        {
+                            completionRoutine(hresult, default(XblAchievementsResultHandle));
+                        }
                     }
                 });
 
-                Int32 hr = XblInterop.XblAchievementsGetAchievementsForTitleIdAsync(
-                    xboxLiveContext.InteropHandle,
-                    xboxUserId,
-                    titleId,
-                    type,
-                    unlockedOnly,
-                    orderBy,
-                    skipItems,
-                    maxItems,
-                    asyncBlock);
-
-                if (HR.FAILED(hr))
+                unsafe
                 {
-                    AsyncHelpers.CleanupAsyncBlock(asyncBlock);
-                    completionRoutine(hr, default(XblAchievementsResultHandle));
+                    Int32 hr = XblInterop.XblAchievementsGetAchievementsForTitleIdAsync(
+                        (XblContext*)xboxLiveContext.InteropHandle.handle,
+                        xboxUserId,
+                        titleId,
+                        type,
+                        Convert.ToByte(unlockedOnly),
+                        orderBy,
+                        skipItems,
+                        maxItems,
+                        asyncBlock.Ptr);
+
+                    if (HR.FAILED(hr))
+                    {
+                        AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                        completionRoutine(hr, default(XblAchievementsResultHandle));
+                    }
                 }
             }
 
-            public static void XblAchievementsUpdateAchievementAsync(
+            public unsafe static void XblAchievementsUpdateAchievementAsync(
                 XblContextHandle xboxLiveContext,
                 UInt64 xboxUserId,
                 string achievementId,
@@ -142,27 +163,32 @@ namespace XGamingRuntime
                     return;
                 }
 
-                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) => 
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
                 {
                     Int32 hresult = XGRInterop.XAsyncGetStatus(block, wait: false);
                     completionRoutine(hresult);
                 });
 
-                Int32 hr = XblInterop.XblAchievementsUpdateAchievementAsync(
-                    xboxLiveContext.InteropHandle,
-                    xboxUserId,
-                    Converters.StringToNullTerminatedUTF8ByteArray(achievementId),
-                    percentComplete,
-                    asyncBlock);
-
-                if (HR.FAILED(hr))
+                using (var disposableCollection = new DisposableCollection())
                 {
-                    AsyncHelpers.CleanupAsyncBlock(asyncBlock);
-                    completionRoutine(hr);
+                    var achPtr = new UTF8StringPtr(achievementId, disposableCollection);
+
+                    Int32 hr = XblInterop.XblAchievementsUpdateAchievementAsync(
+                        (XblContext*)xboxLiveContext.InteropHandle.handle,
+                        xboxUserId,
+                        achPtr.ptr,
+                        percentComplete,
+                        asyncBlock.Ptr);
+
+                    if (HR.FAILED(hr))
+                    {
+                        AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                        completionRoutine(hr);
+                    }
                 }
             }
 
-            public static void XblAchievementsUpdateAchievementAsync(
+            public unsafe static void XblAchievementsUpdateAchievementAsync(
                 XblContextHandle xboxLiveContext,
                 UInt64 xboxUserId,
                 UInt32 titleId,
@@ -177,29 +203,35 @@ namespace XGamingRuntime
                     return;
                 }
 
-                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) => 
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
                 {
                     Int32 hresult = XGRInterop.XAsyncGetStatus(block, wait: false);
                     completionRoutine(hresult);
                 });
 
-                Int32 hr = XblInterop.XblAchievementsUpdateAchievementForTitleIdAsync(
-                    xboxLiveContext.InteropHandle,
+                using (var disposableCollection = new DisposableCollection())
+                {
+                    var scidPtr = new UTF8StringPtr(serviceConfigurationId, disposableCollection);
+                    var achPtr = new UTF8StringPtr(achievementId, disposableCollection);
+
+                    Int32 hr = XblInterop.XblAchievementsUpdateAchievementForTitleIdAsync(
+                    (XblContext*)xboxLiveContext.InteropHandle.handle,
                     xboxUserId,
                     titleId,
-                    Converters.StringToNullTerminatedUTF8ByteArray(serviceConfigurationId),
-                    Converters.StringToNullTerminatedUTF8ByteArray(achievementId),
+                    scidPtr.ptr,
+                    achPtr.ptr,
                     percentComplete,
-                    asyncBlock);
+                    asyncBlock.Ptr);
 
-                if (HR.FAILED(hr))
-                {
-                    AsyncHelpers.CleanupAsyncBlock(asyncBlock);
-                    completionRoutine(hr);
+                    if (HR.FAILED(hr))
+                    {
+                        AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                        completionRoutine(hr);
+                    }
                 }
             }
 
-            public static void XblAchievementsGetAchievementAsync(
+            public unsafe static void XblAchievementsGetAchievementAsync(
                 XblContextHandle xboxLiveContext,
                 UInt64 xboxUserId,
                 string serviceConfigurationId,
@@ -213,10 +245,10 @@ namespace XGamingRuntime
                     return;
                 }
 
-                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) => 
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
                 {
-                    Interop.XblAchievementsResultHandle interopHandle;
-                    Int32 hresult = XblInterop.XblAchievementsGetAchievementResult(block, out interopHandle);
+                    Interop.XblAchievementsResult* interopHandle;
+                    Int32 hresult = XblInterop.XblAchievementsGetAchievementResult(block.Ptr, &interopHandle);
                     if (HR.SUCCEEDED(hresult))
                     {
                         completionRoutine(hresult, new XblAchievementsResultHandle(interopHandle));
@@ -227,21 +259,27 @@ namespace XGamingRuntime
                     }
                 });
 
-                Int32 hr = XblInterop.XblAchievementsGetAchievementAsync(
-                    xboxLiveContext.InteropHandle,
-                    xboxUserId,
-                    Converters.StringToNullTerminatedUTF8ByteArray(serviceConfigurationId),
-                    Converters.StringToNullTerminatedUTF8ByteArray(achievementId),
-                    asyncBlock);
-
-                if (HR.FAILED(hr))
+                using (var disposableCollection = new DisposableCollection())
                 {
-                    AsyncHelpers.CleanupAsyncBlock(asyncBlock);
-                    completionRoutine(hr, default(XblAchievementsResultHandle));
+                    var scidPtr = new UTF8StringPtr(serviceConfigurationId, disposableCollection);
+                    var achPtr = new UTF8StringPtr(achievementId, disposableCollection);
+
+                    Int32 hr = XblInterop.XblAchievementsGetAchievementAsync(
+                    (XblContext*)xboxLiveContext.InteropHandle.handle,
+                    xboxUserId,
+                    scidPtr.ptr,
+                    achPtr.ptr,
+                    asyncBlock.Ptr);
+
+                    if (HR.FAILED(hr))
+                    {
+                        AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                        completionRoutine(hr, default(XblAchievementsResultHandle));
+                    }
                 }
             }
 
-            public static Int32 XblAchievementsResultDuplicateHandle(XblAchievementsResultHandle handle, out XblAchievementsResultHandle duplicatedHandle)
+            public unsafe static Int32 XblAchievementsResultDuplicateHandle(XblAchievementsResultHandle handle, out XblAchievementsResultHandle duplicatedHandle)
             {
                 if (handle == null)
                 {
@@ -249,8 +287,8 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                Interop.XblAchievementsResultHandle duplicatedInteropHandle;
-                Int32 hresult = XblInterop.XblAchievementsResultDuplicateHandle(handle.InteropHandle, out duplicatedInteropHandle);
+                Interop.XblAchievementsResult* duplicatedInteropHandle;
+                Int32 hresult = XblInterop.XblAchievementsResultDuplicateHandle(handle.InteropHandle, &duplicatedInteropHandle);
                 if (HR.SUCCEEDED(hresult))
                 {
                     duplicatedHandle = new XblAchievementsResultHandle(duplicatedInteropHandle);
@@ -262,7 +300,7 @@ namespace XGamingRuntime
                 return hresult;
             }
 
-            public static void XblAchievementsResultCloseHandle(XblAchievementsResultHandle handle)
+            public unsafe static void XblAchievementsResultCloseHandle(XblAchievementsResultHandle handle)
             {
                 if (handle == null)
                 {
@@ -270,7 +308,7 @@ namespace XGamingRuntime
                 }
 
                 XblInterop.XblAchievementsResultCloseHandle(handle.InteropHandle);
-                handle.InteropHandle = new Interop.XblAchievementsResultHandle();
+                handle.InteropHandle = null;
             }
         }
     }

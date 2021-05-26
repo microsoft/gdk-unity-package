@@ -1,25 +1,13 @@
-﻿using System;
-using System.Runtime.InteropServices;
-
 namespace XGamingRuntime.Interop
 {
-    //typedef struct XblAchievementProgression
-    //{
-    //    XblAchievementRequirement* requirements;
-    //    size_t requirementsCount;
-    //    time_t timeUnlocked;
-    //}
-    //XblAchievementProgression;
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct XblAchievementProgression
+    public unsafe partial struct XblAchievementProgression
     {
-        #region IntPtr wrappers
-        internal T[] GetRequirements<T>(Func<XblAchievementRequirement, T> ctor) { return Converters.PtrToClassArray(this.requirements, this.requirementsCount, ctor); }
-        #endregion
+        public XblAchievementRequirement* requirements;
 
-        private readonly IntPtr requirements;
-        private readonly SizeT requirementsCount;
-        internal readonly TimeT timeUnlocked;
+        [NativeTypeName("size_t")]
+        public uint requirementsCount;
+
+        [NativeTypeName("time_t")]
+        public long timeUnlocked;
     }
 }

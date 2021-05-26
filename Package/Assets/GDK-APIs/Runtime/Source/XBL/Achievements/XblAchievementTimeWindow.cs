@@ -6,8 +6,8 @@ namespace XGamingRuntime
     {
         internal XblAchievementTimeWindow(Interop.XblAchievementTimeWindow interopTimeWindow)
         {
-            this.StartDate = interopTimeWindow.startDate.DateTime;
-            this.EndDate = interopTimeWindow.endDate.DateTime;
+            this.StartDate = new DateTime(interopTimeWindow.startDate);
+            this.EndDate = new DateTime(interopTimeWindow.endDate);
         }
 
         public DateTime StartDate { get; private set; }

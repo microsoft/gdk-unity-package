@@ -1,12 +1,14 @@
-﻿namespace XGamingRuntime
+﻿using XGamingRuntime.Interop;
+
+namespace XGamingRuntime
 {
     public class XblAchievementRequirement
     {
-        internal XblAchievementRequirement(Interop.XblAchievementRequirement interopRequirement)
+        internal unsafe XblAchievementRequirement(Interop.XblAchievementRequirement interopRequirement)
         {
-            this.Id = interopRequirement.id.GetString();
-            this.CurrentProgressValue = interopRequirement.currentProgressValue.GetString();
-            this.TargetProgressValue = interopRequirement.targetProgressValue.GetString();
+            this.Id = Converters.PtrToStringUTF8(interopRequirement.id);
+            this.CurrentProgressValue = Converters.PtrToStringUTF8(interopRequirement.currentProgressValue);
+            this.TargetProgressValue = Converters.PtrToStringUTF8(interopRequirement.targetProgressValue);
         }
 
         public string Id { get; private set; }

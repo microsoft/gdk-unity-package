@@ -4,16 +4,21 @@ namespace XGamingRuntime
 {
     public class XblAchievementsResultHandle : EquatableHandle
     {
-        internal XblAchievementsResultHandle(Interop.XblAchievementsResultHandle interopHandle)
+        internal unsafe XblAchievementsResultHandle(Interop.XblAchievementsResult* interopHandle)
         {
             this.InteropHandle = interopHandle;
         }
 
         internal override IntPtr GetInternalPtr()
         {
-            return InteropHandle.handle;
+            IntPtr ptr = default(IntPtr);
+            unsafe
+            {
+                ptr = (IntPtr)InteropHandle;
+            }
+            return ptr;
         }
 
-        internal Interop.XblAchievementsResultHandle InteropHandle { get; set; }
+        internal unsafe Interop.XblAchievementsResult* InteropHandle { get; set; }
     }
 }

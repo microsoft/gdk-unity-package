@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
     public class XblAchievementMediaAsset
     {
-        internal XblAchievementMediaAsset(Interop.XblAchievementMediaAsset mediaAsset)
+        internal unsafe XblAchievementMediaAsset(Interop.XblAchievementMediaAsset mediaAsset)
         {
-            this.Name = mediaAsset.name.GetString();
+            this.Name = Converters.PtrToStringUTF8(mediaAsset.name);
             this.MediaAssetType = mediaAsset.mediaAssetType;
-            this.Url = mediaAsset.url.GetString();
+            this.Url = Converters.PtrToStringUTF8(mediaAsset.url);
         }
 
         public string Name { get; private set; }

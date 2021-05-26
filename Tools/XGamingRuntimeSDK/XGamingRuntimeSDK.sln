@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+VisualStudioVersion = 15.0.28307.1500
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XGamingRuntimeThunks", "XGamingRuntimeThunks\XGamingRuntimeThunks.vcxproj", "{AB35F77B-112D-4365-95F3-7DAE74315CCA}"
 EndProject
@@ -11,42 +11,56 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XGamingRuntime", "XGamingRu
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|Gaming.Desktop.x64 = Debug|Gaming.Desktop.x64
 		Debug|x64 = Debug|x64
+		Profile|Any CPU = Profile|Any CPU
 		Profile|Gaming.Desktop.x64 = Profile|Gaming.Desktop.x64
 		Profile|x64 = Profile|x64
+		Release|Any CPU = Release|Any CPU
 		Release|Gaming.Desktop.x64 = Release|Gaming.Desktop.x64
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Debug|Any CPU.ActiveCfg = Debug|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Debug|Gaming.Desktop.x64.ActiveCfg = Debug|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Debug|Gaming.Desktop.x64.Build.0 = Debug|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Debug|x64.ActiveCfg = Debug|Gaming.Desktop.x64
+		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Profile|Any CPU.ActiveCfg = Profile|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Profile|Gaming.Desktop.x64.ActiveCfg = Profile|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Profile|Gaming.Desktop.x64.Build.0 = Profile|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Profile|x64.ActiveCfg = Profile|Gaming.Desktop.x64
+		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Release|Any CPU.ActiveCfg = Release|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Release|Gaming.Desktop.x64.ActiveCfg = Release|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Release|Gaming.Desktop.x64.Build.0 = Release|Gaming.Desktop.x64
 		{AB35F77B-112D-4365-95F3-7DAE74315CCA}.Release|x64.ActiveCfg = Release|Gaming.Desktop.x64
+		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Debug|Gaming.Desktop.x64.ActiveCfg = Debug|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Debug|Gaming.Desktop.x64.Build.0 = Debug|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Debug|x64.ActiveCfg = Debug|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Debug|x64.Build.0 = Debug|x64
+		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Profile|Any CPU.ActiveCfg = Release|x64
+		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Profile|Any CPU.Build.0 = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Profile|Gaming.Desktop.x64.ActiveCfg = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Profile|Gaming.Desktop.x64.Build.0 = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Profile|x64.ActiveCfg = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Profile|x64.Build.0 = Release|x64
+		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Release|Any CPU.ActiveCfg = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Release|Gaming.Desktop.x64.ActiveCfg = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Release|Gaming.Desktop.x64.Build.0 = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Release|x64.ActiveCfg = Release|x64
 		{010FAFE8-E344-4CDC-B6BD-F09AE1A6612F}.Release|x64.Build.0 = Release|x64
+		{8969A576-C40B-487B-802A-BF310E14639A}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Debug|Gaming.Desktop.x64.ActiveCfg = Debug|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Debug|x64.ActiveCfg = Debug|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Debug|x64.Build.0 = Debug|x64
+		{8969A576-C40B-487B-802A-BF310E14639A}.Profile|Any CPU.ActiveCfg = Release|x64
+		{8969A576-C40B-487B-802A-BF310E14639A}.Profile|Any CPU.Build.0 = Release|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Profile|Gaming.Desktop.x64.ActiveCfg = Release|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Profile|Gaming.Desktop.x64.Build.0 = Release|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Profile|x64.ActiveCfg = Release|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Profile|x64.Build.0 = Release|x64
+		{8969A576-C40B-487B-802A-BF310E14639A}.Release|Any CPU.ActiveCfg = Release|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Release|Gaming.Desktop.x64.ActiveCfg = Release|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Release|x64.ActiveCfg = Release|x64
 		{8969A576-C40B-487B-802A-BF310E14639A}.Release|x64.Build.0 = Release|x64

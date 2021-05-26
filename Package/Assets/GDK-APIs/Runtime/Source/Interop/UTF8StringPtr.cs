@@ -7,7 +7,7 @@ namespace XGamingRuntime.Interop
     /// Represents a null-terminated UTF-8 char* whose _pointer value_ is marshalled between managed and unmanaged code.
     /// </summary>>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct UTF8StringPtr
+    internal unsafe struct UTF8StringPtr
     {
         /// <summary>
         /// Constructor for marshaling a UTF8 char* _to_ managed code.  Requires an existing DisposableCollection to add a buffer to.
@@ -17,6 +17,7 @@ namespace XGamingRuntime.Interop
             if (str == null)
             {
                 this.pointer = IntPtr.Zero;
+                this.ptr = null;
             }
             else
             {
@@ -25,6 +26,7 @@ namespace XGamingRuntime.Interop
                 Marshal.Copy(source: utf8Bytes, startIndex: 0, destination: buffer.IntPtr, length: utf8Bytes.Length);
                 disposableCollection.Add(buffer);
                 this.pointer = buffer.IntPtr;
+                this.ptr = (sbyte*)this.pointer;
             }
         }
 
@@ -46,5 +48,6 @@ namespace XGamingRuntime.Interop
         }
 
         private IntPtr pointer;
+        public sbyte* ptr;
     }
 }

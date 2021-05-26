@@ -1,16 +1,10 @@
-﻿using System;
-
 namespace XGamingRuntime
 {
-    public enum XblAchievementMediaAssetType : UInt32
+    [Interop.NativeTypeName("uint32_t")]
+    public enum XblAchievementMediaAssetType : uint
     {
-        /// <summary>The media asset type is unknown.</summary>
         Unknown,
-
-        /// <summary>An icon media asset.</summary>
         Icon,
-
-        /// <summary>An art media asset.</summary>
-        Art
+        Art,
     }
 }

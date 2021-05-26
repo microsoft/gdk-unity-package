@@ -18,6 +18,11 @@ namespace XGamingRuntime.Interop
             this.value = new UIntPtr(Convert.ToUInt64(length));
         }
 
+        public SizeT(UIntPtr length)
+        {
+            this.value = length;
+        }
+
         public UInt32 ToUInt32()
         {
             return Convert.ToUInt32(value.ToUInt64());

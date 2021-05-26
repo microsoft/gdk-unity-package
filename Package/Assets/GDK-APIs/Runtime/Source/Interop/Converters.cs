@@ -6,6 +6,29 @@ namespace XGamingRuntime.Interop
 {
     static class Converters
     {
+        ////////////////////
+        //  CUSTOM  ADDS  //
+        ////////////////////
+
+        internal unsafe static string PtrToStringUTF8(sbyte* rawPtr)
+        {
+            return PtrToStringUTF8((IntPtr)rawPtr);
+        }
+
+        internal unsafe static string[] StringPtrToArray(sbyte** rawPtr, UInt32 count)
+        {
+            string[] ret = new string[count];
+            for (int i = 0; i < count; i++)
+            {
+                ret[i] = PtrToStringUTF8((IntPtr)rawPtr[i]);
+            }
+            return ret;
+        }
+
+        /////////////////////
+        // END CUSTOM ADDS //
+        /////////////////////
+
         internal static IntPtr Offset(this IntPtr ptr, Int64 that)
         {
             return new IntPtr(ptr.ToInt64() + (that));

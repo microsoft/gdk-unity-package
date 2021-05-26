@@ -5,6 +5,8 @@ namespace XGamingRuntime.Interop
 {
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
     internal delegate void XAsyncCompletionRoutine(XAsyncBlockPtr asyncBlock);
+    [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+    internal unsafe delegate void XAsyncCompletionRoutinePtr(XAsyncBlock* asyncBlock);
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct XAsyncBlockPtr
@@ -12,14 +14,19 @@ namespace XGamingRuntime.Interop
         internal XAsyncBlockPtr(IntPtr intPtr)
         {
             this.IntPtr = intPtr;
+            unsafe
+            {
+                this.Ptr = (XAsyncBlock*)intPtr;
+            }
         }
 
         internal readonly IntPtr IntPtr;
+        internal unsafe readonly XAsyncBlock* Ptr;
     }
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct XAsyncBlock
+    public struct XAsyncBlock
     {
         internal XTaskQueueHandle queue;
         internal IntPtr context;
