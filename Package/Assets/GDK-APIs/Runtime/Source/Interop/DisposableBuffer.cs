@@ -18,6 +18,9 @@ namespace XGamingRuntime.Interop
         public DisposableBuffer(Int32 size)
         {
             this.IntPtr = Marshal.AllocHGlobal(size);
+            // Zero out memory
+            byte[] zeroMem = new byte[size];
+            Marshal.Copy(zeroMem, 0, this.IntPtr, size);
         }
 
         public void Dispose()
