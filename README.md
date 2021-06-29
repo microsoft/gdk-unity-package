@@ -14,7 +14,7 @@ The GDK Unity package supports Unity 2017.4 and newer.
 
 ## How to use 
 
-1. Make sure you have the [GDK](https://aka.ms/gdkdl) installed.
+1. Make sure you have the [GDK](https://aka.ms/gdk) installed.
 
 2. Download the Unity package that matches the installed GDK version from the [releases](https://github.com/microsoft/gdk-unity-package/releases) tab. 
 
