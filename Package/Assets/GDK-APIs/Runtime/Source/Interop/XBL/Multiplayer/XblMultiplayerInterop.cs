@@ -310,6 +310,32 @@ namespace XGamingRuntime.Interop
             out UTF8StringPtr customPropertiesJson
             );
 
+        //STDAPI XblMultiplayerWriteSessionByHandleAsync(
+        //    _In_ XblContextHandle xblContext,
+        //    _In_ XblMultiplayerSessionHandle multiplayerSession,
+        //    _In_ XblMultiplayerSessionWriteMode writeMode,
+        //    _In_ const char* handleId,
+        //    _Inout_ XAsyncBlock* async  
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XblMultiplayerWriteSessionByHandleAsync(
+            XblContextHandle xblContext,
+            XblMultiplayerSessionHandle multiplayerSession,
+            XblMultiplayerSessionWriteMode writeMode,
+            byte[] handleId,
+            XAsyncBlockPtr async
+        );
+
+        //STDAPI XblMultiplayerWriteSessionByHandleResult(
+        //    _Inout_ XAsyncBlock* async,
+        //    _Out_ XblMultiplayerSessionHandle* handle
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XblMultiplayerWriteSessionByHandleResult(
+            XAsyncBlockPtr async,
+            out XblMultiplayerSessionHandle handle
+        );
+
         //STDAPI XblMultiplayerWriteSessionAsync(
         //    _In_ XblContextHandle xblContext,
         //    _In_ XblMultiplayerSessionHandle multiplayerSession,

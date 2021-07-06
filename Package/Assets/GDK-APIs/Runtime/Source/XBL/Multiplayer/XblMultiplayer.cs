@@ -460,6 +460,49 @@ namespace XGamingRuntime
                 return hr;
             }
 
+            public static void XblMultiplayerWriteSessionByHandleAsync(
+                XblContextHandle xblContext,
+                XblMultiplayerSessionHandle multiplayerSessionHandle,
+                XblMultiplayerSessionWriteMode writeMode,
+                string handleId,
+                XblMultiplayerWriteSessionHandleResult completionRoutine
+                )
+            {
+                if (xblContext == null || multiplayerSessionHandle == null || string.IsNullOrEmpty(handleId))
+                {
+                    completionRoutine(HR.E_INVALIDARG, default(XblMultiplayerSessionHandle));
+                    return;
+                }
+
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(
+                    defaultQueue.handle, 
+                    (XAsyncBlockPtr block) =>
+                {
+                    Interop.XblMultiplayerSessionHandle result;
+                    Int32 hresult = XblInterop.XblMultiplayerWriteSessionByHandleResult(block, out result);
+                    if (HR.FAILED(hresult))
+                    {
+                        completionRoutine(hresult, default(XblMultiplayerSessionHandle));
+                        return;
+                    }
+
+                    completionRoutine(hresult, new XblMultiplayerSessionHandle(result));
+                });
+
+                Int32 hr = XblInterop.XblMultiplayerWriteSessionByHandleAsync(
+                    xblContext.InteropHandle,
+                    multiplayerSessionHandle.InteropHandle,
+                    writeMode,
+                    Converters.StringToNullTerminatedUTF8ByteArray(handleId),
+                    asyncBlock);
+
+                if (HR.FAILED(hr))
+                {
+                    AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                    completionRoutine(hr, default(XblMultiplayerSessionHandle));
+                }
+            }
+
             public static void XblMultiplayerWriteSessionAsync(
                 XblContextHandle xblContext,
                 XblMultiplayerSessionHandle handle,
