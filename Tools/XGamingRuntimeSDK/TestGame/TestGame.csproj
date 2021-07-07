@@ -221,5 +221,11 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XGamingRuntime\XGamingRuntime.csproj">
+      <Project>{8969a576-c40b-487b-802a-bf310e14639a}</Project>
+      <Name>XGamingRuntime</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,6 +13,7 @@ namespace XGamingRuntime
             this.XboxUserId = interopRow.xboxUserId;
             this.Percentile = interopRow.percentile;
             this.Rank = interopRow.rank;
+            this.GlobalRank = interopRow.globalRank;
             this.ColumnValues = interopRow.GetColumnValues();
         }
 
@@ -23,6 +24,7 @@ namespace XGamingRuntime
         public UInt64 XboxUserId { get; private set; }
         public double Percentile { get; private set; }
         public UInt32 Rank { get; private set; }
+        public UInt32 GlobalRank { get; private set; }
         public string[] ColumnValues { get; private set; }
     }
 }
