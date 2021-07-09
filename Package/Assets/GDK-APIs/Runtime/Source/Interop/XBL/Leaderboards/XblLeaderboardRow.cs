@@ -33,6 +33,7 @@ namespace XGamingRuntime.Interop
         internal readonly UInt64 xboxUserId;
         internal readonly double percentile;
         internal readonly UInt32 rank;
+        internal readonly UInt32 globalRank;
         private readonly IntPtr columnValues;
         private readonly SizeT columnValuesCount;
 
@@ -45,6 +46,7 @@ namespace XGamingRuntime.Interop
             this.xboxUserId = row.XboxUserId;
             this.percentile = row.Percentile;
             this.rank = row.Rank;
+            this.globalRank = row.GlobalRank;
             this.columnValues = Converters.ClassArrayToPtr(row.ColumnValues, (s, dc) =>new UTF8StringPtr(s, dc), disposableCollection, out this.columnValuesCount);
         }
     }
