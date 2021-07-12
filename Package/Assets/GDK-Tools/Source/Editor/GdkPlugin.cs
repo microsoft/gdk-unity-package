@@ -10,13 +10,6 @@ namespace Microsoft.GameCore.Tools
     [InitializeOnLoad]
     public static class GdkPlugin
     {
-        //[MenuItem("GDK/Documentation/Setting up your project to work with the GDK Unity Plug-in")]
-        //private static void OpenReadme()
-        //{
-        //    string readmeUrl = GdkEditorHelpers.GetRootPluginPath() + "\\GDK-Tools\\Readme.docx";
-        //    Application.OpenURL(readmeUrl);
-        //}
-
         [MenuItem("GDK/Documentation/Developer Portal (GDK)")]
         private static void OpenDeveloperPortal()
         {
