@@ -7,9 +7,13 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using UnityEditor;
+#if UNITY_2018_4_OR_NEWER
+using UnityEditor.Build.Reporting;
+#endif
 using UnityEngine;
 
-public static class GdkBuild {
+public static class GdkBuild
+{
 
     internal static string aumid;
     private static string buildOutputFolderPath;
@@ -60,7 +64,7 @@ public static class GdkBuild {
     public static bool PreBuild(string pcStandaloneBuildPath)
     {
         bool succeeded = false;
-        
+
         buildWin32OutputFolderPath = pcStandaloneBuildPath;
 
         succeeded = CopyManifestFiles();
@@ -88,7 +92,7 @@ public static class GdkBuild {
                 Directory.CreateDirectory(gdkBuildOutputFolderPath);
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             GdkEditorHelpers.LogError("Error: Could not find or create GDK Build output directory: " + gdkBuildOutputFolderPath);
         }

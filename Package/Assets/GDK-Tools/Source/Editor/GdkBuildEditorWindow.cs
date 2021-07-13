@@ -9,9 +9,6 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using UnityEditor;
-#if UNITY_2018_4_OR_NEWER
-using UnityEditor.Build.Reporting;
-#endif
 using UnityEngine;
 
 namespace Microsoft.GameCore.Tools
