@@ -13,7 +13,7 @@ namespace Microsoft.GameCore.Tools
         [MenuItem("GDK/Documentation/Developer Portal (GDK)")]
         private static void OpenDeveloperPortal()
         {
-            Application.OpenURL("https://aka.ms/xhub");
+            Application.OpenURL("https://aka.ms/gamedevdocs");
         }
 
         [MenuItem("GDK/Documentation/Unity Integration Documentation (GDK)")]
