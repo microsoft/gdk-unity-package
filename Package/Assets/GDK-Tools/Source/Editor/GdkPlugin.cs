@@ -13,13 +13,13 @@ namespace Microsoft.GameCore.Tools
         [MenuItem("GDK/Documentation/Developer Portal (GDK)")]
         private static void OpenDeveloperPortal()
         {
-            Application.OpenURL("https://docs.microsoft.com/gaming/gdk/");
+            Application.OpenURL("https://aka.ms/gamedevdocs");
         }
 
         [MenuItem("GDK/Documentation/Unity Integration Documentation (GDK)")]
         private static void OpenUnityDocs()
         {
-            Application.OpenURL("https://docs.microsoft.com/gaming/gdk/_content/gc/get-started-with-pc-dev/get-started-with-unity-pc/gdk-unity-end-to-end-guide");
+            Application.OpenURL("http://aka.ms/gdk_unity");
         }
 
         [MenuItem("GDK/Associate with the Microsoft Store")]
