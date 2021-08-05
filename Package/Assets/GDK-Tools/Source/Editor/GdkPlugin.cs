@@ -19,7 +19,7 @@ namespace Microsoft.GameCore.Tools
         [MenuItem("GDK/Documentation/Unity Integration Documentation (GDK)")]
         private static void OpenUnityDocs()
         {
-            Application.OpenURL("http://aka.ms/gdk_unity");
+            Application.OpenURL("https://aka.ms/gdk_unity");
         }
 
         [MenuItem("GDK/Associate with the Microsoft Store")]
