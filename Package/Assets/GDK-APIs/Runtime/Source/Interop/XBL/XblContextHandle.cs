@@ -8,8 +8,8 @@ namespace XGamingRuntime.Interop
     /// </summary>
     //typedef struct XblContext* XblContextHandle;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblContextHandle
+    public struct XblContextHandle
     {
-        internal readonly IntPtr handle;
+        public readonly IntPtr handle;
     }
 }
