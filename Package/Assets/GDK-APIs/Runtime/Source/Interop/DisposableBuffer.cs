@@ -6,7 +6,7 @@ using System.Text;
 
 namespace XGamingRuntime.Interop
 {
-    internal class DisposableBuffer : IDisposable
+    public class DisposableBuffer : IDisposable
     {
         public DisposableBuffer()
         {

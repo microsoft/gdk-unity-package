@@ -14,6 +14,6 @@ namespace XGamingRuntime
             return InteropHandle.handle;
         }
 
-        internal Interop.XblMultiplayerSessionHandle InteropHandle { get; set; }
+        public Interop.XblMultiplayerSessionHandle InteropHandle { get; set; }
     }
 }

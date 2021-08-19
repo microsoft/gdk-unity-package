@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XGamingRuntime.Interop
 {
-    internal class DisposableCollection : IDisposable
+    public class DisposableCollection : IDisposable
     {
         public DisposableCollection()
         {

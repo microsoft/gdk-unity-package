@@ -10,17 +10,17 @@ namespace XGamingRuntime.Interop
     //    _Null_terminated_ char SessionName[XBL_MULTIPLAYER_SESSION_NAME_MAX_LENGTH];
     //} XblMultiplayerSessionReference;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionReference
+    public struct XblMultiplayerSessionReference
     {
         private unsafe fixed Byte Scid[40]; // char Scid[40]
         private unsafe fixed Byte SessionTemplateName[100]; // char SessionTemplateName[100]
         private unsafe fixed Byte SessionName[100]; // char SessionName[100]
 
-        internal string GetScid() { unsafe { fixed (Byte* ptr = this.Scid) { return Converters.BytePointerToString(ptr, 40); } } }
-        internal string GetSessionTemplateName() { unsafe { fixed (Byte* ptr = this.SessionTemplateName) { return Converters.BytePointerToString(ptr, 100); } } }
-        internal string GetSessionName() { unsafe { fixed (Byte* ptr = this.SessionName) { return Converters.BytePointerToString(ptr, 100); } } }
+        public string GetScid() { unsafe { fixed (Byte* ptr = this.Scid) { return Converters.BytePointerToString(ptr, 40); } } }
+        public string GetSessionTemplateName() { unsafe { fixed (Byte* ptr = this.SessionTemplateName) { return Converters.BytePointerToString(ptr, 100); } } }
+        public string GetSessionName() { unsafe { fixed (Byte* ptr = this.SessionName) { return Converters.BytePointerToString(ptr, 100); } } }
 
-        internal XblMultiplayerSessionReference(XGamingRuntime.XblMultiplayerSessionReference publicObject)
+        public XblMultiplayerSessionReference(XGamingRuntime.XblMultiplayerSessionReference publicObject)
         {
             unsafe
             {
