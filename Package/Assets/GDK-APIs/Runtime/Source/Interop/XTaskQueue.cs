@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace XGamingRuntime.Interop
 {
-    internal enum XTaskQueueDispatchMode : UInt32
+    public enum XTaskQueueDispatchMode : UInt32
     {
         Manual = 0,
         ThreadPool,
@@ -11,14 +11,14 @@ namespace XGamingRuntime.Interop
         Immediate
     }
 
-    internal enum XTaskQueuePort : UInt32
+    public enum XTaskQueuePort : UInt32
     {
         Work = 0,
         Completion
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XTaskQueueHandle
+    public struct XTaskQueueHandle
     {
         private readonly IntPtr intPtr;
     }
@@ -28,12 +28,12 @@ namespace XGamingRuntime.Interop
     //    uint64_t token;
     //};
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XTaskQueueRegistrationToken
+    public struct XTaskQueueRegistrationToken
     {
         public readonly UInt64 token;
     }
 
-    internal class XTaskQueue
+    public class XTaskQueue
     {
         public XTaskQueueHandle handle { get; set; }
     }

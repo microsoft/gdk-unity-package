@@ -4,14 +4,14 @@ using System.Runtime.InteropServices;
 
 namespace XGamingRuntime.Interop
 {
-    static class Converters
+    public static class Converters
     {
-        internal static IntPtr Offset(this IntPtr ptr, Int64 that)
+        public static IntPtr Offset(this IntPtr ptr, Int64 that)
         {
             return new IntPtr(ptr.ToInt64() + (that));
         }
 
-        internal static DisposableBuffer StringArrayToUTF8StringArray(string[] strings)
+        public static DisposableBuffer StringArrayToUTF8StringArray(string[] strings)
         {
             if (strings == null)
             {
@@ -57,7 +57,7 @@ namespace XGamingRuntime.Interop
             return result;
         }
 
-        internal static IntPtr StringArrayToUTF8StringArray(string[] strings, DisposableCollection disposableCollection, out SizeT count)
+        public static IntPtr StringArrayToUTF8StringArray(string[] strings, DisposableCollection disposableCollection, out SizeT count)
         {
             if (strings == null)
             {
@@ -69,8 +69,8 @@ namespace XGamingRuntime.Interop
             return disposableCollection.Add(StringArrayToUTF8StringArray(strings)).IntPtr;
         }
 
-        internal static Byte[] StringToNullTerminatedUTF8ByteArray(string str) { return StringToNullTerminatedUTF8ByteArrayInternal(str, requiredByteArrayLength: -1); }
-        internal static Byte[] StringToNullTerminatedUTF8ByteArray(string str, int requiredByteArrayLength) { return StringToNullTerminatedUTF8ByteArrayInternal(str, requiredByteArrayLength); }
+        public static Byte[] StringToNullTerminatedUTF8ByteArray(string str) { return StringToNullTerminatedUTF8ByteArrayInternal(str, requiredByteArrayLength: -1); }
+        public static Byte[] StringToNullTerminatedUTF8ByteArray(string str, int requiredByteArrayLength) { return StringToNullTerminatedUTF8ByteArrayInternal(str, requiredByteArrayLength); }
 
         private static Byte[] StringToNullTerminatedUTF8ByteArrayInternal(string str, int requiredByteArrayLength)
         {
@@ -90,32 +90,32 @@ namespace XGamingRuntime.Interop
             }
         }
 
-        internal static unsafe void StringToNullTerminatedUTF8FixedPointer(string str, Byte* bytePointer, Int32 length)
+        public static unsafe void StringToNullTerminatedUTF8FixedPointer(string str, Byte* bytePointer, Int32 length)
         {
             Byte[] bytes = StringToNullTerminatedUTF8ByteArray(str, length);
             Marshal.Copy(source: bytes, startIndex: 0, destination: (IntPtr)bytePointer, length: length);
         }
 
-        internal static unsafe string BytePointerToString(Byte* bytePointer, Int32 length)
+        public static unsafe string BytePointerToString(Byte* bytePointer, Int32 length)
         {
             Byte[] bytes = new Byte[length];
             Marshal.Copy(source: (IntPtr)bytePointer, destination: bytes, startIndex: 0, length: length);
             return ByteArrayToString(bytes);
         }
 
-        internal static string ByteArrayToString(Byte[] arr)
+        public static string ByteArrayToString(Byte[] arr)
         {
             string str = System.Text.Encoding.UTF8.GetString(arr);
             Int32 nullIndex = str.IndexOf('\0');
             return nullIndex >= 0 ? str.Substring(0, nullIndex) : str;
         }
 
-        internal static string ByteArrayToString(Byte[] arr, Int32 index, Int32 count)
+        public static string ByteArrayToString(Byte[] arr, Int32 index, Int32 count)
         {
             return System.Text.Encoding.UTF8.GetString(arr, index, count).TrimEnd(new char[] { '\0' });
         }
 
-        internal static string PtrToStringUTF8(IntPtr rawPtr)
+        public static string PtrToStringUTF8(IntPtr rawPtr)
         {
             if (rawPtr == IntPtr.Zero)
             {
@@ -138,7 +138,7 @@ namespace XGamingRuntime.Interop
             return System.Text.Encoding.UTF8.GetString(bytes.ToArray());
         }
 
-        internal static ClassType PtrToClass<ClassType, InteropStructType>(IntPtr rawPtr, Func<InteropStructType, ClassType> ctor)
+        public static ClassType PtrToClass<ClassType, InteropStructType>(IntPtr rawPtr, Func<InteropStructType, ClassType> ctor)
             where ClassType : class
             where InteropStructType : struct
         {
@@ -152,12 +152,12 @@ namespace XGamingRuntime.Interop
             }
         }
 
-        internal static ClassType[] PtrToClassArray<ClassType, InteropStructType>(IntPtr rawPtr, SizeT count, Func<InteropStructType, ClassType> ctor)
+        public static ClassType[] PtrToClassArray<ClassType, InteropStructType>(IntPtr rawPtr, SizeT count, Func<InteropStructType, ClassType> ctor)
         {
             return PtrToClassArray(rawPtr, count.ToUInt32(), ctor);
         }
 
-        internal static ClassType[] PtrToClassArray<ClassType, InteropStructType>(IntPtr rawPtr, UInt32 count, Func<InteropStructType, ClassType> ctor)
+        public static ClassType[] PtrToClassArray<ClassType, InteropStructType>(IntPtr rawPtr, UInt32 count, Func<InteropStructType, ClassType> ctor)
         {
             ClassType[] ret = new ClassType[(Int32)count];
 

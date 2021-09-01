@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace XGamingRuntime.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SizeT 
+    public struct SizeT 
     {
         public bool IsZero { get { return value == UIntPtr.Zero; } }
 

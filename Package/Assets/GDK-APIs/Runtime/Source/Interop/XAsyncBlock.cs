@@ -4,10 +4,10 @@ using System.Runtime.InteropServices;
 namespace XGamingRuntime.Interop
 {
     [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-    internal delegate void XAsyncCompletionRoutine(XAsyncBlockPtr asyncBlock);
+    public delegate void XAsyncCompletionRoutine(XAsyncBlockPtr asyncBlock);
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XAsyncBlockPtr
+    public struct XAsyncBlockPtr
     {
         internal XAsyncBlockPtr(IntPtr intPtr)
         {
@@ -19,7 +19,7 @@ namespace XGamingRuntime.Interop
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    internal struct XAsyncBlock
+    public struct XAsyncBlock
     {
         internal XTaskQueueHandle queue;
         internal IntPtr context;

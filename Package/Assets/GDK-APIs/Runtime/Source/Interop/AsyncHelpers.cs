@@ -9,9 +9,9 @@ namespace XGamingRuntime.Interop
         internal U userCallback;
     }
 
-    class AsyncHelpers
+    public class AsyncHelpers
     {
-        internal static XAsyncBlockPtr WrapAsyncBlock(XTaskQueueHandle queue, XAsyncCompletionRoutine callback)
+        public static XAsyncBlockPtr WrapAsyncBlock(XTaskQueueHandle queue, XAsyncCompletionRoutine callback)
         {
             var acb = new UnmanagedCallback<XAsyncCompletionRoutine, XAsyncCompletionRoutine>
             {

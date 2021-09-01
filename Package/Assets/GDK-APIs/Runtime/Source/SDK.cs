@@ -5,7 +5,7 @@ namespace XGamingRuntime
 {
     public partial class SDK
     {
-        static XTaskQueue defaultQueue = null;
+        public static XTaskQueue defaultQueue = null;
         static bool isInitialized = false;
 
         public static Int32 XGameRuntimeInitialize()

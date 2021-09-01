@@ -11,8 +11,8 @@ namespace XGamingRuntime.Interop
     /// </summary>
     /// typedef struct XblMultiplayerSession* XblMultiplayerSessionHandle;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionHandle
+    public struct XblMultiplayerSessionHandle
     {
-        internal readonly IntPtr handle;
+        public readonly IntPtr handle;
     }
 }

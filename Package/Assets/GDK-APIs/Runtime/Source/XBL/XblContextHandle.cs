@@ -14,6 +14,6 @@ namespace XGamingRuntime
             return InteropHandle.handle;
         }
 
-        internal Interop.XblContextHandle InteropHandle { get; set; }
+        public Interop.XblContextHandle InteropHandle { get; set; }
     }
 }

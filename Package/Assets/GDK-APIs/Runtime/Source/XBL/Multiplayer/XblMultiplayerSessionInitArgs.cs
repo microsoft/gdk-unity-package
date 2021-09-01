@@ -5,6 +5,19 @@ namespace XGamingRuntime
 {
     public class XblMultiplayerSessionInitArgs
     {
+        public XblMultiplayerSessionInitArgs(
+            UInt32 maxMembers,
+            XblMultiplayerSessionVisibility visibility,
+            string customJson,
+            params UInt64[] initiatorXuids)
+        {
+            this.MaxMembersInSession = maxMembers;
+            this.Visibility = visibility;
+            this.InitiatorXuids = new ulong[initiatorXuids.Length];
+            Array.Copy(initiatorXuids, this.InitiatorXuids, initiatorXuids.Length);
+            this.CustomJson = customJson;
+        }
+
         internal XblMultiplayerSessionInitArgs(Interop.XblMultiplayerSessionInitArgs interopStruct)
         {
             this.MaxMembersInSession = interopStruct.MaxMembersInSession;
