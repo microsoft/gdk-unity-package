@@ -7,6 +7,8 @@ namespace XGamingRuntime
     {
         public partial class XBL
         {
+            public const int StandardScidLength = 36;
+
             public delegate void XblCleanupResult(Int32 hresult);
 
             public static Int32 XblInitialize(string scid)
@@ -66,7 +68,7 @@ namespace XGamingRuntime
             }
 
             /// <summary>
-            /// Wraps the underlying native XblContextGetXboxUserId API:
+            /// Wraps the underlying native XblContextDuplicateHandle API:
             /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/xbox_live_context_c/functions/xblcontextduplicatehandle
             /// </summary>
             /// <param name="srcXboxLiveContextHandle"></param>
@@ -99,7 +101,7 @@ namespace XGamingRuntime
             }
 
             /// <summary>
-            /// Wraps the underlying native XblContextGetXboxUserId API:
+            /// Wraps the underlying native XblContextGetUser API:
             /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/xbox_live_context_c/functions/xblcontextgetuser
             /// </summary>
             /// <param name="xboxLiveContextHandle"></param>
@@ -159,6 +161,32 @@ namespace XGamingRuntime
                 else
                 {
                     dstXboxUserId = 0;
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblGetScid API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/xbox_live_global_c/functions/xblgetscid
+            /// </summary>
+            /// <param name="resultScid"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblGetScid(ref string resultScid)
+            {
+                resultScid = string.Empty;
+                int result = HR.S_OK;
+
+                unsafe
+                {
+                    sbyte* scidPointer;
+                    result = XboxLiveGlobal.XblGetScid(&scidPointer);
+                    if (HR.SUCCEEDED(result))
+                    {
+                        resultScid = Converters.BytePointerToString(
+                            (byte*)scidPointer,
+                            StandardScidLength);
+                    }
                 }
 
                 return result;
