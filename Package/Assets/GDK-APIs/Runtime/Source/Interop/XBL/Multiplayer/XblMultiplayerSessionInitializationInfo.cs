@@ -10,7 +10,7 @@ namespace XGamingRuntime.Interop
     //    uint32_t Episode;
     //} XblMultiplayerSessionInitializationInfo;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionInitializationInfo
+    public struct XblMultiplayerSessionInitializationInfo
     {
         internal readonly XblMultiplayerInitializationStage Stage;
         internal readonly TimeT StageStartTime;

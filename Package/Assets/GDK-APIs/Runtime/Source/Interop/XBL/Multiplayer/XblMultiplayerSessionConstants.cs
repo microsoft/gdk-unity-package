@@ -29,7 +29,7 @@ namespace XGamingRuntime.Interop
     //    XblMultiplayerSessionCapabilities SessionCapabilities;
     //} XblMultiplayerSessionConstants;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionConstants
+    public struct XblMultiplayerSessionConstants
     {
         internal readonly UInt32 MaxMembersInSession;
         internal readonly XblMultiplayerSessionVisibility Visibility;

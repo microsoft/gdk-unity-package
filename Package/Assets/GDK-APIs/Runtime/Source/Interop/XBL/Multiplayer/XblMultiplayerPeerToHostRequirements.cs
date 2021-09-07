@@ -11,7 +11,7 @@ namespace XGamingRuntime.Interop
     //    XblMultiplayerMetrics HostSelectionMetric;
     //} XblMultiplayerPeerToHostRequirements;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerPeerToHostRequirements
+    public struct XblMultiplayerPeerToHostRequirements
     {
         internal readonly UInt64 LatencyMaximum;
         internal readonly UInt64 BandwidthDownMinimumInKbps;

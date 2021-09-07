@@ -12,7 +12,7 @@ namespace XGamingRuntime.Interop
     //    uint32_t MembersNeededToStart;
     //} XblMultiplayerMemberInitialization;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerMemberInitialization
+    public struct XblMultiplayerMemberInitialization
     {
         internal readonly UInt64 JoinTimeout;
         internal readonly UInt64 MeasurementTimeout;

@@ -9,7 +9,7 @@ namespace XGamingRuntime.Interop
     //    const char* roleName;
     //} XblMultiplayerSessionMemberRole;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionMemberRole
+    public struct XblMultiplayerSessionMemberRole
     {
         internal readonly UTF8StringPtr roleTypeName;
         internal readonly UTF8StringPtr roleName;

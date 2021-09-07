@@ -39,7 +39,7 @@ namespace XGamingRuntime.Interop
     //    void* Internal;
     //} XblMultiplayerSessionMember;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionMember
+    public struct XblMultiplayerSessionMember
     {
         internal readonly UInt32 MemberId;
         internal readonly UTF8StringPtr TeamId;

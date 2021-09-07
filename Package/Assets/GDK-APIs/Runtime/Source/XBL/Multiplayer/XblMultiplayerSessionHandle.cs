@@ -4,7 +4,7 @@ namespace XGamingRuntime
 {
     public class XblMultiplayerSessionHandle : EquatableHandle
     {
-        internal XblMultiplayerSessionHandle(Interop.XblMultiplayerSessionHandle interopHandle)
+        public XblMultiplayerSessionHandle(Interop.XblMultiplayerSessionHandle interopHandle)
         {
             this.InteropHandle = interopHandle;
         }
