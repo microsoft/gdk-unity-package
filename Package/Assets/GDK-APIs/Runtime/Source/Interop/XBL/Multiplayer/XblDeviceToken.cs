@@ -8,7 +8,7 @@ namespace XGamingRuntime.Interop
     //    _Null_terminated_ char Value[XBL_MULTIPLAYER_DEVICE_TOKEN_MAX_LENGTH];
     //} XblDeviceToken;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblDeviceToken
+    public struct XblDeviceToken
     {
         private unsafe fixed Byte Value[40]; // char Value[40]
 

@@ -9,7 +9,7 @@ namespace XGamingRuntime.Interop
     //    uint64_t BandwidthMinimumInKbps;
     //} XblMultiplayerPeerToPeerRequirements;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerPeerToPeerRequirements
+    public struct XblMultiplayerPeerToPeerRequirements
     {
         internal readonly UInt64 LatencyMaximum;
         internal readonly UInt64 BandwidthMinimumInKbps;

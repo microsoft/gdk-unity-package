@@ -13,6 +13,6 @@ namespace XGamingRuntime.Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct XblMultiplayerSessionHandle
     {
-        public readonly IntPtr handle;
+        public IntPtr handle;
     }
 }

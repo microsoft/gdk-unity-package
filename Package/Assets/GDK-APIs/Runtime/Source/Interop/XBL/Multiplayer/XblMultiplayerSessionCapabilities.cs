@@ -18,7 +18,7 @@ namespace XGamingRuntime.Interop
     //    bool HasOwners;
     //} XblMultiplayerSessionCapabilities;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionCapabilities
+    public struct XblMultiplayerSessionCapabilities
     {
         internal readonly NativeBool Connectivity;
         internal readonly NativeBool Team;

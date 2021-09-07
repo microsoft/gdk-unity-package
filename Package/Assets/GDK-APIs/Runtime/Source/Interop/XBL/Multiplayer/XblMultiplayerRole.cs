@@ -13,7 +13,7 @@ namespace XGamingRuntime.Interop
     //    uint32_t MaxMemberCount;
     //} XblMultiplayerRole;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerRole
+    public struct XblMultiplayerRole
     {
         private readonly unsafe XblMultiplayerRoleType* RoleType;
         internal readonly UTF8StringPtr Name;

@@ -14,7 +14,7 @@ namespace XGamingRuntime.Interop
     //    char SearchHandleId[XBL_GUID_LENGTH];
     //} XblMultiplayerSessionInfo;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerSessionInfo
+    public struct XblMultiplayerSessionInfo
     {
         internal readonly UInt32 ContractVersion;
         private unsafe fixed Byte Branch[40]; // char Branch[40]
@@ -26,7 +26,7 @@ namespace XGamingRuntime.Interop
 
         internal string GetBranch() { unsafe { fixed (Byte* ptr = this.Branch) { return Converters.BytePointerToString(ptr, 40); } } }
         internal string GetCorrelationId() { unsafe { fixed (Byte* ptr = this.CorrelationId) { return Converters.BytePointerToString(ptr, 40); } } }
-        internal string GetSearchHandleId() { unsafe { fixed (Byte* ptr = this.SearchHandleId) { return Converters.BytePointerToString(ptr, 40); } } }
+        public string GetSearchHandleId() { unsafe { fixed (Byte* ptr = this.SearchHandleId) { return Converters.BytePointerToString(ptr, 40); } } }
 
         internal XblMultiplayerSessionInfo(XGamingRuntime.XblMultiplayerSessionInfo publicObject)
         {

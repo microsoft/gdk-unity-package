@@ -12,7 +12,7 @@ namespace XGamingRuntime.Interop
     //    size_t RoleCount;
     //} XblMultiplayerRoleType;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerRoleType
+    public struct XblMultiplayerRoleType
     {
         internal readonly UTF8StringPtr Name;
         internal readonly NativeBool OwnerManaged;
