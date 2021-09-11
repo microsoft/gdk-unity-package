@@ -67,7 +67,7 @@ namespace XGamingRuntime
                         }
                     });
 
-                var result = Social.XblSocialGetSocialRelationshipsAsync(
+                var hresult = Social.XblSocialGetSocialRelationshipsAsync(
                     xboxLiveContext.InteropHandle.handle,
                     xboxUserId,
                     socialRelationshipFilter,
@@ -75,12 +75,12 @@ namespace XGamingRuntime
                     new SizeT(maxItems),
                     asyncBlock);
 
-                if (HR.FAILED(result))
+                if (HR.FAILED(hresult))
                 {
-                    completionCallback?.Invoke(result, default(XblSocialHandle));
+                    completionCallback?.Invoke(hresult, default(XblSocialHandle));
                 }
 
-                return result;
+                return hresult;
             }
 
             /// <summary>
@@ -99,7 +99,7 @@ namespace XGamingRuntime
                 unsafe
                 {
                     SizeT count = new SizeT();
-                    Interop.XblSocialRelationship* relationshipsPtr = default;
+                    Interop.XblSocialRelationship* relationshipsPtr = default(Interop.XblSocialRelationship*);
                     result = Social.XblSocialRelationshipResultGetRelationships(
                         socialHandle.interopHandle,
                         &relationshipsPtr,
@@ -219,23 +219,23 @@ namespace XGamingRuntime
                             IntPtr handle = default(IntPtr);
                             var result = Social.XblSocialRelationshipResultGetNextResult(block, &handle);
 
-                            var socialHandle = new XblSocialHandle { interopHandle = handle };
-                            completionCallback?.Invoke(result, socialHandle);
+                            var refreshedHandle = new XblSocialHandle { interopHandle = handle };
+                            completionCallback?.Invoke(result, refreshedHandle);
                         }
                     });
 
-                var result = Social.XblSocialRelationshipResultGetNextAsync(
+                var hresult = Social.XblSocialRelationshipResultGetNextAsync(
                     xboxLiveContext.InteropHandle.handle,
                     socialHandle.interopHandle,
                     new SizeT(maxItems),
                     asyncBlock);
 
-                if (HR.FAILED(result))
+                if (HR.FAILED(hresult))
                 {
-                    completionCallback?.Invoke(result, default(XblSocialHandle));
+                    completionCallback?.Invoke(hresult, default(XblSocialHandle));
                 }
 
-                return result;
+                return hresult;
             }
 
             /// <summary>
@@ -264,7 +264,7 @@ namespace XGamingRuntime
 
                 if (HR.FAILED(result))
                 {
-                    duplicatedHandle = default;
+                    duplicatedHandle = default(XblSocialHandle);
                 }
 
                 return result;
@@ -314,7 +314,7 @@ namespace XGamingRuntime
 
                             eventCallback?.Invoke(callbackEventArgs);
                         },
-                        default);
+                        default(IntPtr));
                 }
 
                 return callbackFunctionId;
