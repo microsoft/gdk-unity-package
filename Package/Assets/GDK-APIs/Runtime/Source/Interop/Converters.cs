@@ -103,6 +103,18 @@ namespace XGamingRuntime.Interop
             return ByteArrayToString(bytes);
         }
 
+        public static unsafe string NullTerminatedBytePointerToString(Byte* bytePointer)
+        {
+            var terminatorIndex = 0;
+            var bytePtrCopy = bytePointer;
+            while (*bytePtrCopy != '\0')
+            {
+                bytePtrCopy++;
+                terminatorIndex++;
+            }
+            return BytePointerToString(bytePointer, terminatorIndex);
+        }
+
         public static string ByteArrayToString(Byte[] arr)
         {
             string str = System.Text.Encoding.UTF8.GetString(arr);

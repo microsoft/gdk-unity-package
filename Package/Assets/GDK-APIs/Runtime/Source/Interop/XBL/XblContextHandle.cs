@@ -10,6 +10,6 @@ namespace XGamingRuntime.Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct XblContextHandle
     {
-        public readonly IntPtr handle;
+        public IntPtr handle;
     }
 }

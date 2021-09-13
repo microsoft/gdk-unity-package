@@ -5,8 +5,8 @@ namespace XGamingRuntime.Interop
 {
     //typedef struct XUser* XUserHandle;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XUserHandle
+    public struct XUserHandle
     {
-        internal readonly IntPtr Ptr;
+        public IntPtr Ptr;
     }
 }
