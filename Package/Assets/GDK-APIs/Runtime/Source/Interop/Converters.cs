@@ -11,6 +11,13 @@ namespace XGamingRuntime.Interop
             return new IntPtr(ptr.ToInt64() + (that));
         }
 
+        public static int GetSizeRequiredToEncodeStringToUTF8(string str)
+        {
+            return 
+                System.Text.Encoding.UTF8.GetByteCount(str) +
+                System.Text.Encoding.UTF8.GetPreamble().Length;
+        }
+
         public static DisposableBuffer StringArrayToUTF8StringArray(string[] strings)
         {
             if (strings == null)

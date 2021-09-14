@@ -3,37 +3,37 @@ using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
+    public struct XblSocialHandle
+    {
+        public IntPtr interopHandle;
+    }
+
+    public struct XblSocialRelationship
+    {
+        public ulong xboxUserId;
+        public bool isFavorite;
+        public bool isFollowingCaller;
+        public string[] socialNetworks;
+    }
+
+    public struct XblSocialRelationshipChangeEventArgs
+    {
+        public ulong callerXboxUserId;
+        public XblSocialNotificationType socialNotification;
+        public ulong[] xboxUserIds;
+    }
+
+    public delegate void XblSocialRelationshipCallback(
+        int hresult,
+        XblSocialHandle socialHandle);
+
+    public delegate void XblSocialRelationshipChangedCallback(
+        XblSocialRelationshipChangeEventArgs eventArgs);
+
     public partial class SDK
     {
         public partial class XBL
         {
-            public struct XblSocialHandle
-            {
-                public IntPtr interopHandle;
-            }
-
-            public struct XblSocialRelationship
-            {
-                public ulong xboxUserId;
-                public bool isFavorite;
-                public bool isFollowingCaller;
-                public string[] socialNetworks;
-            }
-
-            public struct XblSocialRelationshipChangeEventArgs
-            {
-                public ulong callerXboxUserId;
-                public XblSocialNotificationType socialNotification;
-                public ulong[] xboxUserIds;
-            }
-
-            public delegate void XblSocialRelationshipCallback(
-                int hresult,
-                XblSocialHandle socialHandle);
-
-            public delegate void XblSocialRelationshipChangedCallback(
-                XblSocialRelationshipChangeEventArgs eventArgs);
-
             /// <summary>
             /// Wraps the underlying native XblSocialGetSocialRelationshipsAsync API:
             /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/social_c/functions/xblsocialgetsocialrelationshipsasync
