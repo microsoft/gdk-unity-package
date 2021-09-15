@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
@@ -46,10 +47,10 @@ namespace XGamingRuntime
             /// <param name="completionCallback"></param>
             /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
             public static int XblSocialGetSocialRelationshipsAsync(
-                XblContextHandle xboxLiveContext, 
-                ulong xboxUserId, 
-                XblSocialRelationshipFilter socialRelationshipFilter, 
-                uint startIndex, 
+                XblContextHandle xboxLiveContext,
+                ulong xboxUserId,
+                XblSocialRelationshipFilter socialRelationshipFilter,
+                uint startIndex,
                 uint maxItems,
                 XblSocialRelationshipCallback completionCallback)
             {
@@ -57,7 +58,7 @@ namespace XGamingRuntime
                     SDK.defaultQueue.handle,
                     (XAsyncBlockPtr block) =>
                     {
-                        unsafe 
+                        unsafe
                         {
                             IntPtr handle = default(IntPtr);
                             var result = Social.XblSocialGetSocialRelationshipsResult(block, &handle);
@@ -91,7 +92,7 @@ namespace XGamingRuntime
             /// <param name="relationships"></param>
             /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
             public static int XblSocialRelationshipResultGetRelationships(
-                XblSocialHandle socialHandle, 
+                XblSocialHandle socialHandle,
                 out XblSocialRelationship[] relationships)
             {
                 int result;
@@ -254,7 +255,7 @@ namespace XGamingRuntime
 
                 unsafe
                 {
-                    fixed(IntPtr* ptrToDupeHandle = &duplicatedHandle.interopHandle)
+                    fixed (IntPtr* ptrToDupeHandle = &duplicatedHandle.interopHandle)
                     {
                         result = Social.XblSocialRelationshipResultDuplicateHandle(
                             socialHandle.interopHandle,
@@ -296,25 +297,17 @@ namespace XGamingRuntime
 
                 unsafe
                 {
+                    var context = _socialRelationshipChangeCallbackManager.GetUniqueContext();
                     callbackFunctionId = Social.XblSocialAddSocialRelationshipChangedHandler(
                         xboxLiveContext.InteropHandle.handle,
-                        (Interop.XblSocialRelationshipChangeEventArgs* eventArgs, IntPtr context) =>
-                        {
-                            var callbackEventArgs = new XblSocialRelationshipChangeEventArgs();
+                        _socialRelationshipChangeCallbackManager.InteropPInvokeCallback,
+                        context);
 
-                            callbackEventArgs.callerXboxUserId = eventArgs->callerXboxUserId;
-                            callbackEventArgs.socialNotification = eventArgs->socialNotification;
-                            callbackEventArgs.xboxUserIds = new ulong[eventArgs->xboxUserIdsCount.ToInt32()];
-                            var idsPtr = eventArgs->xboxUserIds;
-                            for (var i = 0; i < eventArgs->xboxUserIdsCount.ToInt32(); i++)
-                            {
-                                callbackEventArgs.xboxUserIds[i] = *idsPtr;
-                                idsPtr++;
-                            }
-
-                            eventCallback?.Invoke(callbackEventArgs);
-                        },
-                        default(IntPtr));
+                    if (callbackFunctionId != 0)
+                    {
+                        _socialRelationshipChangeCallbackManager.AddCallbackForId(
+                            callbackFunctionId, context, eventCallback);
+                    }
                 }
 
                 return callbackFunctionId;
@@ -328,7 +321,7 @@ namespace XGamingRuntime
             /// <param name="callbackFunctionId"></param>
             /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
             public static int XblSocialRemoveSocialRelationshipChangedHandler(
-                XblContextHandle xboxLiveContext, 
+                XblContextHandle xboxLiveContext,
                 int callbackFunctionId)
             {
                 int result;
@@ -338,9 +331,62 @@ namespace XGamingRuntime
                     result = Social.XblSocialRemoveSocialRelationshipChangedHandler(
                         xboxLiveContext.InteropHandle.handle,
                         callbackFunctionId);
+
+                    if (HR.SUCCEEDED(result))
+                    {
+                        _socialRelationshipChangeCallbackManager.RemoveCallbackForId(
+                            callbackFunctionId);
+                    }
                 }
 
                 return result;
+            }
+
+            private static SocialRelationshipChangeCallbackManager _socialRelationshipChangeCallbackManager =
+                new SocialRelationshipChangeCallbackManager();
+
+            private class SocialRelationshipChangeCallbackManager : 
+                InteropCallbackManager<XblSocialRelationshipChangedCallback>
+            {
+                [MonoPInvokeCallback]
+                internal unsafe void InteropPInvokeCallback(
+                    Interop.XblSocialRelationshipChangeEventArgs* eventArgs,
+                    IntPtr context)
+                {
+                    if (!_contextToFunctionId.ContainsKey(context))
+                    {
+                        return;
+                    }
+
+                    var functionId = _contextToFunctionId[context];
+                    IssueEventCallback(functionId, eventArgs);
+                }
+
+                private unsafe void IssueEventCallback(
+                    int functionId,
+                    Interop.XblSocialRelationshipChangeEventArgs* eventArgs)
+                {
+                    if (!_functionIdToHandler.ContainsKey(functionId))
+                    {
+                        return;
+                    }
+
+                    var eventHandler = _functionIdToHandler[functionId];
+
+                    var callbackEventArgs = new XblSocialRelationshipChangeEventArgs();
+
+                    callbackEventArgs.callerXboxUserId = eventArgs->callerXboxUserId;
+                    callbackEventArgs.socialNotification = eventArgs->socialNotification;
+                    callbackEventArgs.xboxUserIds = new ulong[eventArgs->xboxUserIdsCount.ToInt32()];
+                    var idsPtr = eventArgs->xboxUserIds;
+                    for (var i = 0; i < eventArgs->xboxUserIdsCount.ToInt32(); i++)
+                    {
+                        callbackEventArgs.xboxUserIds[i] = *idsPtr;
+                        idsPtr++;
+                    }
+
+                    eventHandler.Callback?.Invoke(callbackEventArgs);
+                }
             }
         }
     }

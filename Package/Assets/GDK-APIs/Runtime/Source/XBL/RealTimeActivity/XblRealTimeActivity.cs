@@ -13,7 +13,8 @@ namespace XGamingRuntime
         public bool IsValid() { return InteropHandlerId > InvalidHandlerId; }
     }
 
-    public delegate void XblConnectionStateChangeCallback(XblRealTimeActivityConnectionState newConnectionState);
+    public delegate void XblConnectionStateChangeCallback(
+        XblRealTimeActivityConnectionState newConnectionState);
 
     public delegate void XblConnectionResyncCallback();
 
@@ -29,13 +30,17 @@ namespace XGamingRuntime
 
                 if (callback != null)
                 {
+                    var context = _connectionStateChangeCallbackManager.GetUniqueContext();
                     interopHandlerId = RealTimeActivity.XblRealTimeActivityAddConnectionStateChangeHandler(
                         xboxLiveContext.InteropHandle.handle,
-                        (IntPtr context, XblRealTimeActivityConnectionState connectionState) =>
-                        {
-                            callback?.Invoke(connectionState);
-                        },
-                        default(IntPtr));
+                        _connectionStateChangeCallbackManager.InteropPInvokeCallback,
+                        context);
+
+                    if (interopHandlerId > 0)
+                    {
+                        _connectionStateChangeCallbackManager.AddCallbackForId(
+                            interopHandlerId, context, callback);
+                    }
                 }
 
                 return new XblRealTimeActivityCallbackToken() { InteropHandlerId = interopHandlerId };
@@ -51,6 +56,8 @@ namespace XGamingRuntime
 
                 if (HR.SUCCEEDED(result))
                 {
+                    _connectionStateChangeCallbackManager.RemoveCallbackForId(
+                        connectionStateChangeCallbackToken.InteropHandlerId);
                     connectionStateChangeCallbackToken.Reset();
                 }
 
@@ -65,13 +72,17 @@ namespace XGamingRuntime
 
                 if (callback != null)
                 {
+                    var context = _connectionResyncCallbackManager.GetUniqueContext();
                     interopHandlerId = RealTimeActivity.XblRealTimeActivityAddResyncHandler(
                         xboxLiveContext.InteropHandle.handle,
-                        (IntPtr context) =>
-                        {
-                            callback?.Invoke();
-                        },
+                        _connectionResyncCallbackManager.InteropPInvokeCallback,
                         default(IntPtr));
+
+                    if (interopHandlerId > 0)
+                    {
+                        _connectionResyncCallbackManager.AddCallbackForId(
+                            interopHandlerId, context, callback);
+                    }
                 }
 
                 return new XblRealTimeActivityCallbackToken() { InteropHandlerId = interopHandlerId };
@@ -87,10 +98,76 @@ namespace XGamingRuntime
 
                 if (HR.SUCCEEDED(result))
                 {
+                    _connectionResyncCallbackManager.RemoveCallbackForId(
+                        connectionResyncCallbackToken.InteropHandlerId);
                     connectionResyncCallbackToken.Reset();
                 }
 
                 return result;
+            }
+
+            private static ConnectionStateChangeCallbackManager _connectionStateChangeCallbackManager =
+                new ConnectionStateChangeCallbackManager();
+
+            private class ConnectionStateChangeCallbackManager :
+                InteropCallbackManager<XblConnectionStateChangeCallback>
+            {
+                [MonoPInvokeCallback]
+                internal unsafe void InteropPInvokeCallback(
+                    IntPtr context,
+                    XblRealTimeActivityConnectionState newConnectionState)
+                {
+                    if (!_contextToFunctionId.ContainsKey(context))
+                    {
+                        return;
+                    }
+
+                    var functionId = _contextToFunctionId[context];
+                    IssueEventCallback(functionId, newConnectionState);
+                }
+
+                private unsafe void IssueEventCallback(
+                    int functionId,
+                    XblRealTimeActivityConnectionState newConnectionState)
+                {
+                    if (!_functionIdToHandler.ContainsKey(functionId))
+                    {
+                        return;
+                    }
+
+                    var eventHandler = _functionIdToHandler[functionId];
+                    eventHandler.Callback?.Invoke(newConnectionState);
+                }
+            }
+
+            private static ConnectionResyncCallbackManager _connectionResyncCallbackManager =
+                new ConnectionResyncCallbackManager();
+
+            private class ConnectionResyncCallbackManager :
+                InteropCallbackManager<XblConnectionResyncCallback>
+            {
+                [MonoPInvokeCallback]
+                internal unsafe void InteropPInvokeCallback(IntPtr context)
+                {
+                    if (!_contextToFunctionId.ContainsKey(context))
+                    {
+                        return;
+                    }
+
+                    var functionId = _contextToFunctionId[context];
+                    IssueEventCallback(functionId);
+                }
+
+                private unsafe void IssueEventCallback(int functionId)
+                {
+                    if (!_functionIdToHandler.ContainsKey(functionId))
+                    {
+                        return;
+                    }
+
+                    var eventHandler = _functionIdToHandler[functionId];
+                    eventHandler.Callback?.Invoke();
+                }
             }
         }
     }
