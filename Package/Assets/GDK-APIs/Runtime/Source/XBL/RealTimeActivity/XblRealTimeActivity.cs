@@ -22,6 +22,13 @@ namespace XGamingRuntime
     {
         public partial class XBL
         {
+            /// <summary>
+            /// Wraps the underlying native XblRealTimeActivityAddConnectionStateChangeHandler API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/real_time_activity_c/functions/xblrealtimeactivityaddconnectionstatechangehandler
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="callback"></param>
+            /// <returns>a XblRealTimeActivityCallbackToken with which to remove the callback</returns>
             public static XblRealTimeActivityCallbackToken XblRealTimeActivityAddConnectionStateChangeHandler(
                 XblContextHandle xboxLiveContext,
                 XblConnectionStateChangeCallback callback)
@@ -46,6 +53,13 @@ namespace XGamingRuntime
                 return new XblRealTimeActivityCallbackToken() { InteropHandlerId = interopHandlerId };
             }
 
+            /// <summary>
+            /// Wraps the underlying native XblRealTimeActivityRemoveConnectionStateChangeHandler API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/real_time_activity_c/functions/xblrealtimeactivityremoveconnectionstatechangehandler
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="connectionStateChangeCallbackToken"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
             public static int XblRealTimeActivityRemoveConnectionStateChangeHandler(
                 XblContextHandle xboxLiveContext,
                 ref XblRealTimeActivityCallbackToken connectionStateChangeCallbackToken)
@@ -64,6 +78,13 @@ namespace XGamingRuntime
                 return result;
             }
 
+            /// <summary>
+            /// Wraps the underlying native XblRealTimeActivityAddResyncHandler API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/real_time_activity_c/functions/xblrealtimeactivityaddresynchandler
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="callback"></param>
+            /// <returns>a XblRealTimeActivityCallbackToken with which to remove the callback</returns>
             public static XblRealTimeActivityCallbackToken XblRealTimeActivityAddResyncHandler(
                 XblContextHandle xboxLiveContext,
                 XblConnectionResyncCallback callback)
@@ -88,6 +109,13 @@ namespace XGamingRuntime
                 return new XblRealTimeActivityCallbackToken() { InteropHandlerId = interopHandlerId };
             }
 
+            /// <summary>
+            /// Wraps the underlying native XblRealTimeActivityRemoveResyncHandler API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/real_time_activity_c/functions/xblrealtimeactivityremoveresynchandler
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="connectionResyncCallbackToken"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
             public static int XblRealTimeActivityRemoveResyncHandler(
                 XblContextHandle xboxLiveContext,
                 ref XblRealTimeActivityCallbackToken connectionResyncCallbackToken)
