@@ -4,7 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace XGamingRuntime.Interop
 {
-    public class InteropCallbackManager<TDelegate> where TDelegate : Delegate
+    // should be TDelegate : Delegate, but that is not available until C# 7
+    public class InteropCallbackManager<TDelegate> where TDelegate : class
     {
         protected struct HandlerContext
         {
