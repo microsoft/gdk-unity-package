@@ -236,5 +236,13 @@ namespace XGamingRuntime.Interop
         [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("HRESULT")]
         public static extern int XblMultiplayerClearActivityAsync([NativeTypeName("XblContextHandle")] IntPtr xblContext, [NativeTypeName("const char *")] sbyte* scid, [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+
+        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [return: NativeTypeName("HRESULT")]
+        public static extern int XblMultiplayerSendInvitesAsync([NativeTypeName("XblContextHandle")] IntPtr xblContext, [NativeTypeName("const XblMultiplayerSessionReference *")] XblMultiplayerSessionReference* sessionReference, [NativeTypeName("const uint64_t *")] ulong* xuids, [NativeTypeName("size_t")] SizeT xuidsCount, [NativeTypeName("uint32_t")] uint titleId, [NativeTypeName("const char *")] sbyte* contextStringId, [NativeTypeName("const char *")] sbyte* customActivationContext, [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+
+        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [return: NativeTypeName("HRESULT")]
+        public static extern int XblMultiplayerSendInvitesResult([NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async, [NativeTypeName("size_t")] SizeT handlesCount, XblMultiplayerInviteHandle* handles);
     }
 }
