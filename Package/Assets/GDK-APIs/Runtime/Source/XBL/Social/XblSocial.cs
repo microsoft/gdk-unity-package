@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using XGamingRuntime.Interop;
 
 namespace XGamingRuntime

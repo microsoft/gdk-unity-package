@@ -10,9 +10,6 @@ namespace XGamingRuntime.Interop
         public static extern int XblMultiplayerSessionDuplicateHandle([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("XblMultiplayerSessionHandle *")] IntPtr* duplicatedHandle);
 
         [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern XblTournamentArbitrationStatus XblMultiplayerSessionArbitrationStatus([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
-
-        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("time_t")]
         public static extern long XblMultiplayerSessionTimeOfSession([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
 

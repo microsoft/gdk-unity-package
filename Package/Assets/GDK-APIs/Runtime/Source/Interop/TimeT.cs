@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace XGamingRuntime.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct TimeT
+    public struct TimeT
     {
         public DateTime DateTime {
             get {
@@ -34,6 +34,11 @@ namespace XGamingRuntime.Interop
         public TimeT(DateTime time)
         {
             SecondsSinceUnixEpoch = (Int64)(time - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+        }
+
+        public TimeT(long secondSinceUnixEpoch)
+        {
+            SecondsSinceUnixEpoch = secondSinceUnixEpoch;
         }
     }
 }
