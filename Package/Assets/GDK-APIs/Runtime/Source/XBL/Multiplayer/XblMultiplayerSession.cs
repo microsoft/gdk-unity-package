@@ -57,82 +57,419 @@ namespace XGamingRuntime
                 return time.DateTime;
             }
 
-            // TODO: place API method implementations here
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionGetInitializationInfo API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessiongetinitializationinfo
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>null if info does not exist for the handle, non-null otherwise.</returns>
+            public static XblMultiplayerSessionInitializationInfo XblMultiplayerSessionGetInitializationInfo(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                XblMultiplayerSessionInitializationInfo info = null;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("const XblMultiplayerSessionInitializationInfo *")]
-            //public static extern XblMultiplayerSessionInitializationInfo* XblMultiplayerSessionGetInitializationInfo([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+                unsafe
+                {
+                    var result = Multiplayer.XblMultiplayerSessionGetInitializationInfo(
+                        sessionHandle.InteropHandle.handle);
+                    if (result != default(Interop.XblMultiplayerSessionInitializationInfo*))
+                    {
+                        info = new XblMultiplayerSessionInitializationInfo(*result);
+                    }
+                }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //public static extern XblMultiplayerSessionChangeTypes XblMultiplayerSessionSubscribedChangeTypes([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+                return info;
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionHostCandidates([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("const XblDeviceToken **")] XblDeviceToken** deviceTokens, [NativeTypeName("size_t *")] SizeT* deviceTokensCount);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionSubscribedChangeTypes API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionsubscribedchangetypes
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>Combined bit flags that contain supported change types by the session.</returns>
+            public static XblMultiplayerSessionChangeTypes XblMultiplayerSessionSubscribedChangeTypes(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                return Multiplayer.XblMultiplayerSessionSubscribedChangeTypes(
+                    sessionHandle.InteropHandle.handle);
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("const XblMultiplayerSessionReference *")]
-            //public static extern XblMultiplayerSessionReference* XblMultiplayerSessionSessionReference([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionHostCandidates API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionhostcandidates
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="deviceTokens"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionHostCandidates(
+                XblMultiplayerSessionHandle sessionHandle,
+                out XblDeviceToken[] deviceTokens)
+            {
+                int result;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("const XblMultiplayerSessionConstants *")]
-            //public static extern XblMultiplayerSessionConstants* XblMultiplayerSessionSessionConstants([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+                unsafe
+                {
+                    var tokenCount = new SizeT();
+                    var tokenPtr = default(Interop.XblDeviceToken*);
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //public static extern void XblMultiplayerSessionConstantsSetMaxMembersInSession([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("uint32_t")] uint maxMembersInSession);
+                    result = Multiplayer.XblMultiplayerSessionHostCandidates(
+                        sessionHandle.InteropHandle.handle,
+                        &tokenPtr,
+                        &tokenCount);
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //public static extern void XblMultiplayerSessionConstantsSetVisibility([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, XblMultiplayerSessionVisibility visibility);
+                    if (HR.SUCCEEDED(result))
+                    {
+                        deviceTokens = new XblDeviceToken[tokenCount.ToInt32()];
+                        for (var i = 0; i < tokenCount.ToInt32(); i++)
+                        {
+                            deviceTokens[i] = new XblDeviceToken(*tokenPtr);
+                            tokenPtr++;
+                        }
+                    }
+                    else
+                    {
+                        deviceTokens = null;
+                    }
+                }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetTimeouts([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("uint64_t")] ulong memberReservedTimeout, [NativeTypeName("uint64_t")] ulong memberInactiveTimeout, [NativeTypeName("uint64_t")] ulong memberReadyTimeout, [NativeTypeName("uint64_t")] ulong sessionEmptyTimeout);
+                return result;
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetArbitrationTimeouts([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("uint64_t")] ulong arbitrationTimeout, [NativeTypeName("uint64_t")] ulong forfeitTimeout);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionSessionReference API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionsessionreference
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>null if the session handle is invalid, non-null otherwise.</returns>
+            public static XblMultiplayerSessionReference XblMultiplayerSessionSessionReference(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                XblMultiplayerSessionReference sessionReference = null;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetQosConnectivityMetrics([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("bool")] byte enableLatencyMetric, [NativeTypeName("bool")] byte enableBandwidthDownMetric, [NativeTypeName("bool")] byte enableBandwidthUpMetric, [NativeTypeName("bool")] byte enableCustomMetric);
+                unsafe
+                {
+                    var sessionRefPtr = Multiplayer.XblMultiplayerSessionSessionReference(
+                        sessionHandle.InteropHandle.handle);
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetMemberInitialization([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, XblMultiplayerMemberInitialization memberInitialization);
+                    if (sessionRefPtr != default(Interop.XblMultiplayerSessionReference*))
+                    {
+                        sessionReference = new XblMultiplayerSessionReference(*sessionRefPtr);
+                    }
+                }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetPeerToPeerRequirements([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, XblMultiplayerPeerToPeerRequirements requirements);
+                return sessionReference;
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetPeerToHostRequirements([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, XblMultiplayerPeerToHostRequirements requirements);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionSessionConstants API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionsessionconstants
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>null if the session handle is invalid, non-null otherwise.</returns>
+            public static XblMultiplayerSessionConstants XblMultiplayerSessionSessionConstants(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                XblMultiplayerSessionConstants sessionConstants = null;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetMeasurementServerAddressesJson([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("const char *")] sbyte* measurementServerAddressesJson);
+                unsafe
+                {
+                    var result = Multiplayer.XblMultiplayerSessionSessionConstants(
+                        sessionHandle.InteropHandle.handle);
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetCapabilities([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, XblMultiplayerSessionCapabilities capabilities);
+                    if (result != default(Interop.XblMultiplayerSessionConstants*))
+                    {
+                        sessionConstants = new XblMultiplayerSessionConstants(*result);
+                    }
+                }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionConstantsSetCloudComputePackageJson([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("const char *")] sbyte* sessionCloudComputePackageConstantsJson);
+                return sessionConstants;
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionPropertiesSetKeywords([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("const char **")] sbyte** keywords, [NativeTypeName("size_t")] SizeT keywordsCount);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetMaxMembersInSession API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetmaxmembersinsession
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="maxMembersInSession"></param>
+            public static void XblMultiplayerSessionConstantsSetMaxMembersInSession(
+                XblMultiplayerSessionHandle sessionHandle,
+                uint maxMembersInSession)
+            {
+                Multiplayer.XblMultiplayerSessionConstantsSetMaxMembersInSession(
+                    sessionHandle.InteropHandle.handle, maxMembersInSession);
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //public static extern void XblMultiplayerSessionPropertiesSetJoinRestriction([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, XblMultiplayerSessionRestriction joinRestriction);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetVisibility API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetvisibility
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="visibility"></param>
+            public static void XblMultiplayerSessionConstantsSetVisibility(
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerSessionVisibility visibility)
+            {
+                Multiplayer.XblMultiplayerSessionConstantsSetVisibility(
+                    sessionHandle.InteropHandle.handle, visibility);
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //public static extern void XblMultiplayerSessionPropertiesSetReadRestriction([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, XblMultiplayerSessionRestriction readRestriction);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetTimeouts API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssettimeouts
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="memberReservedTimeout"></param>
+            /// <param name="memberInactiveTimeout"></param>
+            /// <param name="memberReadyTimeout"></param>
+            /// <param name="sessionEmptyTimeout"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetTimeouts(
+                XblMultiplayerSessionHandle sessionHandle,
+                TimeSpan memberReservedTimeout,
+                TimeSpan memberInactiveTimeout,
+                TimeSpan memberReadyTimeout,
+                TimeSpan sessionEmptyTimeout)
+            {
+                return Multiplayer.XblMultiplayerSessionConstantsSetTimeouts(
+                    sessionHandle.InteropHandle.handle,
+                    Convert.ToUInt64(memberReservedTimeout.TotalMilliseconds),
+                    Convert.ToUInt64(memberInactiveTimeout.TotalMilliseconds),
+                    Convert.ToUInt64(memberReadyTimeout.TotalMilliseconds),
+                    Convert.ToUInt64(sessionEmptyTimeout.TotalMilliseconds));
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionPropertiesSetTurnCollection([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("const uint32_t *")] uint* turnCollectionMemberIds, [NativeTypeName("size_t")] SizeT turnCollectionMemberIdsCount);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetArbitrationTimeouts API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetarbitrationtimeouts
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="arbitrationTimeout"></param>
+            /// <param name="forfeitTimeout"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetArbitrationTimeouts(
+                XblMultiplayerSessionHandle sessionHandle,
+                TimeSpan arbitrationTimeout,
+                TimeSpan forfeitTimeout)
+            {
+                return Multiplayer.XblMultiplayerSessionConstantsSetArbitrationTimeouts(
+                    sessionHandle.InteropHandle.handle,
+                    Convert.ToUInt64(arbitrationTimeout.TotalMilliseconds),
+                    Convert.ToUInt64(forfeitTimeout.TotalMilliseconds));
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetQosConnectivityMetrics API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetqosconnectivitymetrics
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="enableLatencyMetric"></param>
+            /// <param name="enableBandwidthDownMetric"></param>
+            /// <param name="enableBandwidthUpMetric"></param>
+            /// <param name="enableCustomMetric"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetQosConnectivityMetrics(
+                XblMultiplayerSessionHandle sessionHandle,
+                bool enableLatencyMetric,
+                bool enableBandwidthDownMetric,
+                bool enableBandwidthUpMetric,
+                bool enableCustomMetric)
+            {
+                return Multiplayer.XblMultiplayerSessionConstantsSetQosConnectivityMetrics(
+                    sessionHandle.InteropHandle.handle,
+                    Convert.ToByte(enableLatencyMetric),
+                    Convert.ToByte(enableBandwidthDownMetric),
+                    Convert.ToByte(enableBandwidthUpMetric),
+                    Convert.ToByte(enableCustomMetric));
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetMemberInitialization API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetmemberinitialization
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="memberInitialization"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetMemberInitialization(
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerMemberInitialization memberInitialization)
+            {
+                return Multiplayer.XblMultiplayerSessionConstantsSetMemberInitialization(
+                    sessionHandle.InteropHandle.handle,
+                    new Interop.XblMultiplayerMemberInitialization(memberInitialization));
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetPeerToPeerRequirements API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetpeertopeerrequirements
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="requirements"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetPeerToPeerRequirements(
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerPeerToPeerRequirements requirements)
+            {
+                return Multiplayer.XblMultiplayerSessionConstantsSetPeerToPeerRequirements(
+                    sessionHandle.InteropHandle.handle,
+                    new Interop.XblMultiplayerPeerToPeerRequirements(requirements));
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetPeerToHostRequirements API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetpeertohostrequirements
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="requirements"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetPeerToHostRequirements(
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerPeerToHostRequirements requirements)
+            {
+                return Multiplayer.XblMultiplayerSessionConstantsSetPeerToHostRequirements(
+                    sessionHandle.InteropHandle.handle,
+                    new Interop.XblMultiplayerPeerToHostRequirements(requirements));
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetMeasurementServerAddressesJson API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetmeasurementserveraddressesjson
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="measurementServerAddressesJson"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetMeasurementServerAddressesJson(
+                XblMultiplayerSessionHandle sessionHandle,
+                string measurementServerAddressesJson)
+            {
+                int result;
+
+                unsafe
+                {
+                    var requiredInteropLen = Converters.GetSizeRequiredToEncodeStringToUTF8(
+                        measurementServerAddressesJson);
+                    sbyte[] interopJson = new sbyte[requiredInteropLen];
+
+                    fixed(sbyte* interopJsonPtr = &interopJson[0])
+                    {
+                        Converters.StringToNullTerminatedUTF8FixedPointer(
+                            measurementServerAddressesJson, (byte*)interopJsonPtr, requiredInteropLen);
+                        result = Multiplayer.XblMultiplayerSessionConstantsSetMeasurementServerAddressesJson(
+                            sessionHandle.InteropHandle.handle,
+                            interopJsonPtr);
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetCapabilities API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetcapabilities
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="capabilities"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetCapabilities(
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerSessionCapabilities capabilities)
+            {
+                return Multiplayer.XblMultiplayerSessionConstantsSetCapabilities(
+                    sessionHandle.InteropHandle.handle,
+                    new Interop.XblMultiplayerSessionCapabilities(capabilities));
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionConstantsSetCloudComputePackageJson API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionconstantssetcloudcomputepackagejson
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="sessionCloudComputePackageConstantsJson"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionConstantsSetCloudComputePackageJson(
+                XblMultiplayerSessionHandle sessionHandle,
+                string sessionCloudComputePackageConstantsJson)
+            {
+                int result;
+
+                unsafe
+                {
+                    var requiredInteropLen = Converters.GetSizeRequiredToEncodeStringToUTF8(
+                        sessionCloudComputePackageConstantsJson);
+                    sbyte[] interopJson = new sbyte[requiredInteropLen];
+
+                    fixed (sbyte* interopJsonPtr = &interopJson[0])
+                    {
+                        Converters.StringToNullTerminatedUTF8FixedPointer(
+                            sessionCloudComputePackageConstantsJson, (byte*)interopJsonPtr, requiredInteropLen);
+                        result = Multiplayer.XblMultiplayerSessionConstantsSetCloudComputePackageJson(
+                            sessionHandle.InteropHandle.handle,
+                            interopJsonPtr);
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionPropertiesSetJoinRestriction API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionpropertiessetjoinrestriction
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="joinRestriction"></param>
+            public static void XblMultiplayerSessionPropertiesSetJoinRestriction(
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerSessionRestriction joinRestriction)
+            {
+                Multiplayer.XblMultiplayerSessionPropertiesSetJoinRestriction(
+                    sessionHandle.InteropHandle.handle,
+                    joinRestriction);
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionPropertiesSetReadRestriction API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionpropertiessetreadrestriction
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="readRestriction"></param>
+            public static void XblMultiplayerSessionPropertiesSetReadRestriction(
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerSessionRestriction readRestriction)
+            {
+                Multiplayer.XblMultiplayerSessionPropertiesSetReadRestriction(
+                    sessionHandle.InteropHandle.handle,
+                    readRestriction);
+            }
+
+            // TODO: place API method impls here (42 in ~510 mins [1 per ~12 min])
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionPropertiesSetKeywords API:
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="keywords"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionPropertiesSetKeywords(
+                XblMultiplayerSessionHandle sessionHandle,
+                string[] keywords)
+            {
+
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionPropertiesSetTurnCollection API:
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="turnCollectionMemberIds"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionPropertiesSetTurnCollection(
+                XblMultiplayerSessionHandle sessionHandle,
+                uint[] turnCollectionMemberIds)
+            {
+
+            }
+
+            // STOP HERE
+            // TODO: place API method impls here (40 in ~??? mins [1 per ~?? min])
 
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //[return: NativeTypeName("HRESULT")]
