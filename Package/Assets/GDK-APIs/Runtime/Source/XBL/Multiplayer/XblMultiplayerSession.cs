@@ -3,7 +3,9 @@ using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
-    // TODO: place structs and delegate definitions here
+    public delegate void XblWriteSessionByHandleCallback(
+        int hresult,
+        XblMultiplayerSessionHandle sessionHandle);
 
     public partial class SDK
     {
@@ -953,46 +955,212 @@ namespace XGamingRuntime
                 return result;
             }
 
-            // TODO: place API method impls here (20 in ~240 mins [1 per ~12 min])
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionSetMatchmakingTargetSessionConstantsJson API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionsetmatchmakingtargetsessionconstantsjson
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="matchmakingTargetSessionConstantsJson"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionSetMatchmakingTargetSessionConstantsJson(
+                XblMultiplayerSessionHandle sessionHandle,
+                string matchmakingTargetSessionConstantsJson)
+            {
+                int result;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionSetMatchmakingTargetSessionConstantsJson(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle,
-            //  [NativeTypeName("const char *")] sbyte* matchmakingTargetSessionConstantsJson);
+                unsafe
+                {
+                    var interopJsonLen =
+                        string.IsNullOrEmpty(matchmakingTargetSessionConstantsJson) ? 1 :
+                        Converters.GetSizeRequiredToEncodeStringToUTF8(matchmakingTargetSessionConstantsJson);
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionSetCustomPropertyJson(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle,
-            //  [NativeTypeName("const char *")] sbyte* name,
-            //  [NativeTypeName("const char *")] sbyte* valueJson);
+                    var interopJson = new sbyte[interopJsonLen];
+                    interopJson[0] = 0;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionDeleteCustomPropertyJson(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle,
-            //  [NativeTypeName("const char *")] sbyte* name);
+                    fixed(sbyte* interopJsonPtr = &interopJson[0])
+                    {
+                        if (!string.IsNullOrEmpty(matchmakingTargetSessionConstantsJson))
+                        {
+                            Converters.StringToNullTerminatedUTF8FixedPointer(
+                                matchmakingTargetSessionConstantsJson, (byte*)interopJsonPtr, interopJsonLen);
+                        }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //public static extern XblMultiplayerSessionChangeTypes XblMultiplayerSessionCompare(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr currentSessionHandle,
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr oldSessionHandle);
+                        result = Multiplayer.XblMultiplayerSessionSetMatchmakingTargetSessionConstantsJson(
+                            sessionHandle.InteropHandle.handle,
+                            interopJsonPtr);
+                    }
+                }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerWriteSessionByHandleAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr multiplayerSession,
-            //  XblMultiplayerSessionWriteMode writeMode,
-            //  [NativeTypeName("const char *")] sbyte* handleId,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+                return result;
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerWriteSessionByHandleResult(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("XblMultiplayerSessionHandle *")] IntPtr* handle);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionSetCustomPropertyJson API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionsetcustompropertyjson
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="propertyName"></param>
+            /// <param name="propertyValueJson"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionSetCustomPropertyJson(
+                XblMultiplayerSessionHandle sessionHandle,
+                string propertyName,
+                string propertyValueJson)
+            {
+                int result;
+
+                unsafe
+                {
+                    var interopNameLen =
+                        string.IsNullOrEmpty(propertyName) ? 1 :
+                        Converters.GetSizeRequiredToEncodeStringToUTF8(propertyName);
+
+                    var interopValueLen =
+                        string.IsNullOrEmpty(propertyValueJson) ? 1 :
+                        Converters.GetSizeRequiredToEncodeStringToUTF8(propertyValueJson);
+
+                    var interopName = new sbyte[interopNameLen];
+                    interopName[0] = 0;
+
+                    var interopValue = new sbyte[interopValueLen];
+                    interopValue[0] = 0;
+
+                    fixed (sbyte* interopNamePtr = &interopName[0], interopValuePtr = &interopValue[0])
+                    {
+                        if (!string.IsNullOrEmpty(propertyName))
+                        {
+                            Converters.StringToNullTerminatedUTF8FixedPointer(
+                                propertyName, (byte*)interopNamePtr, interopNameLen);
+                        }
+
+                        if (!string.IsNullOrEmpty(propertyValueJson))
+                        {
+                            Converters.StringToNullTerminatedUTF8FixedPointer(
+                                propertyValueJson, (byte*)interopValuePtr, interopValueLen);
+                        }
+
+                        result = Multiplayer.XblMultiplayerSessionSetCustomPropertyJson(
+                           sessionHandle.InteropHandle.handle,
+                            interopNamePtr,
+                            interopValuePtr);
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionDeleteCustomPropertyJson API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessiondeletecustompropertyjson
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="propertyName"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionDeleteCustomPropertyJson(
+                XblMultiplayerSessionHandle sessionHandle,
+                string propertyName)
+            {
+                int result;
+
+                unsafe
+                {
+                    var interopNameLen =
+                        string.IsNullOrEmpty(propertyName) ? 1 :
+                        Converters.GetSizeRequiredToEncodeStringToUTF8(propertyName);
+
+                    var interopName = new sbyte[interopNameLen];
+                    interopName[0] = 0;
+
+                    fixed (sbyte* interopNamePtr = &interopName[0])
+                    {
+                        if (!string.IsNullOrEmpty(propertyName))
+                        {
+                            Converters.StringToNullTerminatedUTF8FixedPointer(
+                                propertyName, (byte*)interopNamePtr, interopNameLen);
+                        }
+
+                        result = Multiplayer.XblMultiplayerSessionDeleteCustomPropertyJson(
+                            sessionHandle.InteropHandle.handle,
+                            interopNamePtr);
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionCompare API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessioncompare
+            /// </summary>
+            /// <param name="currentSessionHandle"></param>
+            /// <param name="oldSessionHandle"></param>
+            /// <returns>the set of change flags between the two session handles.</returns>
+            public static XblMultiplayerSessionChangeTypes XblMultiplayerSessionCompare(
+                XblMultiplayerSessionHandle currentSessionHandle,
+                XblMultiplayerSessionHandle oldSessionHandle)
+            {
+                return Multiplayer.XblMultiplayerSessionCompare(
+                    currentSessionHandle.InteropHandle.handle,
+                    oldSessionHandle.InteropHandle.handle);
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerWriteSessionByHandleAsync API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayerwritesessionbyhandleasync
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="sessionHandle"></param>
+            /// <param name="writeMode"></param>
+            /// <param name="sessionHandleId"></param>
+            /// <param name="completionCallback"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerWriteSessionByHandleAsync(
+                XblContextHandle xboxLiveContext,
+                XblMultiplayerSessionHandle sessionHandle,
+                XblMultiplayerSessionWriteMode writeMode,
+                string sessionHandleId,
+                XblWriteSessionByHandleCallback completionCallback)
+            {
+                int result;
+
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(
+                    SDK.defaultQueue.handle,
+                    (XAsyncBlockPtr block) =>
+                    {
+                        unsafe
+                        {
+                            IntPtr handle = default(IntPtr);
+                            var hresult = Multiplayer.XblMultiplayerWriteSessionByHandleResult(block, &handle);
+
+                            var resultSessionHandle = new XblMultiplayerSessionHandle(
+                                new Interop.XblMultiplayerSessionHandle() { handle = handle });
+                            completionCallback?.Invoke(hresult, resultSessionHandle);
+                        }
+                    });
+
+                unsafe
+                {
+                    var interopHandleIdLen = Converters.GetSizeRequiredToEncodeStringToUTF8(
+                        sessionHandleId);
+                    var interopHandleId = new sbyte[interopHandleIdLen];
+
+                    fixed (sbyte* interopHandleIdPtr = &interopHandleId[0])
+                    {
+                        Converters.StringToNullTerminatedUTF8FixedPointer(
+                            sessionHandleId, (byte*)interopHandleIdPtr, interopHandleIdLen);
+                        result = Multiplayer.XblMultiplayerWriteSessionByHandleAsync(
+                            xboxLiveContext.InteropHandle.handle,
+                            sessionHandle.InteropHandle.handle,
+                            writeMode,
+                            interopHandleIdPtr,
+                            asyncBlock);
+                    }
+                }
+
+                return result;
+            }
+
+            // TODO: place API method impls here (14 in ~229 mins [1 per ~15 min])
 
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //[return: NativeTypeName("HRESULT")]
