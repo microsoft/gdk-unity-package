@@ -7,6 +7,12 @@ namespace XGamingRuntime
         int hresult,
         XblMultiplayerSessionHandle sessionHandle);
 
+    public delegate void XblGetSessionCallback(
+        int hresult,
+        XblMultiplayerSessionHandle sessionHandle);
+
+    public delegate void XblActivityCompletionCallback(int hresult);
+
     public partial class SDK
     {
         public partial class XBL
@@ -1160,67 +1166,179 @@ namespace XGamingRuntime
                 return result;
             }
 
-            // TODO: place API method impls here (14 in ~229 mins [1 per ~15 min])
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerGetSessionAsync API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayergetsessionasync
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="sessionReference"></param>
+            /// <param name="completionCallback"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerGetSessionAsync(
+                XblContextHandle xboxLiveContext,
+                XblMultiplayerSessionReference sessionReference,
+                XblGetSessionCallback completionCallback)
+            {
+                int result;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerGetSessionAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("const XblMultiplayerSessionReference *")] XblMultiplayerSessionReference* sessionReference,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(
+                    SDK.defaultQueue.handle,
+                    (XAsyncBlockPtr block) =>
+                    {
+                        unsafe
+                        {
+                            IntPtr handle = default(IntPtr);
+                            var hresult = Multiplayer.XblMultiplayerGetSessionResult(block, &handle);
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerGetSessionResult(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("XblMultiplayerSessionHandle *")] IntPtr* handle);
+                            var resultSessionHandle = new XblMultiplayerSessionHandle(
+                                new Interop.XblMultiplayerSessionHandle() { handle = handle });
+                            completionCallback?.Invoke(hresult, resultSessionHandle);
+                        }
+                    });
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerGetSessionByHandleAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("const char *")] sbyte* handleId,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+                unsafe
+                {
+                    var interopSessionReference = new Interop.XblMultiplayerSessionReference(sessionReference);
+                    result = Multiplayer.XblMultiplayerGetSessionAsync(
+                        xboxLiveContext.InteropHandle.handle,
+                        &interopSessionReference,
+                        asyncBlock);
+                }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerGetSessionByHandleResult(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("XblMultiplayerSessionHandle *")] IntPtr* handle);
+                return result;
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerQuerySessionsAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("const XblMultiplayerSessionQuery *")] XblMultiplayerSessionQuery* sessionQuery,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerGetSessionByHandleAsync API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayergetsessionbyhandleasync
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="sessionHandleId"></param>
+            /// <param name="completionCallback"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerGetSessionByHandleAsync(
+                XblContextHandle xboxLiveContext,
+                string sessionHandleId,
+                XblGetSessionCallback completionCallback)
+            {
+                int result;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerQuerySessionsResultCount(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("size_t *")] SizeT* sessionCount);
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(
+                    SDK.defaultQueue.handle,
+                    (XAsyncBlockPtr block) =>
+                    {
+                        unsafe
+                        {
+                            IntPtr handle = default(IntPtr);
+                            var hresult = Multiplayer.XblMultiplayerGetSessionByHandleResult(block, &handle);
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerQuerySessionsResult(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("size_t")] SizeT sessionCount,
-            //  XblMultiplayerSessionQueryResult* sessions);
+                            var resultSessionHandle = new XblMultiplayerSessionHandle(
+                                new Interop.XblMultiplayerSessionHandle() { handle = handle });
+                            completionCallback?.Invoke(hresult, resultSessionHandle);
+                        }
+                    });
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSetActivityAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("const XblMultiplayerSessionReference *")] XblMultiplayerSessionReference* sessionReference,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+                unsafe
+                {
+                    var interopHandleIdLen = Converters.GetSizeRequiredToEncodeStringToUTF8(
+                        sessionHandleId);
+                    var interopHandleId = new sbyte[interopHandleIdLen];
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerClearActivityAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("const char *")] sbyte* scid,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+                    fixed (sbyte* interopHandleIdPtr = &interopHandleId[0])
+                    {
+                        Converters.StringToNullTerminatedUTF8FixedPointer(
+                            sessionHandleId, (byte*)interopHandleIdPtr, interopHandleIdLen);
+
+                        result = Multiplayer.XblMultiplayerGetSessionByHandleAsync(
+                            xboxLiveContext.InteropHandle.handle,
+                            interopHandleIdPtr,
+                            asyncBlock);
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSetActivityAsync API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersetactivityasync
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="sessionReference"></param>
+            /// <param name="completionCallback"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSetActivityAsync(
+                XblContextHandle xboxLiveContext,
+                XblMultiplayerSessionReference sessionReference,
+                XblActivityCompletionCallback completionCallback)
+            {
+                int result;
+
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(
+                    SDK.defaultQueue.handle,
+                    (XAsyncBlockPtr block) =>
+                    {
+                        completionCallback?.Invoke(HR.S_OK);
+                    });
+
+                unsafe
+                {
+                    var interopSessionRef = new Interop.XblMultiplayerSessionReference(
+                        sessionReference);
+
+                    result = Multiplayer.XblMultiplayerSetActivityAsync(
+                        xboxLiveContext.InteropHandle.handle,
+                        &interopSessionRef,
+                        asyncBlock);
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerClearActivityAsync API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayerclearactivityasync
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="serviceConfigurationId"></param>
+            /// <param name="completionCallback"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerClearActivityAsync(
+                XblContextHandle xboxLiveContext,
+                string serviceConfigurationId,
+                XblActivityCompletionCallback completionCallback)
+            {
+                int result;
+
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(
+                    SDK.defaultQueue.handle,
+                    (XAsyncBlockPtr block) =>
+                    {
+                        completionCallback?.Invoke(HR.S_OK);
+                    });
+
+                unsafe
+                {
+                    var interopScidLen = Converters.GetSizeRequiredToEncodeStringToUTF8(
+                        serviceConfigurationId);
+                    var interopScid = new sbyte[interopScidLen];
+
+                    fixed (sbyte* interopScidPtr = &interopScid[0])
+                    {
+                        Converters.StringToNullTerminatedUTF8FixedPointer(
+                            serviceConfigurationId, (byte*)interopScidPtr, interopScidLen);
+
+                        result = Multiplayer.XblMultiplayerClearActivityAsync(
+                            xboxLiveContext.InteropHandle.handle,
+                            interopScidPtr,
+                            asyncBlock);
+                    }
+                }
+
+                return result;
+            }
+
+            // TODO: place API method impls here (5 in ~195 mins [1 per ~40 min])
 
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //[return: NativeTypeName("HRESULT")]
@@ -1233,13 +1351,35 @@ namespace XGamingRuntime
             //  [NativeTypeName("const char *")] sbyte* contextStringId,
             //  [NativeTypeName("const char *")] sbyte* customActivationContext,
             //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
-
+            // ... AND ...
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //[return: NativeTypeName("HRESULT")]
             //public static extern int XblMultiplayerSendInvitesResult(
             //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
             //  [NativeTypeName("size_t")] SizeT handlesCount,
             //  XblMultiplayerInviteHandle* handles);
+
+            // STOP HERE
+
+            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            //[return: NativeTypeName("HRESULT")]
+            //public static extern int XblMultiplayerQuerySessionsAsync(
+            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
+            //  [NativeTypeName("const XblMultiplayerSessionQuery *")] XblMultiplayerSessionQuery* sessionQuery,
+            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+            // ... AND ...
+            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            //[return: NativeTypeName("HRESULT")]
+            //public static extern int XblMultiplayerQuerySessionsResultCount(
+            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
+            //  [NativeTypeName("size_t *")] SizeT* sessionCount);
+            // ... AND ...
+            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+            //[return: NativeTypeName("HRESULT")]
+            //public static extern int XblMultiplayerQuerySessionsResult(
+            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
+            //  [NativeTypeName("size_t")] SizeT sessionCount,
+            //  XblMultiplayerSessionQueryResult* sessions);
 
             /// <summary>
             /// Wraps the underlying native XblMultiplayerSessionPropertiesSetKeywords API:
