@@ -3,32 +3,6 @@ using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
-    public struct XblMultiplayerSessionQuery
-    {
-        public string Scid;
-        public uint MaxItems;
-        public bool IncludePrivateSessions;
-        public bool IncludeReservations;
-        public bool IncludeInactiveSessions;
-        public ulong[] XuidFilters;
-        public string KeywordFilter;
-        public string SessionTemplateNameFilter;
-        public XblMultiplayerSessionVisibility VisibilityFilter;
-        public uint ContractVersionFilter;
-    }
-
-    public struct XblMultiplayerSessionQueryResult
-    {
-        public DateTime StartTime;
-        public XblMultiplayerSessionReference SessionReference;
-        public XblMultiplayerSessionStatus Status;
-        public XblMultiplayerSessionVisibility Visibility;
-        public bool IsMyTurn;
-        public ulong Xuid;
-        public uint AcceptedMemberCount;
-        public XblMultiplayerSessionRestriction JoinRestriction;
-    }
-
     public delegate void XblWriteSessionByHandleCallback(
         int hresult,
         XblMultiplayerSessionHandle sessionHandle);
@@ -42,10 +16,6 @@ namespace XGamingRuntime
     public delegate void XblSendInvitesCompletionCallback(
         int hresult,
         string[] inviteHandles);
-
-    public delegate void XblQuerySessionsCompletionCallback(
-        int hresult,
-        XblMultiplayerSessionQueryResult[] sessions);
 
     public partial class SDK
     {
@@ -1593,34 +1563,6 @@ namespace XGamingRuntime
                 }
 
                 return result;
-            }
-
-            // TODO: place API method impls here (1 in ~124 mins)
-
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerQuerySessionsAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("const XblMultiplayerSessionQuery *")] XblMultiplayerSessionQuery* sessionQuery,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
-            // ... AND ...
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerQuerySessionsResultCount(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("size_t *")] SizeT* sessionCount);
-            // ... AND ...
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerQuerySessionsResult(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("size_t")] SizeT sessionCount,
-            //  XblMultiplayerSessionQueryResult* sessions);
-            public static int XblMultiplayerQuerySessionsAsync(
-                XblContextHandle xboxLiveContext,
-                XblMultiplayerSessionQuery sessionQuery,
-                XblQuerySessionsCompletionCallback completionCallback)
-            {
             }
         }
     }
