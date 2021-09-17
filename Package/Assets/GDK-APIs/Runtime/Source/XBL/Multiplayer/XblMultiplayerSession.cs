@@ -3,6 +3,32 @@ using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
+    public struct XblMultiplayerSessionQuery
+    {
+        public string Scid;
+        public uint MaxItems;
+        public bool IncludePrivateSessions;
+        public bool IncludeReservations;
+        public bool IncludeInactiveSessions;
+        public ulong[] XuidFilters;
+        public string KeywordFilter;
+        public string SessionTemplateNameFilter;
+        public XblMultiplayerSessionVisibility VisibilityFilter;
+        public uint ContractVersionFilter;
+    }
+
+    public struct XblMultiplayerSessionQueryResult
+    {
+        public DateTime StartTime;
+        public XblMultiplayerSessionReference SessionReference;
+        public XblMultiplayerSessionStatus Status;
+        public XblMultiplayerSessionVisibility Visibility;
+        public bool IsMyTurn;
+        public ulong Xuid;
+        public uint AcceptedMemberCount;
+        public XblMultiplayerSessionRestriction JoinRestriction;
+    }
+
     public delegate void XblWriteSessionByHandleCallback(
         int hresult,
         XblMultiplayerSessionHandle sessionHandle);
@@ -12,6 +38,14 @@ namespace XGamingRuntime
         XblMultiplayerSessionHandle sessionHandle);
 
     public delegate void XblActivityCompletionCallback(int hresult);
+
+    public delegate void XblSendInvitesCompletionCallback(
+        int hresult,
+        string[] inviteHandles);
+
+    public delegate void XblQuerySessionsCompletionCallback(
+        int hresult,
+        XblMultiplayerSessionQueryResult[] sessions);
 
     public partial class SDK
     {
@@ -1338,28 +1372,230 @@ namespace XGamingRuntime
                 return result;
             }
 
-            // TODO: place API method impls here (5 in ~195 mins [1 per ~40 min])
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSendInvitesAsync API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersendinvitesasync
+            /// </summary>
+            /// <param name="xboxLiveContext"></param>
+            /// <param name="sessionReference"></param>
+            /// <param name="xuidsForUsersToInvite"></param>
+            /// <param name="titleId"></param>
+            /// <param name="contextStringId"></param>
+            /// <param name="customActivationContext"></param>
+            /// <param name="completionCallback"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSendInvitesAsync(
+                XblContextHandle xboxLiveContext,
+                XblMultiplayerSessionReference sessionReference,
+                ulong[] xuidsForUsersToInvite,
+                uint titleId,
+                string contextStringId,
+                string customActivationContext,
+                XblSendInvitesCompletionCallback completionCallback)
+            {
+                int result;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSendInvitesAsync(
-            //  [NativeTypeName("XblContextHandle")] IntPtr xblContext,
-            //  [NativeTypeName("const XblMultiplayerSessionReference *")] XblMultiplayerSessionReference* sessionReference,
-            //  [NativeTypeName("const uint64_t *")] ulong* xuids,
-            //  [NativeTypeName("size_t")] SizeT xuidsCount,
-            //  [NativeTypeName("uint32_t")] uint titleId,
-            //  [NativeTypeName("const char *")] sbyte* contextStringId,
-            //  [NativeTypeName("const char *")] sbyte* customActivationContext,
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
-            // ... AND ...
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSendInvitesResult(
-            //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
-            //  [NativeTypeName("size_t")] SizeT handlesCount,
-            //  XblMultiplayerInviteHandle* handles);
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(
+                    SDK.defaultQueue.handle,
+                    (XAsyncBlockPtr block) =>
+                    {
+                        unsafe
+                        {
+                            var interopHandles = new XblMultiplayerInviteHandle[xuidsForUsersToInvite.Length];
 
-            // STOP HERE
+                            string[] handles = null;
+
+                            fixed (XblMultiplayerInviteHandle* ptr = &interopHandles[0])
+                            {
+                                var hresult = Multiplayer.XblMultiplayerSendInvitesResult(
+                                    block,
+                                    new SizeT(xuidsForUsersToInvite.Length),
+                                    ptr);
+
+                                if (HR.SUCCEEDED(hresult))
+                                {
+
+                                }
+
+                                completionCallback?.Invoke(hresult, handles);
+                            }
+                        }
+                    });
+
+                unsafe
+                {
+                    var interopSessionReference = new Interop.XblMultiplayerSessionReference(sessionReference);
+
+                    fixed (ulong* interopXuids = &xuidsForUsersToInvite[0])
+                    {
+                        var interopContextLen =
+                            string.IsNullOrEmpty(contextStringId) ? 1 :
+                            Converters.GetSizeRequiredToEncodeStringToUTF8(contextStringId);
+
+                        var interopContext = new sbyte[interopContextLen];
+                        interopContext[0] = 0;
+
+                        var interopCustomActivationLen =
+                            string.IsNullOrEmpty(customActivationContext) ? 1 :
+                            Converters.GetSizeRequiredToEncodeStringToUTF8(customActivationContext);
+
+                        var interopCustomActivation = new sbyte[interopCustomActivationLen];
+                        interopCustomActivation[0] = 0;
+
+                        fixed (sbyte* interopContextPtr = &interopContext[0], interopCustomActivationPtr = &interopCustomActivation[0])
+                        {
+                            result = Multiplayer.XblMultiplayerSendInvitesAsync(
+                                xboxLiveContext.InteropHandle.handle,
+                                &interopSessionReference,
+                                interopXuids,
+                                new SizeT(xuidsForUsersToInvite.Length),
+                                titleId,
+                                interopContextPtr,
+                                interopCustomActivationPtr,
+                                asyncBlock);
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionPropertiesSetKeywords API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionpropertiessetkeywords
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="keyword"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionPropertiesSetKeyword(
+                XblMultiplayerSessionHandle sessionHandle,
+                string keyword)
+            {
+                int result;
+
+                unsafe
+                {
+                    var interopKeywordLen =
+                        string.IsNullOrEmpty(keyword) ? 1 :
+                        Converters.GetSizeRequiredToEncodeStringToUTF8(keyword);
+
+                    var interopKeyword = new sbyte[interopKeywordLen];
+                    interopKeyword[0] = 0;
+
+                    fixed (sbyte* interopKeywordPtr = &interopKeyword[0])
+                    {
+                        result = Multiplayer.XblMultiplayerSessionPropertiesSetKeywords(
+                            sessionHandle.InteropHandle.handle,
+                            &interopKeywordPtr,
+                            new SizeT(1));
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionRoleTypes API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionroletypes
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="roleTypes"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionRoleTypes(
+                XblMultiplayerSessionHandle sessionHandle,
+                out XblMultiplayerRoleType[] roleTypes)
+            {
+                int result;
+
+                roleTypes = null;
+
+                unsafe
+                {
+                    var roleTypesPtr = default(Interop.XblMultiplayerRoleType*);
+                    var roleTypesCount = new SizeT(0);
+
+                    result = Multiplayer.XblMultiplayerSessionRoleTypes(
+                        sessionHandle.InteropHandle.handle,
+                        &roleTypesPtr,
+                        &roleTypesCount);
+
+                    if (HR.SUCCEEDED(result))
+                    {
+                        var ptr = roleTypesPtr;
+                        roleTypes = new XblMultiplayerRoleType[roleTypesCount.ToInt32()];
+                        for (var i = 0; i < roleTypesCount.ToInt32(); i++)
+                        {
+                            roleTypes[i] = new XblMultiplayerRoleType(*ptr);
+                            ptr++;
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionGetRoleByName API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessiongetrolebyname
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="roleTypeName"></param>
+            /// <param name="roleName"></param>
+            /// <param name="role"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionGetRoleByName(
+                XblMultiplayerSessionHandle sessionHandle,
+                string roleTypeName,
+                string roleName,
+                out XblMultiplayerRole role)
+            {
+                int result;
+
+                role = null;
+
+                unsafe
+                {
+                    var rolePtr = default(Interop.XblMultiplayerRole*);
+
+                    var interopRoleTypeNameLen = Converters.GetSizeRequiredToEncodeStringToUTF8(roleTypeName);
+
+                    var interopRoleTypeName = new sbyte[interopRoleTypeNameLen];
+                    interopRoleTypeName[0] = 0;
+
+                    var interopRoleNameLen = Converters.GetSizeRequiredToEncodeStringToUTF8(roleName);
+
+                    var interopRoleName = new sbyte[interopRoleNameLen];
+                    interopRoleName[0] = 0;
+
+                    fixed (sbyte* interopRoleTypeNamePtr = &interopRoleTypeName[0], interopRoleNamePtr = &interopRoleName[0])
+                    {
+                        Converters.StringToNullTerminatedUTF8FixedPointer(
+                            roleTypeName, 
+                            (byte*)interopRoleTypeNamePtr, 
+                            interopRoleTypeNameLen);
+
+                        Converters.StringToNullTerminatedUTF8FixedPointer(
+                            roleName,
+                            (byte*)interopRoleNamePtr,
+                            interopRoleNameLen);
+
+                        result = Multiplayer.XblMultiplayerSessionGetRoleByName(
+                            sessionHandle.InteropHandle.handle,
+                            interopRoleTypeNamePtr,
+                            interopRoleNamePtr,
+                            &rolePtr);
+                    }
+
+                    if(HR.SUCCEEDED(result) && rolePtr != default(Interop.XblMultiplayerRole*))
+                    {
+                        role = new XblMultiplayerRole(*rolePtr);
+                    }
+                }
+
+                return result;
+            }
+
+            // TODO: place API method impls here (1 in ~124 mins)
 
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //[return: NativeTypeName("HRESULT")]
@@ -1380,43 +1616,12 @@ namespace XGamingRuntime
             //  [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async,
             //  [NativeTypeName("size_t")] SizeT sessionCount,
             //  XblMultiplayerSessionQueryResult* sessions);
-
-            /// <summary>
-            /// Wraps the underlying native XblMultiplayerSessionPropertiesSetKeywords API:
-            /// </summary>
-            /// <param name="sessionHandle"></param>
-            /// <param name="keywords"></param>
-            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
-            //public static int XblMultiplayerSessionPropertiesSetKeywords(
-            //    XblMultiplayerSessionHandle sessionHandle,
-            //    string[] keywords)
-            //{
-            //}
-
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionRoleTypes(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle,
-            //  [NativeTypeName("const XblMultiplayerRoleType **")] XblMultiplayerRoleType** roleTypes,
-            //  [NativeTypeName("size_t *")] SizeT* roleTypesCount);
-            //public static int XblMultiplayerSessionRoleTypes(
-            //    XblMultiplayerSessionHandle sessionHandle,
-            //    out XblMultiplayerRoleType[] roleTypes)
-            //{ }
-
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionGetRoleByName(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle,
-            //  [NativeTypeName("const char *")] sbyte* roleTypeName,
-            //  [NativeTypeName("const char *")] sbyte* roleName,
-            //  [NativeTypeName("const XblMultiplayerRole **")] XblMultiplayerRole** role);
-            //public static int XblMultiplayerSessionGetRoleByName(
-            //    XblMultiplayerSessionHandle sessionHandle,
-            //    string roleTypeName,
-            //    string roleName,
-            //    out XblMultiplayerRole role)
-            //{ }
+            public static int XblMultiplayerQuerySessionsAsync(
+                XblContextHandle xboxLiveContext,
+                XblMultiplayerSessionQuery sessionQuery,
+                XblQuerySessionsCompletionCallback completionCallback)
+            {
+            }
         }
     }
 }
