@@ -518,28 +518,106 @@ namespace XGamingRuntime
                 return sessionMember;
             }
 
-            // TODO: place API method impls here (40 in ~390 mins [1 per ~10 min])
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionMembersAccepted API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionmembersaccepted
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>0 if no members accepted or invalid handle, >0 otherwise.</returns>
+            public static uint XblMultiplayerSessionMembersAccepted(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                return Multiplayer.XblMultiplayerSessionMembersAccepted(
+                    sessionHandle.InteropHandle.handle);
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("uint32_t")]
-            //public static extern uint XblMultiplayerSessionMembersAccepted(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionRawServersJson API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionrawserversjson
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>null if invalid session handle, non-null otherwise.</returns>
+            public static string XblMultiplayerSessionRawServersJson(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                string serverJson = null;
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("const char *")]
-            //public static extern sbyte* XblMultiplayerSessionRawServersJson(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+                unsafe
+                {
+                    var interopServerJson = Multiplayer.XblMultiplayerSessionRawServersJson(
+                        sessionHandle.InteropHandle.handle);
+                    if (interopServerJson != default(sbyte*))
+                    {
+                        serverJson = Converters.NullTerminatedBytePointerToString((byte*)interopServerJson);
+                    }
+                }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("HRESULT")]
-            //public static extern int XblMultiplayerSessionSetRawServersJson(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle,
-            //  [NativeTypeName("const char *")] sbyte* rawServersJson);
+                return serverJson;
+            }
 
-            //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-            //[return: NativeTypeName("const char *")]
-            //public static extern sbyte* XblMultiplayerSessionEtag(
-            //  [NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionSetRawServersJson API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionsetrawserversjson
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <param name="rawServersJson"></param>
+            /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            public static int XblMultiplayerSessionSetRawServersJson(
+                XblMultiplayerSessionHandle sessionHandle,
+                string rawServersJson)
+            {
+                int result;
+
+                unsafe
+                {
+                    var interopServerJsonLen = 
+                        string.IsNullOrEmpty(rawServersJson) ? 1 :
+                        Converters.GetSizeRequiredToEncodeStringToUTF8(
+                            rawServersJson);
+                    var interopServerJson = new sbyte[interopServerJsonLen];
+                    interopServerJson[0] = 0;
+
+                    fixed (sbyte* interopServerJsonPtr = &interopServerJson[0])
+                    {
+                        if (!string.IsNullOrEmpty(rawServersJson))
+                        {
+                            Converters.StringToNullTerminatedUTF8FixedPointer(
+                                rawServersJson, (byte*)interopServerJsonPtr, interopServerJsonLen);
+                        }
+                        result = Multiplayer.XblMultiplayerSessionSetRawServersJson(
+                            sessionHandle.InteropHandle.handle,
+                            interopServerJsonPtr);
+                    }
+                }
+
+                return result;
+            }
+
+            /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionEtag API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionetag
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>null if the session handle is invalid, non-null otherwise.</returns>
+            public static string XblMultiplayerSessionEtag(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                string etag = null;
+
+                unsafe
+                {
+                    var interopEtag = Multiplayer.XblMultiplayerSessionEtag(
+                        sessionHandle.InteropHandle.handle);
+                    if (interopEtag != default(sbyte*))
+                    {
+                        etag = Converters.NullTerminatedBytePointerToString((byte*)interopEtag);
+                    }
+                }
+
+                return etag;
+            }
+
+            // TODO: place API method impls here (36 in ~401 mins [1 per ~10 min])
 
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //[return: NativeTypeName("const XblMultiplayerSessionInfo *")]
@@ -549,6 +627,8 @@ namespace XGamingRuntime
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //[return: NativeTypeName("HRESULT")]
             //public static extern int XblMultiplayerSessionAddMemberReservation([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("uint64_t")] ulong xuid, [NativeTypeName("const char *")] sbyte* memberCustomConstantsJson, [NativeTypeName("bool")] byte initializeRequested);
+
+            // STOP HERE ... 10:00 (360 minutes left)
 
             //[DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
             //public static extern void XblMultiplayerSessionSetInitializationSucceeded(
