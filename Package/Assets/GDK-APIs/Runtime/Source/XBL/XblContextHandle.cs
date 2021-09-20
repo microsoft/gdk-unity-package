@@ -4,7 +4,7 @@ namespace XGamingRuntime
 {
     public class XblContextHandle : EquatableHandle
     {
-        internal XblContextHandle(Interop.XblContextHandle interopHandle)
+        public XblContextHandle(Interop.XblContextHandle interopHandle)
         {
             this.InteropHandle = interopHandle;
         }
