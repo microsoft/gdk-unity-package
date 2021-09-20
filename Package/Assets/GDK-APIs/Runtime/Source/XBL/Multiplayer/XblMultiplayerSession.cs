@@ -1454,10 +1454,14 @@ namespace XGamingRuntime
 
                     fixed (sbyte* interopKeywordPtr = &interopKeyword[0])
                     {
-                        result = Multiplayer.XblMultiplayerSessionPropertiesSetKeywords(
-                            sessionHandle.InteropHandle.handle,
-                            &interopKeywordPtr,
-                            new SizeT(1));
+                        IntPtr ptr = new IntPtr(interopKeywordPtr);
+                        IntPtr* ptrptr = &ptr;
+                        {
+                            result = Multiplayer.XblMultiplayerSessionPropertiesSetKeywords(
+                                sessionHandle.InteropHandle.handle,
+                                (sbyte**)ptrptr,
+                                new SizeT(1));
+                        }
                     }
                 }
 
