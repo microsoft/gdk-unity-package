@@ -70,7 +70,7 @@ namespace XGamingRuntime
                 var hresult = Social.XblSocialGetSocialRelationshipsAsync(
                     xboxLiveContext.InteropHandle.handle,
                     xboxUserId,
-                    socialRelationshipFilter,
+                    (Interop.XblSocialRelationshipFilter)socialRelationshipFilter,
                     new SizeT(startIndex),
                     new SizeT(maxItems),
                     asyncBlock);

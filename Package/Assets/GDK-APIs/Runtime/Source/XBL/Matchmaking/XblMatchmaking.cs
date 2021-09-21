@@ -101,7 +101,7 @@ namespace XGamingRuntime
                             scidBytePtr,
                             hopperNameBytePtr,
                             ticketTimeout,
-                            XblPreserveSessionMode.Never,
+                            Interop.XblPreserveSessionMode.Never,
                             attrsBytePtr,
                             asyncBlock);
 
@@ -205,7 +205,7 @@ namespace XGamingRuntime
                                     {
                                         details.matchStatus = ptr->matchStatus;
                                         details.estimatedWaitTime = ptr->estimatedWaitTime;
-                                        details.preserveSession = ptr->preserveSession;
+                                        details.preserveSession = (XblPreserveSessionMode)ptr->preserveSession;
                                         details.ticketSession =
                                             new XblMultiplayerSessionReference(ptr->ticketSession);
                                         details.targetSession =

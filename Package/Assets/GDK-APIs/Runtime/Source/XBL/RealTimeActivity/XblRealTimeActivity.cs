@@ -97,7 +97,7 @@ namespace XGamingRuntime
                     interopHandlerId = RealTimeActivity.XblRealTimeActivityAddResyncHandler(
                         xboxLiveContext.InteropHandle.handle,
                         _connectionResyncCallbackManager.InteropPInvokeCallback,
-                        default(IntPtr));
+                        context);
 
                     if (interopHandlerId > 0)
                     {
@@ -143,7 +143,7 @@ namespace XGamingRuntime
                 [MonoPInvokeCallback]
                 internal unsafe void InteropPInvokeCallback(
                     IntPtr context,
-                    XblRealTimeActivityConnectionState newConnectionState)
+                    Interop.XblRealTimeActivityConnectionState newConnectionState)
                 {
                     if (!_contextToFunctionId.ContainsKey(context))
                     {
@@ -151,7 +151,7 @@ namespace XGamingRuntime
                     }
 
                     var functionId = _contextToFunctionId[context];
-                    IssueEventCallback(functionId, newConnectionState);
+                    IssueEventCallback(functionId, (XblRealTimeActivityConnectionState)newConnectionState);
                 }
 
                 private unsafe void IssueEventCallback(
