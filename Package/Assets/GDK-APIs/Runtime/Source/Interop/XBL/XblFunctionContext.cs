@@ -5,8 +5,8 @@ namespace XGamingRuntime.Interop
 {
     //typedef int32_t XblFunctionContext;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblFunctionContext
+    public struct XblFunctionContext
     {
-        private readonly Int32 context;
+        public readonly Int32 context;
     }
 }
