@@ -105,6 +105,10 @@ namespace XGamingRuntime.Interop
         public static extern XblMultiplayerSessionMember* XblMultiplayerSessionGetMember([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("uint32_t")] uint memberId);
 
         [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [return: NativeTypeName("const XblMultiplayerMatchmakingServer *")]
+        public static extern XblMultiplayerMatchmakingServer* XblMultiplayerSessionMatchmakingServer([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
+
+        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("uint32_t")]
         public static extern uint XblMultiplayerSessionMembersAccepted([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
 

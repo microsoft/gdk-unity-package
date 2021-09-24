@@ -22,6 +22,31 @@ namespace XGamingRuntime
         public partial class XBL
         {
             /// <summary>
+            /// Wraps the underlying native XblMultiplayerSessionMatchmakingServer API:
+            /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionmatchmakingserver
+            /// </summary>
+            /// <param name="sessionHandle"></param>
+            /// <returns>null if no associated matchmaking server, non-null otherwise.</returns>
+            public static XblMultiplayerMatchmakingServer XblMultiplayerSessionMatchmakingServer(
+                XblMultiplayerSessionHandle sessionHandle)
+            {
+                var matchmakingServer = default(XblMultiplayerMatchmakingServer);
+
+                unsafe
+                {
+                    var interopMatchmakingServer = Multiplayer.XblMultiplayerSessionMatchmakingServer(
+                        sessionHandle.InteropHandle.handle);
+
+                    if (interopMatchmakingServer != default(Interop.XblMultiplayerMatchmakingServer*))
+                    {
+                        matchmakingServer = new XblMultiplayerMatchmakingServer(*interopMatchmakingServer);
+                    }
+                }
+
+                return matchmakingServer;
+            }
+
+            /// <summary>
             /// Wraps the underlying native XblMultiplayerSessionDuplicateHandle API:
             /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionduplicatehandle
             /// </summary>
