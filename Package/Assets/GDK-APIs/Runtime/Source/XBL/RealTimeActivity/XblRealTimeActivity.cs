@@ -10,7 +10,9 @@ namespace XGamingRuntime
         public int InteropHandlerId;
 
         public void Reset() { InteropHandlerId = InvalidHandlerId; }
-        public bool IsValid() { return InteropHandlerId > InvalidHandlerId; }
+        public bool IsValid() { return IsValid(InteropHandlerId); }
+
+        public static bool IsValid(int interopHandlerId) { return interopHandlerId > InvalidHandlerId; }
     }
 
     public delegate void XblConnectionStateChangeCallback(
@@ -40,10 +42,10 @@ namespace XGamingRuntime
                     var context = _connectionStateChangeCallbackManager.GetUniqueContext();
                     interopHandlerId = RealTimeActivity.XblRealTimeActivityAddConnectionStateChangeHandler(
                         xboxLiveContext.InteropHandle.handle,
-                        _connectionStateChangeCallbackManager.InteropPInvokeCallback,
+                        ConnectionStateChangeCallbackManager.InteropPInvokeCallback,
                         context);
 
-                    if (interopHandlerId > 0)
+                    if (XblRealTimeActivityCallbackToken.IsValid(interopHandlerId))
                     {
                         _connectionStateChangeCallbackManager.AddCallbackForId(
                             interopHandlerId, context, callback);
@@ -96,10 +98,10 @@ namespace XGamingRuntime
                     var context = _connectionResyncCallbackManager.GetUniqueContext();
                     interopHandlerId = RealTimeActivity.XblRealTimeActivityAddResyncHandler(
                         xboxLiveContext.InteropHandle.handle,
-                        _connectionResyncCallbackManager.InteropPInvokeCallback,
-                        default(IntPtr));
+                        ConnectionResyncCallbackManager.InteropPInvokeCallback,
+                        context);
 
-                    if (interopHandlerId > 0)
+                    if (XblRealTimeActivityCallbackToken.IsValid(interopHandlerId))
                     {
                         _connectionResyncCallbackManager.AddCallbackForId(
                             interopHandlerId, context, callback);
@@ -141,17 +143,17 @@ namespace XGamingRuntime
                 InteropCallbackManager<XblConnectionStateChangeCallback>
             {
                 [MonoPInvokeCallback]
-                internal unsafe void InteropPInvokeCallback(
+                internal static unsafe void InteropPInvokeCallback(
                     IntPtr context,
-                    XblRealTimeActivityConnectionState newConnectionState)
+                    Interop.XblRealTimeActivityConnectionState newConnectionState)
                 {
-                    if (!_contextToFunctionId.ContainsKey(context))
+                    if (!_connectionStateChangeCallbackManager._contextToFunctionId.ContainsKey(context))
                     {
                         return;
                     }
 
-                    var functionId = _contextToFunctionId[context];
-                    IssueEventCallback(functionId, newConnectionState);
+                    var functionId = _connectionStateChangeCallbackManager._contextToFunctionId[context];
+                    _connectionStateChangeCallbackManager.IssueEventCallback(functionId, (XblRealTimeActivityConnectionState)newConnectionState);
                 }
 
                 private unsafe void IssueEventCallback(
@@ -175,15 +177,15 @@ namespace XGamingRuntime
                 InteropCallbackManager<XblConnectionResyncCallback>
             {
                 [MonoPInvokeCallback]
-                internal unsafe void InteropPInvokeCallback(IntPtr context)
+                internal static unsafe void InteropPInvokeCallback(IntPtr context)
                 {
-                    if (!_contextToFunctionId.ContainsKey(context))
+                    if (!_connectionResyncCallbackManager._contextToFunctionId.ContainsKey(context))
                     {
                         return;
                     }
 
-                    var functionId = _contextToFunctionId[context];
-                    IssueEventCallback(functionId);
+                    var functionId = _connectionResyncCallbackManager._contextToFunctionId[context];
+                    _connectionResyncCallbackManager.IssueEventCallback(functionId);
                 }
 
                 private unsafe void IssueEventCallback(int functionId)

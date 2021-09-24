@@ -10,9 +10,6 @@ namespace XGamingRuntime.Interop
         public static extern int XblMultiplayerSessionDuplicateHandle([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("XblMultiplayerSessionHandle *")] IntPtr* duplicatedHandle);
 
         [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
-        public static extern XblTournamentArbitrationStatus XblMultiplayerSessionArbitrationStatus([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
-
-        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("time_t")]
         public static extern long XblMultiplayerSessionTimeOfSession([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
 
@@ -106,6 +103,10 @@ namespace XGamingRuntime.Interop
         [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("const XblMultiplayerSessionMember *")]
         public static extern XblMultiplayerSessionMember* XblMultiplayerSessionGetMember([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("uint32_t")] uint memberId);
+
+        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [return: NativeTypeName("const XblMultiplayerMatchmakingServer *")]
+        public static extern XblMultiplayerMatchmakingServer* XblMultiplayerSessionMatchmakingServer([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle);
 
         [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("uint32_t")]
@@ -236,5 +237,13 @@ namespace XGamingRuntime.Interop
         [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("HRESULT")]
         public static extern int XblMultiplayerClearActivityAsync([NativeTypeName("XblContextHandle")] IntPtr xblContext, [NativeTypeName("const char *")] sbyte* scid, [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+
+        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [return: NativeTypeName("HRESULT")]
+        public static extern int XblMultiplayerSendInvitesAsync([NativeTypeName("XblContextHandle")] IntPtr xblContext, [NativeTypeName("const XblMultiplayerSessionReference *")] XblMultiplayerSessionReference* sessionReference, [NativeTypeName("const uint64_t *")] ulong* xuids, [NativeTypeName("size_t")] SizeT xuidsCount, [NativeTypeName("uint32_t")] uint titleId, [NativeTypeName("const char *")] sbyte* contextStringId, [NativeTypeName("const char *")] sbyte* customActivationContext, [NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async);
+
+        [DllImport("Microsoft_Xbox_Services_141_GDK_C_Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [return: NativeTypeName("HRESULT")]
+        public static extern int XblMultiplayerSendInvitesResult([NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async, [NativeTypeName("size_t")] SizeT handlesCount, XblMultiplayerInviteHandle* handles);
     }
 }

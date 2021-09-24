@@ -11,7 +11,7 @@ namespace XGamingRuntime.Interop
     //    XblMultiplayerSessionReference TargetSessionRef;
     //} XblMultiplayerMatchmakingServer;
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblMultiplayerMatchmakingServer
+    public struct XblMultiplayerMatchmakingServer
     {
         internal readonly XblMatchmakingStatus Status;
         internal readonly UTF8StringPtr StatusDetails;

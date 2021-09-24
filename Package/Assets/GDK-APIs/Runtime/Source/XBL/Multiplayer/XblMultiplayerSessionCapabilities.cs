@@ -5,6 +5,8 @@ namespace XGamingRuntime
 {
     public class XblMultiplayerSessionCapabilities
     {
+        public XblMultiplayerSessionCapabilities() { }
+
         internal XblMultiplayerSessionCapabilities(Interop.XblMultiplayerSessionCapabilities interopStruct)
         {
             this.Connectivity = interopStruct.Connectivity.Value;
@@ -20,16 +22,16 @@ namespace XGamingRuntime
             this.HasOwners = interopStruct.HasOwners.Value;
         }
 
-        public bool Connectivity { get; private set; }
-        public bool Team { get; private set; }
-        public bool Arbitration { get; private set; }
-        public bool SuppressPresenceActivityCheck { get; private set; }
-        public bool Gameplay { get; private set; }
-        public bool Large { get; private set; }
-        public bool ConnectionRequiredForActiveMembers { get; private set; }
-        public bool UserAuthorizationStyle { get; private set; }
-        public bool Crossplay { get; private set; }
-        public bool Searchable { get; private set; }
-        public bool HasOwners { get; private set; }
+        public bool Connectivity { get; set; }
+        public bool Team { get; set; }
+        public bool Arbitration { get; set; }
+        public bool SuppressPresenceActivityCheck { get; set; }
+        public bool Gameplay { get; set; }
+        public bool Large { get; set; }
+        public bool ConnectionRequiredForActiveMembers { get; set; }
+        public bool UserAuthorizationStyle { get; set; }
+        public bool Crossplay { get; set; }
+        public bool Searchable { get; set; }
+        public bool HasOwners { get; set; }
     }
 }

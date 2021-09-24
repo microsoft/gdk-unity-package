@@ -9,6 +9,7 @@ namespace XGamingRuntime.Interop
         //    _In_opt_ void* context,
         //    _In_ XblRealTimeActivityConnectionState connectionState
         //);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate void XblRealTimeActivityConnectionStateChangeHandler(
             IntPtr context,
             XblRealTimeActivityConnectionState connectionState);
@@ -16,6 +17,7 @@ namespace XGamingRuntime.Interop
         //typedef void CALLBACK XblRealTimeActivityResyncHandler(
         //    _In_opt_ void* context
         //);
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         public delegate void XblRealTimeActivityResyncHandler(
             IntPtr context);
 

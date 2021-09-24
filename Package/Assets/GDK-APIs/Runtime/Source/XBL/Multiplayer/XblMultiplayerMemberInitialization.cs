@@ -5,6 +5,8 @@ namespace XGamingRuntime
 {
     public class XblMultiplayerMemberInitialization
     {
+        public XblMultiplayerMemberInitialization() { }
+
         internal XblMultiplayerMemberInitialization(Interop.XblMultiplayerMemberInitialization interopStruct)
         {
             this.JoinTimeout = interopStruct.JoinTimeout;
@@ -14,10 +16,10 @@ namespace XGamingRuntime
             this.MembersNeededToStart = interopStruct.MembersNeededToStart;
         }
 
-        public UInt64 JoinTimeout { get; private set; }
-        public UInt64 MeasurementTimeout { get; private set; }
-        public UInt64 EvaluationTimeout { get; private set; }
-        public bool ExternalEvaluation { get; private set; }
-        public UInt32 MembersNeededToStart { get; private set; }
+        public UInt64 JoinTimeout { get; set; }
+        public UInt64 MeasurementTimeout { get; set; }
+        public UInt64 EvaluationTimeout { get; set; }
+        public bool ExternalEvaluation { get; set; }
+        public UInt32 MembersNeededToStart { get; set; }
     }
 }

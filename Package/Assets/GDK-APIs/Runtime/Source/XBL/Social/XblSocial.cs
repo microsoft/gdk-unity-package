@@ -71,7 +71,7 @@ namespace XGamingRuntime
                 var hresult = Social.XblSocialGetSocialRelationshipsAsync(
                     xboxLiveContext.InteropHandle.handle,
                     xboxUserId,
-                    socialRelationshipFilter,
+                    (Interop.XblSocialRelationshipFilter)socialRelationshipFilter,
                     new SizeT(startIndex),
                     new SizeT(maxItems),
                     asyncBlock);
@@ -300,7 +300,7 @@ namespace XGamingRuntime
                     var context = _socialRelationshipChangeCallbackManager.GetUniqueContext();
                     callbackFunctionId = Social.XblSocialAddSocialRelationshipChangedHandler(
                         xboxLiveContext.InteropHandle.handle,
-                        _socialRelationshipChangeCallbackManager.InteropPInvokeCallback,
+                        SocialRelationshipChangeCallbackManager.InteropPInvokeCallback,
                         context);
 
                     if (callbackFunctionId != 0)
@@ -349,17 +349,17 @@ namespace XGamingRuntime
                 InteropCallbackManager<XblSocialRelationshipChangedCallback>
             {
                 [MonoPInvokeCallback]
-                internal unsafe void InteropPInvokeCallback(
+                internal static unsafe void InteropPInvokeCallback(
                     Interop.XblSocialRelationshipChangeEventArgs* eventArgs,
                     IntPtr context)
                 {
-                    if (!_contextToFunctionId.ContainsKey(context))
+                    if (!_socialRelationshipChangeCallbackManager._contextToFunctionId.ContainsKey(context))
                     {
                         return;
                     }
 
-                    var functionId = _contextToFunctionId[context];
-                    IssueEventCallback(functionId, eventArgs);
+                    var functionId = _socialRelationshipChangeCallbackManager._contextToFunctionId[context];
+                    _socialRelationshipChangeCallbackManager.IssueEventCallback(functionId, eventArgs);
                 }
 
                 private unsafe void IssueEventCallback(
