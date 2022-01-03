@@ -159,6 +159,9 @@ namespace Microsoft.Xbox
             _hresultToFriendlyErrorLookup.Add(-1994108656, "E_GAMEUSER_NO_PACKAGE_IDENTITY: Are you trying to call GDK APIs from the Unity editor?" +
                 " To call GDK APIs, you must use the GDK > Build and Run menu. You can debug your code by attaching the Unity debugger once your" +
                 "game is launched.");
+
+            _hresultToFriendlyErrorLookup.Add(-2015559675, "AM_E_XAST_UNEXPECTED: Have you added the Windows 10 PC platform on the Xbox Settings page " +
+                "in Partner Center? Learn more: aka.ms/sandboxtroubleshootingguide");
         }
 
         public void SignIn()
