@@ -155,6 +155,17 @@ namespace Microsoft.Xbox
             _hresultToFriendlyErrorLookup.Add(-2143330041, "IAP_UNEXPECTED: Does the player you are signed in as have a license for the game? " +
                 "You can get one by downloading your game from the store and purchasing it first. If you can't find your game in the store, " +
                 "have you published it in Partner Center?");
+
+            _hresultToFriendlyErrorLookup.Add(-1994108656, "E_GAMEUSER_NO_PACKAGE_IDENTITY: Are you trying to call GDK APIs from the Unity editor?" +
+                " To call GDK APIs, you must use the GDK > Build and Run menu. You can debug your code by attaching the Unity debugger once your" +
+                "game is launched.");
+
+            _hresultToFriendlyErrorLookup.Add(-1994108656, "E_GAMERUNTIME_NOT_INITIALIZED: Are you trying to call GDK APIs from the Unity editor?" +
+                " To call GDK APIs, you must use the GDK > Build and Run menu. You can debug your code by attaching the Unity debugger once your" +
+                "game is launched.");
+
+            _hresultToFriendlyErrorLookup.Add(-1994129152, "AM_E_XAST_UNEXPECTED: Have you added the Windows 10 PC platform on the Xbox Settings page " +
+                "in Partner Center? Learn more: aka.ms/sandboxtroubleshootingguide");
         }
 
         public void SignIn()
