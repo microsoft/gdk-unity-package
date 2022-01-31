@@ -64,7 +64,10 @@ namespace XGamingRuntime
                             var result = Social.XblSocialGetSocialRelationshipsResult(block, &handle);
 
                             var socialHandle = new XblSocialHandle { interopHandle = handle };
-                            completionCallback?.Invoke(result, socialHandle);
+                            if (completionCallback != null)
+                            { 
+                                completionCallback.Invoke(result, socialHandle);
+                            }
                         }
                     });
 
@@ -78,7 +81,10 @@ namespace XGamingRuntime
 
                 if (HR.FAILED(hresult))
                 {
-                    completionCallback?.Invoke(hresult, default(XblSocialHandle));
+                    if (completionCallback != null)
+                    { 
+                        completionCallback.Invoke(hresult, default(XblSocialHandle));
+                    }
                 }
 
                 return hresult;
@@ -221,7 +227,10 @@ namespace XGamingRuntime
                             var result = Social.XblSocialRelationshipResultGetNextResult(block, &handle);
 
                             var refreshedHandle = new XblSocialHandle { interopHandle = handle };
-                            completionCallback?.Invoke(result, refreshedHandle);
+                            if (completionCallback != null)
+                            { 
+                                completionCallback.Invoke(result, refreshedHandle);
+                            }
                         }
                     });
 
@@ -233,7 +242,10 @@ namespace XGamingRuntime
 
                 if (HR.FAILED(hresult))
                 {
-                    completionCallback?.Invoke(hresult, default(XblSocialHandle));
+                    if (completionCallback != null)
+                    { 
+                        completionCallback.Invoke(hresult, default(XblSocialHandle));
+                    }
                 }
 
                 return hresult;
@@ -385,7 +397,10 @@ namespace XGamingRuntime
                         idsPtr++;
                     }
 
-                    eventHandler.Callback?.Invoke(callbackEventArgs);
+                    if (eventHandler.Callback != null)
+                    { 
+                        eventHandler.Callback.Invoke(callbackEventArgs);
+                    }
                 }
             }
         }

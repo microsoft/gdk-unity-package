@@ -409,7 +409,7 @@ namespace XGamingRuntime
             }
 
             // Use wait=true to ensure that it's safe to free the context object.
-            bool _ = XGRInterop.XUserUnregisterForChangeEvent(registrationToken.Token, wait: true);
+            XGRInterop.XUserUnregisterForChangeEvent(registrationToken.Token, wait: true);
             registrationToken.CallbackHandle.Free();
         }
 

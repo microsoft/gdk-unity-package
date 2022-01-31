@@ -331,7 +331,7 @@ namespace Microsoft.Xbox
 
             _associatedProducts = new List<XStoreProduct>();
             _queryAssociatedProductsCallback = callback;
-            int hresult = SDK.XStoreCreateContext(out _storeContext);
+            Succeeded(SDK.XStoreCreateContext(out _storeContext), "Failed to create store context.");
             SDK.XStoreQueryAssociatedProductsAsync(
                 _storeContext,
                 _addOnProducts,

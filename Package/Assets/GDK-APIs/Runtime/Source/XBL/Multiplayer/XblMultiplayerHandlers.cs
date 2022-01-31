@@ -177,7 +177,10 @@ namespace XGamingRuntime
                     }
 
                     var eventHandler = _functionIdToHandler[functionId];
-                    eventHandler.Callback?.Invoke();
+                    if (eventHandler.Callback != null)
+                    {
+                        eventHandler.Callback.Invoke();
+                    }
                 }
             }
 
@@ -207,7 +210,10 @@ namespace XGamingRuntime
                     }
 
                     var eventHandler = _functionIdToHandler[functionId];
-                    eventHandler.Callback?.Invoke();
+                    if (eventHandler.Callback != null)
+                    {
+                        eventHandler.Callback.Invoke();
+                    }
                 }
             }
 
@@ -241,7 +247,10 @@ namespace XGamingRuntime
                     }
 
                     var eventHandler = _functionIdToHandler[functionId];
-                    eventHandler.Callback?.Invoke(eventArgs);
+                    if (eventHandler.Callback != null)
+                    {
+                        eventHandler.Callback.Invoke(eventArgs);
+                    }
                 }
             }
         }
