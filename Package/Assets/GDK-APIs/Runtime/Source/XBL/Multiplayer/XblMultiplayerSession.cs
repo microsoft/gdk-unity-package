@@ -386,7 +386,7 @@ namespace XGamingRuntime
                         measurementServerAddressesJson);
                     sbyte[] interopJson = new sbyte[requiredInteropLen];
 
-                    fixed(sbyte* interopJsonPtr = &interopJson[0])
+                    fixed (sbyte* interopJsonPtr = &interopJson[0])
                     {
                         Converters.StringToNullTerminatedUTF8FixedPointer(
                             measurementServerAddressesJson, (byte*)interopJsonPtr, requiredInteropLen);
@@ -607,7 +607,7 @@ namespace XGamingRuntime
 
                 unsafe
                 {
-                    var interopServerJsonLen = 
+                    var interopServerJsonLen =
                         string.IsNullOrEmpty(rawServersJson) ? 1 :
                         Converters.GetSizeRequiredToEncodeStringToUTF8(
                             rawServersJson);
@@ -758,7 +758,7 @@ namespace XGamingRuntime
                     var connectionPath = new sbyte[connectionPathLen];
                     connectionPath[0] = 0;
 
-                    fixed(sbyte* connectionPathPtr = &connectionPath[0])
+                    fixed (sbyte* connectionPathPtr = &connectionPath[0])
                     {
                         if (!string.IsNullOrEmpty(serverConnectionPath))
                         {
@@ -882,8 +882,8 @@ namespace XGamingRuntime
                         if (!string.IsNullOrEmpty(measurements))
                         {
                             Converters.StringToNullTerminatedUTF8FixedPointer(
-                                measurements, 
-                                (byte*)interopMeasurementsPtr, 
+                                measurements,
+                                (byte*)interopMeasurementsPtr,
                                 interopMeasurementsLen);
                         }
 
@@ -1012,7 +1012,7 @@ namespace XGamingRuntime
                     var interopJson = new sbyte[interopJsonLen];
                     interopJson[0] = 0;
 
-                    fixed(sbyte* interopJsonPtr = &interopJson[0])
+                    fixed (sbyte* interopJsonPtr = &interopJson[0])
                     {
                         if (!string.IsNullOrEmpty(matchmakingTargetSessionConstantsJson))
                         {
@@ -1169,7 +1169,10 @@ namespace XGamingRuntime
 
                             var resultSessionHandle = new XblMultiplayerSessionHandle(
                                 new Interop.XblMultiplayerSessionHandle() { handle = handle });
-                            completionCallback?.Invoke(hresult, resultSessionHandle);
+                            if (completionCallback != null)
+                            {
+                                completionCallback.Invoke(hresult, resultSessionHandle);
+                            }
                         }
                     });
 
@@ -1221,7 +1224,10 @@ namespace XGamingRuntime
 
                             var resultSessionHandle = new XblMultiplayerSessionHandle(
                                 new Interop.XblMultiplayerSessionHandle() { handle = handle });
-                            completionCallback?.Invoke(hresult, resultSessionHandle);
+                            if (completionCallback != null)
+                            {
+                                completionCallback.Invoke(hresult, resultSessionHandle);
+                            }
                         }
                     });
 
@@ -1263,7 +1269,10 @@ namespace XGamingRuntime
 
                             var resultSessionHandle = new XblMultiplayerSessionHandle(
                                 new Interop.XblMultiplayerSessionHandle() { handle = handle });
-                            completionCallback?.Invoke(hresult, resultSessionHandle);
+                            if (completionCallback != null)
+                            {
+                                completionCallback.Invoke(hresult, resultSessionHandle);
+                            }
                         }
                     });
 
@@ -1307,7 +1316,10 @@ namespace XGamingRuntime
                     SDK.defaultQueue.handle,
                     (XAsyncBlockPtr block) =>
                     {
-                        completionCallback?.Invoke(HR.S_OK);
+                        if (completionCallback != null)
+                        {
+                            completionCallback.Invoke(HR.S_OK);
+                        }
                     });
 
                 unsafe
@@ -1343,7 +1355,10 @@ namespace XGamingRuntime
                     SDK.defaultQueue.handle,
                     (XAsyncBlockPtr block) =>
                     {
-                        completionCallback?.Invoke(HR.S_OK);
+                        if (completionCallback != null)
+                        {
+                            completionCallback.Invoke(HR.S_OK);
+                        }
                     });
 
                 unsafe
@@ -1412,7 +1427,10 @@ namespace XGamingRuntime
 
                                 }
 
-                                completionCallback?.Invoke(hresult, handles);
+                                if (completionCallback != null)
+                                {
+                                    completionCallback.Invoke(hresult, handles);
+                                }
                             }
                         }
                     });
@@ -1569,8 +1587,8 @@ namespace XGamingRuntime
                     fixed (sbyte* interopRoleTypeNamePtr = &interopRoleTypeName[0], interopRoleNamePtr = &interopRoleName[0])
                     {
                         Converters.StringToNullTerminatedUTF8FixedPointer(
-                            roleTypeName, 
-                            (byte*)interopRoleTypeNamePtr, 
+                            roleTypeName,
+                            (byte*)interopRoleTypeNamePtr,
                             interopRoleTypeNameLen);
 
                         Converters.StringToNullTerminatedUTF8FixedPointer(
@@ -1585,7 +1603,7 @@ namespace XGamingRuntime
                             &rolePtr);
                     }
 
-                    if(HR.SUCCEEDED(result) && rolePtr != default(Interop.XblMultiplayerRole*))
+                    if (HR.SUCCEEDED(result) && rolePtr != default(Interop.XblMultiplayerRole*))
                     {
                         role = new XblMultiplayerRole(*rolePtr);
                     }

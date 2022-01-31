@@ -166,7 +166,10 @@ namespace XGamingRuntime
                     }
 
                     var eventHandler = _functionIdToHandler[functionId];
-                    eventHandler.Callback?.Invoke(newConnectionState);
+                    if (eventHandler.Callback != null)
+                    { 
+                        eventHandler.Callback.Invoke(newConnectionState);
+                    }
                 }
             }
 
@@ -196,7 +199,10 @@ namespace XGamingRuntime
                     }
 
                     var eventHandler = _functionIdToHandler[functionId];
-                    eventHandler.Callback?.Invoke();
+                    if (eventHandler.Callback != null)
+                    { 
+                        eventHandler.Callback.Invoke();
+                    }
                 }
             }
         }

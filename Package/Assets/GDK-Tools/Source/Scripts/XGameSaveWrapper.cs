@@ -47,6 +47,8 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. InitializeCallback(Int32 hresult)</param>
         public void InitializeAsync(XUserHandle userHandle, string scid, InitializeCallback callback)
         {
+            m_userHandle = null;
+            m_gameSaveProviderHandle = null;
 #if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
             Int32 hr = SDK.XUserDuplicateHandle(userHandle, out m_userHandle);
             if (HR.FAILED(hr))

@@ -308,38 +308,39 @@ public static class GdkBuild
         // Switch the platform to Win32, x64. The GDK only supports x64.
         BuildTarget buildTarget = BuildTarget.StandaloneWindows64;
         EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, buildTarget);
-        if (EditorUserBuildSettings.allowDebugging)
+        if (EditorUserBuildSettings.development)
         {
-            buildOptions |= BuildOptions.AllowDebugging;
-        }
-        if (EditorUserBuildSettings.buildScriptsOnly)
-        {
-            buildOptions |= BuildOptions.BuildScriptsOnly;
-        }
+            buildOptions |= BuildOptions.Development;
+
+            if (EditorUserBuildSettings.allowDebugging)
+            {
+                buildOptions |= BuildOptions.AllowDebugging;
+            }
+            if (EditorUserBuildSettings.buildScriptsOnly)
+            {
+                buildOptions |= BuildOptions.BuildScriptsOnly;
+            }
 #if UNITY_2019_3_OR_NEWER
             if (EditorUserBuildSettings.buildWithDeepProfilingSupport)
             {
                 buildOptions |= BuildOptions.EnableDeepProfilingSupport;
             }
 #endif
-        if (EditorUserBuildSettings.connectProfiler)
-        {
-            buildOptions |= BuildOptions.ConnectWithProfiler;
-        }
-        if (EditorUserBuildSettings.development)
-        {
-            buildOptions |= BuildOptions.Development;
-        }
-        if (EditorUserBuildSettings.enableHeadlessMode)
-        {
-            buildOptions |= BuildOptions.EnableHeadlessMode;
-        }
+            if (EditorUserBuildSettings.connectProfiler)
+            {
+                buildOptions |= BuildOptions.ConnectWithProfiler;
+            }
 #if UNITY_2019_1_OR_NEWER
             if (EditorUserBuildSettings.waitForPlayerConnection)
             {
                 buildOptions |= BuildOptions.WaitForPlayerConnection;
             }
 #endif
+        }
+        if (EditorUserBuildSettings.enableHeadlessMode)
+        {
+            buildOptions |= BuildOptions.EnableHeadlessMode;
+        }
 
         return buildOptions;
     }

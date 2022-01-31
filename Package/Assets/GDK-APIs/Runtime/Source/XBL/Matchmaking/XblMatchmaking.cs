@@ -77,9 +77,12 @@ namespace XGamingRuntime
                                 matchTicket.estimatedWaitTime = response.estimatedWaitTime;
                             }
 
-                            createCompletionCallback?.Invoke(
-                                hresult,
-                                matchTicket);
+                            if (createCompletionCallback != null)
+                            {
+                                createCompletionCallback.Invoke(
+                                    hresult,
+                                    matchTicket);
+                            }
                         });
 
                     var scidLen = Converters.GetSizeRequiredToEncodeStringToUTF8(serviceConfigurationId);
@@ -107,9 +110,12 @@ namespace XGamingRuntime
 
                         if (HR.FAILED(result))
                         {
-                            createCompletionCallback?.Invoke(
-                                result,
-                                new XblMatchTicket());
+                            if (createCompletionCallback != null)
+                            {
+                                createCompletionCallback.Invoke(
+                                    result,
+                                    new XblMatchTicket());
+                            }
                         }
                     }
                 }
@@ -132,7 +138,10 @@ namespace XGamingRuntime
                         SDK.defaultQueue.handle,
                         (XAsyncBlockPtr block) =>
                         {
-                            deleteCompletionCallback?.Invoke(HR.S_OK);
+                            if (deleteCompletionCallback != null)
+                            {
+                                deleteCompletionCallback.Invoke(HR.S_OK);
+                            }
                         });
 
                     var scidLen = Converters.GetSizeRequiredToEncodeStringToUTF8(serviceConfigurationId);
@@ -157,7 +166,10 @@ namespace XGamingRuntime
 
                         if (HR.FAILED(result))
                         {
-                            deleteCompletionCallback?.Invoke(result);
+                            if (deleteCompletionCallback != null)
+                            {
+                                deleteCompletionCallback.Invoke(result);
+                            }
                         }
                     }
                 }
@@ -216,7 +228,10 @@ namespace XGamingRuntime
                                 }
                             }
 
-                            completionCallback?.Invoke(hresult, details);
+                            if (completionCallback != null)
+                            { 
+                                completionCallback.Invoke(hresult, details);
+                            }
                         });
 
                     var scidLen = Converters.GetSizeRequiredToEncodeStringToUTF8(serviceConfigurationId);
@@ -241,7 +256,10 @@ namespace XGamingRuntime
 
                         if (HR.FAILED(result))
                         {
-                            completionCallback?.Invoke(result, new XblMatchTicketDetailsResponse());
+                            if (completionCallback != null)
+                            { 
+                                completionCallback.Invoke(result, new XblMatchTicketDetailsResponse());
+                            }
                         }
                     }
                 }
@@ -294,7 +312,10 @@ namespace XGamingRuntime
                                 }
                             }
 
-                            completionCallback?.Invoke(hresult, statistics);
+                            if (completionCallback != null)
+                            { 
+                                completionCallback.Invoke(hresult, statistics);
+                            }
                         });
 
                     var scidLen = Converters.GetSizeRequiredToEncodeStringToUTF8(serviceConfigurationId);
@@ -315,7 +336,10 @@ namespace XGamingRuntime
 
                         if (HR.FAILED(result))
                         {
-                            completionCallback?.Invoke(result, new XblHopperStatisticsResponse());
+                            if (completionCallback != null)
+                            { 
+                                completionCallback.Invoke(result, new XblHopperStatisticsResponse());
+                            }
                         }
                     }
                 }
