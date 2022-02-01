@@ -92,7 +92,7 @@ namespace Microsoft.GameCore.Tools
 
             GdkEditorHelpers.SectionSeperator();
 
-            EditorGUILayout.LabelField("Launch the Microsoft Store app, the Xbox app, and the Xbox Console Companion app in sandbox mode. Sandbox mode will allow you to see how your title loads in these apps. To return to normal, switch your sandbox to RETAIL and click the Launch Apps button.", EditorStyles.wordWrappedLabel);
+            EditorGUILayout.LabelField("Launch the Microsoft Store and the Xbox app in the current sandbox mode. Sandbox mode will allow you to see how your title loads in these apps. To return to normal, switch your sandbox to RETAIL and click the Launch Apps button.", EditorStyles.wordWrappedLabel);
 
             GdkEditorHelpers.SectionSeperator();
 
@@ -101,11 +101,11 @@ namespace Microsoft.GameCore.Tools
                 try
                 {
                     XblPCSandbox.XblPCSandbox.RestartApps();
-                    operationsSummary = "Successfully launched system apps in sandbox mode.";
+                    operationsSummary = "Successfully launched system apps in the current sandbox mode.";
                 }
                 catch (Exception ex)
                 {
-                    operationsSummary = "Failed to launch system apps in sandbox mode.\n\n" + ex.Message;
+                    operationsSummary = "Failed to launch system apps in the current sandbox mode.\n\n" + ex.Message;
                     UnityEngine.Debug.Log(ex.Message);
                 }
             }
