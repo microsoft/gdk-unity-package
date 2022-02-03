@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using System.IO;
+using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
@@ -23,19 +24,30 @@ namespace Microsoft.GameCore.Tools
         }
 
         [MenuItem("GDK/Associate with the Microsoft Store")]
-        internal static void EditManifest()
+        internal static void EditGameConfig()
         {
-            string manifestFilePath = GdkEditorHelpers.GetGameConfigPath();
-            if (!File.Exists(manifestFilePath))
+            string configEditorPath = Path.Combine(GdkEditorHelpers.GdkToolsPath, "GameConfigEditor.exe");
+            if (!File.Exists(configEditorPath))
             {
-                EditorUtility.DisplayDialog("MicrosoftGame.config not found", "No MicrosoftGame.config file was found. Please re-import this plugin.", "Close", string.Empty);
+                EditorUtility.DisplayDialog("GDK tools not found", $"Ensure the GDK is installed on this PC.", "Close");
                 return;
             }
 
-            string arguments = "/c start GDK-Tools\\Source\\Tools\\ManifestEditor\\ManifestEditor.exe " +
-                "GDK-Tools\\ProjectMetadata\\MicrosoftGame.Config /e:Unity /i:GDK-PC\\ProjectMetadata\\Square480x480Logo.png";
-            string workingDirectory = GdkEditorHelpers.GetRootPluginPath().Replace("GDK-Tools", string.Empty);
-            GdkEditorHelpers.StartCmdProcess(arguments, workingDirectory);
+            string manifestFilePath = GdkEditorHelpers.GetGameConfigPath();
+            if (!File.Exists(manifestFilePath))
+            {
+                EditorUtility.DisplayDialog("MicrosoftGame.config not found", "No MicrosoftGame.config file was found. Please re-import this plugin.", "Close");
+                return;
+            }
+
+            try
+            {
+                Process.Start(configEditorPath, $"{manifestFilePath} GameEngine");
+            }
+            catch (System.Exception e)
+            {
+                UnityEngine.Debug.LogError(e.Message);
+            }
         }
         
         [MenuItem("GDK/PC/Switch sandbox")]
