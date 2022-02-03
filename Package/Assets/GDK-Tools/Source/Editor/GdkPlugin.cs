@@ -29,7 +29,7 @@ namespace Microsoft.GameCore.Tools
             string configEditorPath = Path.Combine(GdkEditorHelpers.GdkToolsPath, "GameConfigEditor.exe");
             if (!File.Exists(configEditorPath))
             {
-                EditorUtility.DisplayDialog("GDK tools not found", $"Ensure the GDK is installed on this PC.", "Close");
+                EditorUtility.DisplayDialog("GDK tools not found", "Ensure the GDK is installed on this PC.", "Close");
                 return;
             }
 
@@ -42,7 +42,7 @@ namespace Microsoft.GameCore.Tools
 
             try
             {
-                Process.Start(configEditorPath, $"{manifestFilePath} GameEngine");
+                Process.Start(configEditorPath, manifestFilePath + " GameEngine");
             }
             catch (System.Exception e)
             {
