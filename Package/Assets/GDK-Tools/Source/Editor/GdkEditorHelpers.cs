@@ -13,9 +13,22 @@ namespace Microsoft.GameCore.Tools
 {
     public class GdkEditorHelpers : ScriptableObject
     {
-        public static string GdkToolsPath { get; } = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), "bin");
+        public static string GdkToolsPath 
+        { 
+            get 
+            { 
+                if (string.IsNullOrEmpty(_gdkToolsPath))
+                {
+                    _gdkToolsPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), "bin");
+                }
+
+                return _gdkToolsPath;
+            }
+        }
 
         private static GdkEditorHelpers _instance;
+
+        private static string _gdkToolsPath;
 
         public static GdkEditorHelpers Instance
         {
@@ -247,11 +260,12 @@ namespace Microsoft.GameCore.Tools
 
                 try
                 {
-                    lResult = RegCreateKeyEx(inHive, inKeyName, 0, null, 0, (uint)RegSAM.QUERY64, 0, out hkey, out uint dis);
+                    uint dis;
+                    lResult = RegCreateKeyEx(inHive, inKeyName, 0, null, 0, (uint)RegSAM.QUERY64, 0, out hkey, out dis);
 
                     if (0 != lResult)
                     {
-                        UnityEngine.Debug.LogError($"Create/OpenKey (Query) failed {lResult}: {FormatMessage(lResult)}");
+                        UnityEngine.Debug.LogError("Create/OpenKey (Query) failed " + lResult + ": " + FormatMessage(lResult));
                         return string.Empty;
                     }
 
@@ -271,7 +285,7 @@ namespace Microsoft.GameCore.Tools
                         // 2 here means the key exists but there's just no value set. No need for an error message
                         if (2 != lResult)
                         {
-                            UnityEngine.Debug.LogError($"QueryKey failed {lResult}: {FormatMessage(lResult)}");
+                            UnityEngine.Debug.LogError("QueryKey failed " + lResult + ": " + FormatMessage(lResult));
                         }
 
                         return string.Empty;
@@ -281,7 +295,7 @@ namespace Microsoft.GameCore.Tools
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.LogError($"Failed to get key: {e.Message}");
+                    UnityEngine.Debug.LogError("Failed to get key: " + e.Message);
                     return string.Empty;
                 }
                 finally
@@ -292,7 +306,7 @@ namespace Microsoft.GameCore.Tools
 
                         if (0 != lResult)
                         {
-                            UnityEngine.Debug.LogError($"CloseKey (Query) failed {lResult}: {FormatMessage(lResult)}");
+                            UnityEngine.Debug.LogError("CloseKey (Query) failed " + lResult + ": " + FormatMessage(lResult));
                         }
                     }
                 }
