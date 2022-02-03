@@ -86,7 +86,7 @@ namespace Microsoft.GameCore.Tools
                 EditorGUILayout.LabelField("Error: Could not retrieve sandboxes. Have you run the store association wizard?", style);
                 if (GUILayout.Button("Open Store Association Wizard"))
                 {
-                    GdkPlugin.EditManifest();
+                    GdkPlugin.EditGameConfig();
                 }
             }
 
