@@ -1,11 +1,10 @@
 ﻿using Microsoft.GameCore.Tools;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
+using System.Linq;
+using System.Diagnostics;
+using System.Collections.Generic;
 using UnityEditor;
 #if UNITY_2018_4_OR_NEWER
 using UnityEditor.Build.Reporting;
@@ -14,8 +13,8 @@ using UnityEngine;
 
 public static class GdkBuild
 {
-
     internal static string aumid;
+
     private static string buildOutputFolderPath;
     private static string buildWin32OutputFolderPath;
     private static string buildMsixvcOutputFolderPath;
@@ -103,7 +102,8 @@ public static class GdkBuild
         succeeded = PostWin32BuildCleanup();
         if (succeeded)
         {
-            succeeded = CreateLayoutFile();
+            succeeded = CreateAndConfigureLayoutFile();
+            return succeeded;
         }
         if (succeeded)
         {
@@ -369,10 +369,30 @@ public static class GdkBuild
         return succeeded;
     }
 
-    private static bool CreateLayoutFile()
+    private static bool CreateAndConfigureLayoutFile()
     {
         string arguments = string.Format("/c makepkg.exe genmap /f \"{0}\\layout.xml\" /d \"{0}\"", buildWin32OutputFolderPath);
-        return GdkEditorHelpers.StartCmdProcess(arguments);
+
+        if (!GdkEditorHelpers.StartCmdProcess(arguments))
+        {
+            return false;
+        }
+
+        string layoutPath = buildWin32OutputFolderPath + @"\layout.xml";
+
+        var doc = XDocument.Load(layoutPath);
+        var ignoredNodes = (from node in doc.Descendants()
+                            where node.Name == "FileGroup" && node.Attribute("SourcePath").Value.Contains("Package_BackUpThisFolder_ButDontShipItWithYourGame")
+                            select node).ToArray();
+        
+        for (int i = 0; i < ignoredNodes.Length; ++i)
+        {
+            ignoredNodes[i].Remove();
+        }
+
+        doc.Save(layoutPath);
+        
+        return true;
     }
 
     private static bool MakePackage(bool createForStoreUpload)
