@@ -42,7 +42,7 @@ namespace Microsoft.GameCore.Tools
 
             try
             {
-                Process.Start(configEditorPath, manifestFilePath + " GameEngine");
+                Process.Start(configEditorPath, string.Format("\"{0}\" GameEngine", manifestFilePath));
             }
             catch (System.Exception e)
             {
