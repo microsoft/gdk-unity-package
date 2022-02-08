@@ -21,6 +21,7 @@ public static class GdkBuild
     private static string contentIdOverride;
     private static string originalSquare150x150LogoPath;
     private static string originalSquare44x44LogoPath;
+    private static string originalSquare480x480LogoPath;
     private static string originalSplashScreenImagePath;
     private static string originalStoreLogoPath;
     private static bool previousForceSingleInstanceValue;
@@ -103,7 +104,6 @@ public static class GdkBuild
         if (succeeded)
         {
             succeeded = CreateAndConfigureLayoutFile();
-            return succeeded;
         }
         if (succeeded)
         {
@@ -157,6 +157,7 @@ public static class GdkBuild
         string gameConfigFilePath = string.Empty;
         string square150x150LogoPath = string.Empty;
         string square44x44LogoPath = string.Empty;
+        string square480x480LogoPath = string.Empty;
         string splashScreenImagePath = string.Empty;
         string storeLogoPath = string.Empty;
 
@@ -184,6 +185,10 @@ public static class GdkBuild
                 XAttribute square44x44LogoAttribute = shellVisualsEl.Attribute("Square44x44Logo");
                 originalSquare44x44LogoPath = square44x44LogoAttribute.Value;
                 square44x44LogoPath = (imagesPath + originalSquare44x44LogoPath).Replace("/", "\\");
+
+                XAttribute square480x480LogoAttribute = shellVisualsEl.Attribute("Square480x480Logo");
+                originalSquare480x480LogoPath = square480x480LogoAttribute.Value;
+                square480x480LogoPath = (imagesPath + originalSquare480x480LogoPath).Replace("/", "\\");
 
                 XAttribute splashScreenImageAttribute = shellVisualsEl.Attribute("SplashScreenImage");
                 originalSplashScreenImagePath = splashScreenImageAttribute.Value;
@@ -214,6 +219,7 @@ public static class GdkBuild
         storeAssetsToCopy.Add(gameConfigFilePath);
         storeAssetsToCopy.Add(square150x150LogoPath);
         storeAssetsToCopy.Add(square44x44LogoPath);
+        storeAssetsToCopy.Add(square480x480LogoPath);
         storeAssetsToCopy.Add(splashScreenImagePath);
         storeAssetsToCopy.Add(storeLogoPath);
 
@@ -361,6 +367,7 @@ public static class GdkBuild
         // in the build directory.
         shellVisualsEl.SetAttributeValue("Square150x150Logo", Path.GetFileName(originalSquare150x150LogoPath));
         shellVisualsEl.SetAttributeValue("Square44x44Logo", Path.GetFileName(originalSquare44x44LogoPath));
+        shellVisualsEl.SetAttributeValue("Square480x480Logo", Path.GetFileName(originalSquare480x480LogoPath));
         shellVisualsEl.SetAttributeValue("SplashScreenImage", Path.GetFileName(originalSplashScreenImagePath));
         shellVisualsEl.SetAttributeValue("StoreLogo", Path.GetFileName(originalStoreLogoPath));
 
@@ -384,14 +391,14 @@ public static class GdkBuild
         var ignoredNodes = (from node in doc.Descendants()
                             where node.Name == "FileGroup" && node.Attribute("SourcePath").Value.Contains("Package_BackUpThisFolder_ButDontShipItWithYourGame")
                             select node).ToArray();
-        
+
         for (int i = 0; i < ignoredNodes.Length; ++i)
         {
             ignoredNodes[i].Remove();
         }
 
         doc.Save(layoutPath);
-        
+
         return true;
     }
 
