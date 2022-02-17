@@ -13,7 +13,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.GameCore.Tools;
+using Microsoft.GameCore.Utilities;
 using UnityEngine;
 
 namespace Microsoft.Xbox
@@ -129,7 +129,7 @@ namespace Microsoft.Xbox
 
             _lastScid = scid;
 
-            var gameConfigDoc = XDocument.Load(GdkEditorHelpers.GameConfigPath, LoadOptions.PreserveWhitespace);
+            var gameConfigDoc = XDocument.Load(GdkUtilities.GameConfigPath, LoadOptions.PreserveWhitespace);
             try
             {
                 var scidNode = (from node in gameConfigDoc.Descendants("ExtendedAttribute")
@@ -144,7 +144,7 @@ namespace Microsoft.Xbox
                     NewLineOnAttributes = true
                 };
 
-                using (XmlWriter xmlWriter = XmlWriter.Create(GdkEditorHelpers.GameConfigPath, xmlWriterSettings))
+                using (XmlWriter xmlWriter = XmlWriter.Create(GdkUtilities.GameConfigPath, xmlWriterSettings))
                 {
                     gameConfigDoc.WriteTo(xmlWriter);
                 }

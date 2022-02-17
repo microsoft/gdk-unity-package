@@ -1,10 +1,11 @@
-﻿using Microsoft.GameCore.Tools;
-using System;
+﻿using System;
 using System.IO;
 using System.Xml.Linq;
 using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Microsoft.GameCore.Tools;
+using Microsoft.GameCore.Utilities;
 using UnityEditor;
 #if UNITY_2018_4_OR_NEWER
 using UnityEditor.Build.Reporting;
@@ -158,7 +159,7 @@ public static class GdkBuild
         string splashScreenImagePath = string.Empty;
         string storeLogoPath = string.Empty;
 
-        string gameConfigFilePath = GdkEditorHelpers.GameConfigPath;
+        string gameConfigFilePath = GdkUtilities.GameConfigPath;
 
         // Use the first MicrosoftGame.Config
         if (!File.Exists(gameConfigFilePath)) return false;

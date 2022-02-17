@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.GameCore.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -29,14 +30,14 @@ namespace Microsoft.GameCore.Tools
         [MenuItem("GDK/Associate with the Microsoft Store")]
         internal static void EditGameConfig()
         {
-            string configEditorPath = Path.Combine(GdkEditorHelpers.GdkToolsPath, "GameConfigEditor.exe");
+            string configEditorPath = Path.Combine(GdkUtilities.GdkToolsPath, "GameConfigEditor.exe");
             if (!File.Exists(configEditorPath))
             {
                 EditorUtility.DisplayDialog("GDK tools not found", "Ensure the GDK is installed on this PC.", "Close");
                 return;
             }
 
-            if (!File.Exists(GdkEditorHelpers.GameConfigPath))
+            if (!File.Exists(GdkUtilities.GameConfigPath))
             {
                 EditorUtility.DisplayDialog("MicrosoftGame.config not found", "No MicrosoftGame.config file was found. Please re-import this plugin.", "Close");
                 return;
@@ -45,7 +46,7 @@ namespace Microsoft.GameCore.Tools
             using (Process configEditorProcess = new Process())
             {
                 configEditorProcess.StartInfo.FileName = configEditorPath;
-                configEditorProcess.StartInfo.Arguments = string.Format("\"{0}\" GameEngine", GdkEditorHelpers.GameConfigPath);
+                configEditorProcess.StartInfo.Arguments = string.Format("\"{0}\" GameEngine", GdkUtilities.GameConfigPath);
 
                 configEditorProcess.Start();
                 configEditorProcess.WaitForExit();
