@@ -152,67 +152,60 @@ public static class GdkBuild
 
     private static bool CopyManifestFiles()
     {
-        bool succeeded = true;
-
-        string gameConfigFilePath = string.Empty;
         string square150x150LogoPath = string.Empty;
         string square44x44LogoPath = string.Empty;
         string square480x480LogoPath = string.Empty;
         string splashScreenImagePath = string.Empty;
         string storeLogoPath = string.Empty;
 
-        gameConfigFilePath = GdkEditorHelpers.GetGameConfigPath();
+        string gameConfigFilePath = GdkEditorHelpers.GameConfigPath;
 
         // Use the first MicrosoftGame.Config
-        if (!string.IsNullOrEmpty(gameConfigFilePath))
+        if (!File.Exists(gameConfigFilePath)) return false;
+
+        XDocument gameConfigXmlDoc = XDocument.Load(gameConfigFilePath);
+        try
         {
-            XDocument gameConfigXmlDoc = XDocument.Load(gameConfigFilePath);
-            try
-            {
-                string imagesPath = GdkEditorHelpers.GetGameConfigPath().Replace("MicrosoftGame.Config", string.Empty);
-                XElement executableEl = (from executable in gameConfigXmlDoc.Descendants("Executable")
-                                         select executable).First();
-                executableEl.SetAttributeValue("Name", PlayerSettings.productName + ".exe");
+            string imagesPath = gameConfigFilePath.Replace("MicrosoftGame.Config", string.Empty);
+            XElement executableEl = (from executable in gameConfigXmlDoc.Descendants("Executable")
+                                        select executable).First();
+            executableEl.SetAttributeValue("Name", PlayerSettings.productName + ".exe");
 
-                // Find the images
-                XElement shellVisualsEl = (from shellVisual in gameConfigXmlDoc.Descendants("ShellVisuals")
-                                           select shellVisual).First();
+            // Find the images
+            XElement shellVisualsEl = (from shellVisual in gameConfigXmlDoc.Descendants("ShellVisuals")
+                                        select shellVisual).First();
 
-                XAttribute square150x150LogoAttribute = shellVisualsEl.Attribute("Square150x150Logo");
-                originalSquare150x150LogoPath = square150x150LogoAttribute.Value;
-                square150x150LogoPath = (imagesPath + originalSquare150x150LogoPath).Replace("/", "\\");
+            XAttribute square150x150LogoAttribute = shellVisualsEl.Attribute("Square150x150Logo");
+            originalSquare150x150LogoPath = square150x150LogoAttribute.Value;
+            square150x150LogoPath = (imagesPath + originalSquare150x150LogoPath).Replace("/", "\\");
 
-                XAttribute square44x44LogoAttribute = shellVisualsEl.Attribute("Square44x44Logo");
-                originalSquare44x44LogoPath = square44x44LogoAttribute.Value;
-                square44x44LogoPath = (imagesPath + originalSquare44x44LogoPath).Replace("/", "\\");
+            XAttribute square44x44LogoAttribute = shellVisualsEl.Attribute("Square44x44Logo");
+            originalSquare44x44LogoPath = square44x44LogoAttribute.Value;
+            square44x44LogoPath = (imagesPath + originalSquare44x44LogoPath).Replace("/", "\\");
 
-                XAttribute square480x480LogoAttribute = shellVisualsEl.Attribute("Square480x480Logo");
-                originalSquare480x480LogoPath = square480x480LogoAttribute.Value;
-                square480x480LogoPath = (imagesPath + originalSquare480x480LogoPath).Replace("/", "\\");
+            XAttribute square480x480LogoAttribute = shellVisualsEl.Attribute("Square480x480Logo");
+            originalSquare480x480LogoPath = square480x480LogoAttribute.Value;
+            square480x480LogoPath = (imagesPath + originalSquare480x480LogoPath).Replace("/", "\\");
 
-                XAttribute splashScreenImageAttribute = shellVisualsEl.Attribute("SplashScreenImage");
-                originalSplashScreenImagePath = splashScreenImageAttribute.Value;
-                splashScreenImagePath = (imagesPath + originalSplashScreenImagePath).Replace("/", "\\");
+            XAttribute splashScreenImageAttribute = shellVisualsEl.Attribute("SplashScreenImage");
+            originalSplashScreenImagePath = splashScreenImageAttribute.Value;
+            splashScreenImagePath = (imagesPath + originalSplashScreenImagePath).Replace("/", "\\");
 
-                XAttribute storeLogoAttribute = shellVisualsEl.Attribute("StoreLogo");
-                originalStoreLogoPath = storeLogoAttribute.Value;
-                storeLogoPath = (imagesPath + originalStoreLogoPath).Replace("/", "\\");
+            XAttribute storeLogoAttribute = shellVisualsEl.Attribute("StoreLogo");
+            originalStoreLogoPath = storeLogoAttribute.Value;
+            storeLogoPath = (imagesPath + originalStoreLogoPath).Replace("/", "\\");
 
-                // Check for a Content ID override
-                XElement contentIdOverrideEl = (from contentIdOverride in gameConfigXmlDoc.Descendants("ContentIdOverride")
-                                                select contentIdOverride).First();
-                contentIdOverride = contentIdOverrideEl.Value;
+            // Check for a Content ID override
+            XElement contentIdOverrideEl = (from contentIdOverride in gameConfigXmlDoc.Descendants("ContentIdOverride")
+                                            select contentIdOverride).First();
+            contentIdOverride = contentIdOverrideEl.Value;
 
-                gameConfigXmlDoc.Save(gameConfigFilePath);
-            }
-            catch (Exception)
-            {
-                GdkEditorHelpers.LogError("Error: Invalid or corrupt MicrosoftGame.Config.");
-            }
+            gameConfigXmlDoc.Save(gameConfigFilePath);
         }
-        else
+        catch (Exception)
         {
-            GdkEditorHelpers.LogError("Error: No Microsoft.GameConfig found. You can create one under by selecting the GDK > Associate with the Store.");
+            GdkEditorHelpers.LogError("Invalid or corrupt MicrosoftGame.Config.");
+            return false;
         }
 
         List<string> storeAssetsToCopy = new List<string>();
@@ -231,13 +224,11 @@ public static class GdkBuild
             File.Copy(fullSourcePath, destinationPath, true);
         }
 
-        return succeeded;
+        return true;
     }
 
     internal static bool BuildWin32()
     {
-        bool buildSucceeded = true;
-
         EditorBuildSettingsScene[] buildScenes = EditorBuildSettings.scenes;
         if (buildScenes.Count() <= 0)
         {
@@ -276,28 +267,28 @@ public static class GdkBuild
         buildPlayerOptions.options = ImportWin32BuildSettings();
 
 #if UNITY_2018_4_OR_NEWER
-            BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-            BuildSummary summary = report.summary;
+        BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+        BuildSummary summary = report.summary;
 
-            if (summary.result == BuildResult.Succeeded)
-            {
-                GdkEditorHelpers.LogInfo("Build succeeded: " + summary.totalSize + " bytes");
-                buildSucceeded = true;
-            }
-            else if (summary.result == BuildResult.Failed)
-            {
-                GdkEditorHelpers.LogInfo("Build failed. " + summary.totalErrors + " errors.");
-                buildSucceeded = false;
-            }
-            else if (summary.result == BuildResult.Cancelled)
-            {
-                GdkEditorHelpers.LogInfo("Build cancelled.");
-                buildSucceeded = false;
-            }
-            else
-            {
-                GdkEditorHelpers.LogInfo("Build failed.");
-            }
+        if (summary.result == BuildResult.Succeeded)
+        {
+            GdkEditorHelpers.LogInfo("Build succeeded: " + summary.totalSize + " bytes");
+        }
+        else if (summary.result == BuildResult.Failed)
+        {
+            GdkEditorHelpers.LogInfo("Build failed. " + summary.totalErrors + " errors.");
+            return false;
+        }
+        else if (summary.result == BuildResult.Cancelled)
+        {
+            GdkEditorHelpers.LogInfo("Build cancelled.");
+            return false;
+        }
+        else
+        {
+            GdkEditorHelpers.LogInfo("Build failed.");
+            return false;
+        }
 #else
         string report = BuildPipeline.BuildPlayer(buildPlayerOptions);
         GdkEditorHelpers.LogInfo(report);
@@ -305,7 +296,7 @@ public static class GdkBuild
 
         PlayerSettings.forceSingleInstance = previousForceSingleInstanceValue;
 
-        return buildSucceeded;
+        return true;
     }
 
     private static BuildOptions ImportWin32BuildSettings()
@@ -426,13 +417,12 @@ public static class GdkBuild
 
     private static bool InstallPackage()
     {
-        bool succeeded = true;
+        bool succeeded = false;
 
         string[] files = Directory.GetFiles(buildMsixvcOutputFolderPath, "*.msixvc");
-        string msixvcFilePath = string.Empty;
         if (files.Length > 0)
         {
-            msixvcFilePath = files[0];
+            string msixvcFilePath = files[0];
             if (files.Length > 1)
             {
                 GdkEditorHelpers.LogInfo("More than one .msixvc found. Installing this one: " + files[0]);

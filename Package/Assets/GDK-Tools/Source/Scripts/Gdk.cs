@@ -8,10 +8,13 @@ using Unity.GameCore;
 using XGamingRuntime;
 #endif
 
-using UnityEngine;
-using UnityEngine.UI;
 using System;
+using System.Xml;
+using System.Xml.Linq;
+using System.Linq;
 using System.Collections.Generic;
+using Microsoft.GameCore.Tools;
+using UnityEngine;
 
 namespace Microsoft.Xbox
 {
@@ -43,14 +46,19 @@ namespace Microsoft.Xbox
 
     public class Gdk : MonoBehaviour
     {
-        [Header("You can find the value of the scid in your MicrosoftGame.config")]
+        [Header("Changing the SCID here will also change the value in your MicrosoftGame.config")]
+        [Tooltip("Service Configuration GUID in the form: 12345678-1234-1234-1234-123456789abc")]
+        [Delayed]
         public string scid;
-        public Text gamertagLabel;
+
+        [Tooltip("Will automatically sign the user in after XGameRuntime initialization if checked")]
         public bool signInOnStart = true;
 
         private static Gdk _xboxHelpers;
         private static bool _initialized;
         private static Dictionary<int, string> _hresultToFriendlyErrorLookup;
+
+        private string _lastScid = string.Empty;
 
 #if MICROSOFT_GAME_CORE || UNITY_GAMECORE
         private XStoreContext _storeContext = null;
@@ -105,8 +113,50 @@ namespace Microsoft.Xbox
         public delegate void OnErrorHandler(object sender, ErrorEventArgs e);
         public event OnErrorHandler OnError;
 
+        private void OnValidate()
+        {
+            if (scid == _lastScid) return;
+
+            // Ensure guid formatted with only dashes
+            Guid guidScid;
+            if (scid.Length != 36 ||
+                !Guid.TryParse(scid, out guidScid))
+            {
+                Debug.LogError("Invalid SCID given");
+                scid = _lastScid;
+                return;
+            }
+
+            _lastScid = scid;
+
+            var gameConfigDoc = XDocument.Load(GdkEditorHelpers.GameConfigPath, LoadOptions.PreserveWhitespace);
+            try
+            {
+                var scidNode = (from node in gameConfigDoc.Descendants("ExtendedAttribute")
+                                where node.Attribute("Name").Value == "Scid"
+                                select node).First();
+
+                scidNode.Attribute("Value").Value = scid;
+
+                var xmlWriterSettings = new XmlWriterSettings()
+                {
+                    Indent = true,
+                    NewLineOnAttributes = true
+                };
+
+                using (XmlWriter xmlWriter = XmlWriter.Create(GdkEditorHelpers.GameConfigPath, xmlWriterSettings))
+                {
+                    gameConfigDoc.WriteTo(xmlWriter);
+                }
+            }
+            catch
+            {
+                Debug.LogError("Malformed MicrosoftGame.Config. Try associating with the Micosoft Store again or re-import the plugin.");
+            }
+        }
+
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _Initialize();
         }
@@ -223,12 +273,6 @@ namespace Microsoft.Xbox
 
         private void CompletePostSignInInitialization()
         {
-            string gamertag = string.Empty;
-            if (gamertagLabel != null &&
-                Succeeded(SDK.XUserGetGamertag(_userHandle, XUserGamertagComponent.UniqueModern, out gamertag), "Get gamertag."))
-            {
-                gamertagLabel.text = gamertag;
-            }
             Succeeded(SDK.XBL.XblInitialize(
                 scid
                 ), "Initialize Xbox Live");

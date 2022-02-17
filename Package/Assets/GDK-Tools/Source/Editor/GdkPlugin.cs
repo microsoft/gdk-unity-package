@@ -1,10 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+using System;
 using System.IO;
 using System.Diagnostics;
 using UnityEditor;
 using UnityEngine;
+
+using Debug = UnityEngine.Debug;
 
 namespace Microsoft.GameCore.Tools
 {
@@ -33,20 +36,20 @@ namespace Microsoft.GameCore.Tools
                 return;
             }
 
-            string manifestFilePath = GdkEditorHelpers.GetGameConfigPath();
-            if (!File.Exists(manifestFilePath))
+            if (!File.Exists(GdkEditorHelpers.GameConfigPath))
             {
                 EditorUtility.DisplayDialog("MicrosoftGame.config not found", "No MicrosoftGame.config file was found. Please re-import this plugin.", "Close");
                 return;
             }
 
-            try
+            using (Process configEditorProcess = new Process())
             {
-                Process.Start(configEditorPath, string.Format("\"{0}\" GameEngine", manifestFilePath));
-            }
-            catch (System.Exception e)
-            {
-                UnityEngine.Debug.LogError(e.Message);
+                configEditorProcess.StartInfo.FileName = configEditorPath;
+                configEditorProcess.StartInfo.Arguments = string.Format("\"{0}\" GameEngine", GdkEditorHelpers.GameConfigPath);
+
+                configEditorProcess.Start();
+                configEditorProcess.WaitForExit();
+                GdkEditorHelpers.SyncScidToGameConfig();
             }
         }
         
