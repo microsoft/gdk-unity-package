@@ -1,10 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+using System;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.GameCore.Utilities;
 using UnityEditor;
 using UnityEngine;
+
+using Debug = UnityEngine.Debug;
 
 namespace Microsoft.GameCore.Tools
 {
@@ -26,27 +30,27 @@ namespace Microsoft.GameCore.Tools
         [MenuItem("GDK/Associate with the Microsoft Store")]
         internal static void EditGameConfig()
         {
-            string configEditorPath = Path.Combine(GdkEditorHelpers.GdkToolsPath, "GameConfigEditor.exe");
+            string configEditorPath = Path.Combine(GdkUtilities.GdkToolsPath, "GameConfigEditor.exe");
             if (!File.Exists(configEditorPath))
             {
                 EditorUtility.DisplayDialog("GDK tools not found", "Ensure the GDK is installed on this PC.", "Close");
                 return;
             }
 
-            string manifestFilePath = GdkEditorHelpers.GetGameConfigPath();
-            if (!File.Exists(manifestFilePath))
+            if (!File.Exists(GdkUtilities.GameConfigPath))
             {
                 EditorUtility.DisplayDialog("MicrosoftGame.config not found", "No MicrosoftGame.config file was found. Please re-import this plugin.", "Close");
                 return;
             }
 
-            try
+            using (Process configEditorProcess = new Process())
             {
-                Process.Start(configEditorPath, string.Format("\"{0}\" GameEngine", manifestFilePath));
-            }
-            catch (System.Exception e)
-            {
-                UnityEngine.Debug.LogError(e.Message);
+                configEditorProcess.StartInfo.FileName = configEditorPath;
+                configEditorProcess.StartInfo.Arguments = string.Format("\"{0}\" GameEngine", GdkUtilities.GameConfigPath);
+
+                configEditorProcess.Start();
+                configEditorProcess.WaitForExit();
+                GdkEditorHelpers.SyncScidToGameConfig();
             }
         }
         

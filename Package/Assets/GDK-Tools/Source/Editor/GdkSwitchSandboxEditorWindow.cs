@@ -2,10 +2,11 @@
 // Licensed under the MIT license.
 
 using System;
+using System.Xml.Linq;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Xml.Linq;
+using Microsoft.GameCore.Utilities;
 using UnityEditor;
 using UnityEngine;
 
@@ -137,10 +138,8 @@ namespace Microsoft.GameCore.Tools
 
         private bool SetSandbox(string sandboxId)
         {
-            bool succeeded = true;
-
             string arguments = sandboxId + " /noApps";
-            string workingDirectory = GdkEditorHelpers.GetRootPluginPath() + "\\GDK-Tools\\Source\\Tools\\SandboxSwitcher\\";
+            string workingDirectory = System.IO.Path.Combine(GdkUtilities.RootPluginPath, @"GDK-Tools\Source\Tools\SandboxSwitcher\");
 
             var processStartInfo = new ProcessStartInfo(workingDirectory + "XBLPCSandbox.exe");
             processStartInfo.Arguments = arguments;
@@ -167,17 +166,18 @@ namespace Microsoft.GameCore.Tools
             {
                 operationsSummary = "Failed to set the sandbox to " + sandboxId + "\n\n" + e.Message;
                 GdkEditorHelpers.LogError(e.Message);
+                return false;
             }
 
-            return succeeded;
+            return true;
         }
 
         private List<string> GetAvailableSandboxes()
         {
             List<string> sandboxes = new List<string>();
             sandboxes.Add(RETAIL_SANDBOX_ID);
-            string gameConfigPath = GdkEditorHelpers.GetGameConfigPath();
-            XDocument gameConfigXmlDoc = XDocument.Load(gameConfigPath);
+
+            XDocument gameConfigXmlDoc = XDocument.Load(GdkUtilities.GameConfigPath);
             try
             {
                 XElement extendedAttributesEl = (from extendedAttributeList in gameConfigXmlDoc.Descendants("ExtendedAttributeList")

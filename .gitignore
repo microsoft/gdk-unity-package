@@ -17,6 +17,11 @@ Package/[Mm]emoryCaptures/
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !Package/[Aa]ssets/**/*.meta
 
+# 
+Package/.vsconfig
+Package/[Aa]ssets/[Rr]esources*
+Package/[Uu]nity[Pp]ackage[Mm]anager/manifest.json
+
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
 
