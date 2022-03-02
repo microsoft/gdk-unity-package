@@ -10,7 +10,8 @@ using UnityEditor;
 #if UNITY_2018_4_OR_NEWER
 using UnityEditor.Build.Reporting;
 #endif
-using UnityEngine;
+
+using Debug = UnityEngine.Debug;
 
 public static class GdkBuild
 {
@@ -33,16 +34,14 @@ public static class GdkBuild
 
     internal static bool Build(bool buildOnly, bool createPackageForStoreUpload)
     {
-        bool succeeded = false;
-
-        succeeded = ChooseOutputFolder();
+        bool succeeded = ChooseOutputFolder();
         if (succeeded)
         {
             succeeded = PreBuild(buildWin32OutputFolderPath);
         }
         if (succeeded)
         {
-            succeeded = BuildWin32();
+            succeeded = BuildWin32(createPackageForStoreUpload);
         }
         if (succeeded)
         {
@@ -84,8 +83,6 @@ public static class GdkBuild
     /// <returns>True if the tasks succeeded. False if one or more tasks failed.</returns>
     public static bool PostBuild(string pcStandaloneBuildPath, string gdkBuildOutputFolderPath, bool createPackageForStoreUpload)
     {
-        bool succeeded = false;
-
         try
         {
             if (!Directory.Exists(gdkBuildOutputFolderPath))
@@ -95,13 +92,13 @@ public static class GdkBuild
         }
         catch (Exception)
         {
-            GdkEditorHelpers.LogError("Error: Could not find or create GDK Build output directory: " + gdkBuildOutputFolderPath);
+            Debug.LogError("Could not find or create GDK Build output directory: " + gdkBuildOutputFolderPath);
         }
 
         buildWin32OutputFolderPath = pcStandaloneBuildPath;
         buildMsixvcOutputFolderPath = gdkBuildOutputFolderPath;
 
-        succeeded = PostWin32BuildCleanup();
+        bool succeeded = PostWin32BuildCleanup();
         if (succeeded)
         {
             succeeded = CreateAndConfigureLayoutFile();
@@ -130,25 +127,19 @@ public static class GdkBuild
 
     private static bool ChooseOutputFolder()
     {
-        bool succeeded = true;
         string rawBuildOutputFolderPath = EditorUtility.OpenFolderPanel("Select an output folder for your MSIXVC package", string.Empty, string.Empty);
-        if (rawBuildOutputFolderPath == string.Empty)
-        {
-            succeeded = false;
-        }
-        else
-        {
-            buildOutputFolderPath = rawBuildOutputFolderPath.Replace("/", "\\");
+        if (rawBuildOutputFolderPath == string.Empty) return false;
 
-            // Create two subfolders underneath. One for the Win32 build and another for the MSIXVC package.
-            buildWin32OutputFolderPath = buildOutputFolderPath + "\\" + Win32OutputDirectory;
-            buildMsixvcOutputFolderPath = buildOutputFolderPath + "\\" + MsixvcOutputDirectory;
+        buildOutputFolderPath = rawBuildOutputFolderPath.Replace("/", "\\");
 
-            Directory.CreateDirectory(buildWin32OutputFolderPath);
-            Directory.CreateDirectory(buildMsixvcOutputFolderPath);
-        }
+        // Create two subfolders underneath. One for the Win32 build and another for the MSIXVC package.
+        buildWin32OutputFolderPath = buildOutputFolderPath + "\\" + Win32OutputDirectory;
+        buildMsixvcOutputFolderPath = buildOutputFolderPath + "\\" + MsixvcOutputDirectory;
+        
+        Directory.CreateDirectory(buildWin32OutputFolderPath);
+        Directory.CreateDirectory(buildMsixvcOutputFolderPath);
 
-        return succeeded;
+        return true;
     }
 
     private static bool CopyManifestFiles()
@@ -169,12 +160,12 @@ public static class GdkBuild
         {
             string imagesPath = gameConfigFilePath.Replace("MicrosoftGame.Config", string.Empty);
             XElement executableEl = (from executable in gameConfigXmlDoc.Descendants("Executable")
-                                        select executable).First();
+                                     select executable).First();
             executableEl.SetAttributeValue("Name", PlayerSettings.productName + ".exe");
 
             // Find the images
             XElement shellVisualsEl = (from shellVisual in gameConfigXmlDoc.Descendants("ShellVisuals")
-                                        select shellVisual).First();
+                                       select shellVisual).First();
 
             XAttribute square150x150LogoAttribute = shellVisualsEl.Attribute("Square150x150Logo");
             originalSquare150x150LogoPath = square150x150LogoAttribute.Value;
@@ -205,17 +196,19 @@ public static class GdkBuild
         }
         catch (Exception)
         {
-            GdkEditorHelpers.LogError("Invalid or corrupt MicrosoftGame.Config.");
+            Debug.LogError("Invalid or corrupt MicrosoftGame.Config.");
             return false;
         }
 
-        List<string> storeAssetsToCopy = new List<string>();
-        storeAssetsToCopy.Add(gameConfigFilePath);
-        storeAssetsToCopy.Add(square150x150LogoPath);
-        storeAssetsToCopy.Add(square44x44LogoPath);
-        storeAssetsToCopy.Add(square480x480LogoPath);
-        storeAssetsToCopy.Add(splashScreenImagePath);
-        storeAssetsToCopy.Add(storeLogoPath);
+        List<string> storeAssetsToCopy = new List<string>
+        {
+            gameConfigFilePath,
+            square150x150LogoPath,
+            square44x44LogoPath,
+            square480x480LogoPath,
+            splashScreenImagePath,
+            storeLogoPath
+        };
 
         foreach (string storeAssetToCopy in storeAssetsToCopy)
         {
@@ -228,12 +221,12 @@ public static class GdkBuild
         return true;
     }
 
-    internal static bool BuildWin32()
+    internal static bool BuildWin32(bool createPackageForStoreUpload)
     {
         EditorBuildSettingsScene[] buildScenes = EditorBuildSettings.scenes;
         if (buildScenes.Count() <= 0)
         {
-            GdkEditorHelpers.LogError("Error: No scenes specified to build. Please select scenes in Unity's Build Settings dialog.");
+            Debug.LogError("No scenes specified to build. Please select scenes in Unity's Build Settings dialog.");
             return false;
         }
 
@@ -251,48 +244,45 @@ public static class GdkBuild
         previousForceSingleInstanceValue = PlayerSettings.forceSingleInstance;
         PlayerSettings.forceSingleInstance = true;
 
-        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
-        buildPlayerOptions.scenes = scenePaths.ToArray();
-        buildPlayerOptions.locationPathName = buildWin32OutputFolderPath + "/" + PlayerSettings.productName + ".exe";
-        buildPlayerOptions.target = BuildTarget.StandaloneWindows;
-
-        if (EditorUserBuildSettings.selectedStandaloneTarget == BuildTarget.StandaloneWindows ||
-            EditorUserBuildSettings.selectedStandaloneTarget == BuildTarget.StandaloneWindows64)
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
         {
-            buildPlayerOptions.target = EditorUserBuildSettings.selectedStandaloneTarget;
-        }
-        else
-        {
-            buildPlayerOptions.target = BuildTarget.StandaloneWindows;
-        }
-        buildPlayerOptions.options = ImportWin32BuildSettings();
+            scenes = scenePaths.ToArray(),
+            locationPathName = buildWin32OutputFolderPath + "/" + PlayerSettings.productName + ".exe",
+            target = BuildTarget.StandaloneWindows64,
+            options = ImportWin32BuildSettings(createPackageForStoreUpload)
+        };
 
 #if UNITY_2018_4_OR_NEWER
         BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
         BuildSummary summary = report.summary;
 
+        if (EditorUserBuildSettings.development && createPackageForStoreUpload)
+        {
+            Debug.LogWarning("Disabled development build and debugging/profiling options for store package.");
+        }
+
         if (summary.result == BuildResult.Succeeded)
         {
-            GdkEditorHelpers.LogInfo("Build succeeded: " + summary.totalSize + " bytes");
+            Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
         }
         else if (summary.result == BuildResult.Failed)
         {
-            GdkEditorHelpers.LogInfo("Build failed. " + summary.totalErrors + " errors.");
+            Debug.Log("Build failed. " + summary.totalErrors + " errors.");
             return false;
         }
         else if (summary.result == BuildResult.Cancelled)
         {
-            GdkEditorHelpers.LogInfo("Build cancelled.");
+            Debug.Log("Build cancelled.");
             return false;
         }
         else
         {
-            GdkEditorHelpers.LogInfo("Build failed.");
+            Debug.Log("Build failed.");
             return false;
         }
 #else
         string report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-        GdkEditorHelpers.LogInfo(report);
+        Debug.Log(report);
 #endif
 
         PlayerSettings.forceSingleInstance = previousForceSingleInstanceValue;
@@ -300,13 +290,11 @@ public static class GdkBuild
         return true;
     }
 
-    private static BuildOptions ImportWin32BuildSettings()
+    private static BuildOptions ImportWin32BuildSettings(bool createPackageForStoreUpload)
     {
         BuildOptions buildOptions = BuildOptions.None;
-        // Switch the platform to Win32, x64. The GDK only supports x64.
-        BuildTarget buildTarget = BuildTarget.StandaloneWindows64;
-        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, buildTarget);
-        if (EditorUserBuildSettings.development)
+
+        if (EditorUserBuildSettings.development && !createPackageForStoreUpload)
         {
             buildOptions |= BuildOptions.Development;
 
@@ -335,6 +323,7 @@ public static class GdkBuild
             }
 #endif
         }
+
         if (EditorUserBuildSettings.enableHeadlessMode)
         {
             buildOptions |= BuildOptions.EnableHeadlessMode;
@@ -401,11 +390,13 @@ public static class GdkBuild
         {
             makePkgExtraArgs = "/contentid " + contentIdOverride;
         }
+
         string arguments = string.Format("/c makepkg.exe pack /f \"{0}\\layout.xml\" /d \"{0}\" /pd \"{1}\" /pc /CorrelationId Unity " + makePkgExtraArgs, buildWin32OutputFolderPath, buildMsixvcOutputFolderPath);
         if (createForStoreUpload)
         {
             arguments += " /l";
         }
+
         return GdkEditorHelpers.StartCmdProcess(arguments);
     }
 
@@ -418,40 +409,38 @@ public static class GdkBuild
 
     private static bool InstallPackage()
     {
-        bool succeeded = false;
-
         string[] files = Directory.GetFiles(buildMsixvcOutputFolderPath, "*.msixvc");
-        if (files.Length > 0)
+        if (files.Length == 0)
         {
-            string msixvcFilePath = files[0];
-            if (files.Length > 1)
-            {
-                GdkEditorHelpers.LogInfo("More than one .msixvc found. Installing this one: " + files[0]);
-            }
-
-            // We always try to uninstall an old package before installing a new one to avoid
-            // cases where an old install is not fully cleaned up.
-            string pFN = Path.GetFileNameWithoutExtension(msixvcFilePath);
-
-            string listExistingGamesArguments = "/c wdapp.exe list";
-            string standardOutput = string.Empty;
-            string standardError = string.Empty;
-            GdkEditorHelpers.StartCmdProcessAndReturnOutput(listExistingGamesArguments, out standardOutput, out standardError);
-            if (standardOutput.Contains(pFN))
-            {
-                string uninstallArguments = "/c wdapp.exe uninstall " + pFN;
-                succeeded = GdkEditorHelpers.StartCmdProcess(uninstallArguments);
-            }
-
-            string arguments = "/c wdapp.exe install \"" + msixvcFilePath + "\"";
-            succeeded = GdkEditorHelpers.StartCmdProcess(arguments, out aumid);
-        }
-        else
-        {
-            GdkEditorHelpers.LogError("Error: No .msixvc found.");
+            Debug.LogError("No .msixvc found.");
+            return false;
         }
 
-        return succeeded;
+        string msixvcFilePath = files[0];
+        if (files.Length > 1)
+        {
+            Debug.Log("More than one .msixvc found. Installing this one: " + files[0]);
+        }
+
+        // We always try to uninstall an old package before installing a new one to avoid
+        // cases where an old install is not fully cleaned up.
+        string pFN = Path.GetFileNameWithoutExtension(msixvcFilePath);
+
+        string listExistingGamesArguments = "/c wdapp.exe list";
+        string standardOutput = string.Empty;
+        string standardError = string.Empty;
+        GdkEditorHelpers.StartCmdProcessAndReturnOutput(listExistingGamesArguments, out standardOutput, out standardError);
+        if (standardOutput.Contains(pFN))
+        {
+            string uninstallArguments = "/c wdapp.exe uninstall " + pFN;
+            if (!GdkEditorHelpers.StartCmdProcess(uninstallArguments))
+            {
+                Debug.LogError("Unable to uninstall previous existing package.");
+            }
+        }
+
+        string arguments = "/c wdapp.exe install \"" + msixvcFilePath + "\"";
+        return GdkEditorHelpers.StartCmdProcess(arguments, out aumid);
     }
     private static bool LaunchPackage()
     {
