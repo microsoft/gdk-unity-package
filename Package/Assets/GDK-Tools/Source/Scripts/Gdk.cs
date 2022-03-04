@@ -113,14 +113,25 @@ namespace Microsoft.Xbox
         public delegate void OnErrorHandler(object sender, ErrorEventArgs e);
         public event OnErrorHandler OnError;
 
+        private bool ValidateGuid(string guid)
+        {
+            var groups = guid.Split('-');
+            if (groups.Length != 5) return false;
+
+            if (!groups.Select(str => str.Length).SequenceEqual(new[] { 8, 4, 4, 4, 12 })) return false;
+            
+            if (!guid.All(c => "1234567890abcdef-".Contains(c))) return false;
+
+            return true;
+        }
+
         private void OnValidate()
         {
             if (scid == _lastScid) return;
 
             // Ensure guid formatted with only dashes
-            Guid guidScid;
-            if (scid.Length != 36 ||
-                !Guid.TryParse(scid, out guidScid))
+            if (scid.Length != 36 || 
+                !ValidateGuid(scid))
             {
                 Debug.LogError("Invalid SCID given");
                 scid = _lastScid;
@@ -129,7 +140,7 @@ namespace Microsoft.Xbox
 
             _lastScid = scid;
 
-            var gameConfigDoc = XDocument.Load(GdkUtilities.GameConfigPath, LoadOptions.PreserveWhitespace);
+            var gameConfigDoc = XDocument.Load(GdkUtilities.GameConfigPath);
             try
             {
                 var scidNode = (from node in gameConfigDoc.Descendants("ExtendedAttribute")
