@@ -115,9 +115,6 @@ namespace Microsoft.Xbox
 
         private bool ValidateGuid(string guid)
         {
-#if UNITY_2018_4_OR_NEWER
-            return Guid.TryParse(scid, out Guid guidScid);
-#else
             var groups = guid.Split('-');
             if (groups.Length != 5) return false;
 
@@ -126,7 +123,6 @@ namespace Microsoft.Xbox
             if (!guid.All(c => "1234567890abcdef-".Contains(c))) return false;
 
             return true;
-#endif
         }
 
         private void OnValidate()
