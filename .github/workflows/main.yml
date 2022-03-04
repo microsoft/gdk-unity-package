@@ -42,5 +42,5 @@ jobs:
         uses: game-ci/unity-builder@c8202c01e7dfe4de0e897b26cb2ca1cc363e4ad4
         with:
           projectPath: Package
-          unityVersion: 2020.3.36f1
+          unityVersion: 2018.4.23f1
           targetPlatform: StandaloneWindows64
