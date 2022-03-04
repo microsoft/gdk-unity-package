@@ -32,8 +32,7 @@ jobs:
             
       - name: Unity - Builder
         # You may pin to the exact commit or the version.
-        # uses: rakhad/unity-builder@2104r1
-        uses: rakhad/unity-builder@2a30ca95a19b0c227fa3cf2f290b5a8f5a5cce47
+        uses: tculotta/unity-builder@packaging
         with:
           projectPath: Package
           unityVersion: 2018.4.23f1          
