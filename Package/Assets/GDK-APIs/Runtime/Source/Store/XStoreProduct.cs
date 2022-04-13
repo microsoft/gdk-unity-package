@@ -38,4 +38,48 @@ namespace XGamingRuntime
         public XStoreImage[] Images { get; private set; }
         public XStoreVideo[] Videos { get; private set; }
     }
+
+    public partial class SDK
+    {
+        public delegate void XStoreShowProductPageUICompleted(int hresult);
+        public delegate void XStoreShowAssociatedProductsPageUICompleted(int hresult);
+
+        public static int XStoreShowProductPageUIAsync(XStoreContext context, string storeId, XStoreShowProductPageUICompleted completionRoutine)
+        {
+            var asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
+            {
+                var resultHr = XStore.XStoreShowProductPageUIResult(block);
+                completionRoutine(resultHr);
+            });
+
+            var hr = XStore.XStoreShowProductPageUIAsync(context.handle, Converters.StringToNullTerminatedUTF8ByteArray(storeId), asyncBlock);
+
+            if (HR.FAILED(hr))
+            {
+                AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                completionRoutine(hr);
+            }
+
+            return hr;
+        }
+
+        public static int XStoreShowAssociatedProductsUIAsync(XStoreContext context, string storeId, XStoreProductKind productKinds, XStoreShowAssociatedProductsPageUICompleted completionRoutine)
+        {
+            var asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
+            {
+                var resultHr = XStore.XStoreShowAssociatedProductsUIResult(block);
+                completionRoutine(resultHr);
+            });
+
+            var hr = XStore.XStoreShowAssociatedProductsUIAsync(context.handle, Converters.StringToNullTerminatedUTF8ByteArray(storeId), productKinds, asyncBlock);
+
+            if (HR.FAILED(hr))
+            {
+                AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                completionRoutine(hr);
+            }
+
+            return hr;
+        }
+    }
 }
