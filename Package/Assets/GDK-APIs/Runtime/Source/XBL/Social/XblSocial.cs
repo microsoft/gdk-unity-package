@@ -119,11 +119,13 @@ namespace XGamingRuntime
 
                         for (var i = 0; i < count.ToInt32(); i++)
                         {
-                            relationships[i] = new XblSocialRelationship();
-                            relationships[i].xboxUserId = interopPtr->xboxUserId;
-                            relationships[i].isFavorite = interopPtr->isFavorite;
-                            relationships[i].isFollowingCaller = interopPtr->isFollowingCaller;
-                            relationships[i].socialNetworks = new string[interopPtr->socialNetworksCount.ToInt32()];
+                            relationships[i] = new XblSocialRelationship
+                            {
+                                xboxUserId = interopPtr->xboxUserId,
+                                isFavorite = interopPtr->isFavorite,
+                                isFollowingCaller = interopPtr->isFollowingCaller,
+                                socialNetworks = new string[interopPtr->socialNetworksCount.ToInt32()]
+                            };
 
                             var socialNetworksPtr = interopPtr->socialNetworks;
 
@@ -133,6 +135,8 @@ namespace XGamingRuntime
                                     Converters.NullTerminatedBytePointerToString((byte*)*socialNetworksPtr);
                                 socialNetworksPtr++;
                             }
+
+                            ++interopPtr;
                         }
                     }
                     else
