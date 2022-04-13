@@ -48,8 +48,8 @@ namespace XGamingRuntime
         {
             var asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
             {
-                var hr = XStore.XStoreShowProductPageUIResult(block);
-                completionRoutine(hr);
+                var resultHr = XStore.XStoreShowProductPageUIResult(block);
+                completionRoutine(resultHr);
             });
 
             var hr = XStore.XStoreShowProductPageUIAsync(context.handle, Converters.StringToNullTerminatedUTF8ByteArray(storeId), asyncBlock);
@@ -67,8 +67,8 @@ namespace XGamingRuntime
         {
             var asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
             {
-                var hr = XStore.XStoreShowAssociatedProductsUIResult(block);
-                completionRoutine(hr);
+                var resultHr = XStore.XStoreShowAssociatedProductsUIResult(block);
+                completionRoutine(resultHr);
             });
 
             var hr = XStore.XStoreShowAssociatedProductsUIAsync(context.handle, Converters.StringToNullTerminatedUTF8ByteArray(storeId), productKinds, asyncBlock);
