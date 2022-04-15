@@ -21,6 +21,8 @@ Package/[Mm]emoryCaptures/
 Package/.vsconfig
 Package/[Aa]ssets/[Rr]esources*
 Package/[Uu]nity[Pp]ackage[Mm]anager/manifest.json
+Package/[Aa]ssets/GDK-APIs/Runtime/DLLs/Microsoft.Xbox.Services.141.GDK.C.Thunks.dll*
+Package/[Aa]ssets/GDK-APIs/Runtime/DLLs/XCurl.dll*
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*

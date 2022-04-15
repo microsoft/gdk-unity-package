@@ -67,6 +67,8 @@ public static class GdkBuild
 
         buildWin32OutputFolderPath = pcStandaloneBuildPath;
 
+        GdkUtilities.PullGdkDlls();
+
         succeeded = CopyManifestFiles();
 
         return succeeded;

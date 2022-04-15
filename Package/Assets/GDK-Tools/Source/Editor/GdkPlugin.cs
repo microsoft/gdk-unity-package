@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using System;
 using System.IO;
 using System.Diagnostics;
 using Microsoft.GameCore.Utilities;
@@ -15,6 +14,21 @@ namespace Microsoft.GameCore.Tools
     [InitializeOnLoad]
     public static class GdkPlugin
     {
+        static GdkPlugin()
+        {
+            GdkUtilities.PullGdkDlls();
+            EditorApplication.playModeStateChanged += PullGdkDlls;
+        }
+
+        private static void PullGdkDlls(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode)
+            {
+                Debug.LogError("PullGdkDlls state: " + state);
+                GdkUtilities.PullGdkDlls();
+            }
+        }
+
         [MenuItem("GDK/Documentation/Developer Portal (GDK)")]
         private static void OpenDeveloperPortal()
         {

@@ -8,6 +8,9 @@ namespace Microsoft.GameCore.Utilities
 {
     public class GdkUtilities
     {
+        public static string XsapiLibName => "Microsoft.Xbox.Services.141.GDK.C.Thunks.dll";
+        public static string XCurlLibName => "XCurl.dll";
+
         public static string GdkToolsPath
         {
             get
@@ -21,6 +24,55 @@ namespace Microsoft.GameCore.Utilities
             }
         }
 
+        public static string GdkVersion
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_gdkVersion))
+                {
+                    // Reset paths to get new versions
+                    _xsapiLibPath = "";
+                    _xCurlLibPath = "";
+
+                    _gdkVersion = RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "GRDKLatest");
+                }
+
+                return _gdkVersion;
+            }
+        }
+
+        public static string XsapiLibPath
+        {
+            get
+            {
+                if (!File.Exists(_xsapiLibPath))
+                {
+                    _xsapiLibPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
+                                                 GdkVersion, 
+                                                 @"GRDK\ExtensionLibraries\Xbox.Services.API.C\DesignTime\CommonConfiguration\Neutral\Lib\Release", 
+                                                 XsapiLibName);
+                }
+
+                return _xsapiLibPath;
+            }
+        }
+
+        public static string XCurlLibPath
+        {
+            get
+            {
+                if (!File.Exists(_xCurlLibPath))
+                {
+                    _xCurlLibPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
+                                                 GdkVersion, 
+                                                 @"GRDK\ExtensionLibraries\Xbox.XCurl.API\Redist\CommonConfiguration\neutral", 
+                                                 XCurlLibName);
+                }
+
+                return _xCurlLibPath;
+            }
+        }
+
         public static string RootPluginPath
         {
             get
@@ -31,6 +83,19 @@ namespace Microsoft.GameCore.Utilities
                 }
 
                 return _rootPluginPath;
+            }
+        }
+
+        public static string PluginDllPath
+        {
+            get
+            {
+                if (!File.Exists(_pluginDllPath))
+                {
+                    _pluginDllPath = Path.Combine(RootPluginPath, @"GDK-APIs\Runtime\DLLs");
+                }
+
+                return _pluginDllPath;
             }
         }
 
@@ -71,9 +136,48 @@ namespace Microsoft.GameCore.Utilities
             }
         }
 
+        private static string _gdkVersion;
+        private static string _xsapiLibPath;
+        private static string _xCurlLibPath;
         private static string _gdkToolsPath;
+        private static string _pluginDllPath;
         private static string _rootPluginPath;
         private static string _gameConfigPath;
+
+        /// <summary>
+        /// Copy DLLs from GDK if not currently in the plugin or if a different GDK version is detected
+        /// </summary>
+        public static void PullGdkDlls()
+        {
+            string oldGdkVersion = GdkVersion;
+            _gdkVersion = "";
+
+            string xsapiPath = Path.Combine(PluginDllPath, XsapiLibName);
+            string xCurlPath = Path.Combine(PluginDllPath, XCurlLibName);
+            bool requiresXCurl = int.Parse(GdkVersion.Substring(0, 4)) >= 2110;
+
+            if (!oldGdkVersion.Equals(GdkVersion) ||
+                !File.Exists(xsapiPath) || 
+                (requiresXCurl && !File.Exists(xCurlPath)))
+            {
+
+                Debug.LogWarning("xsapi: " + xsapiPath);
+                Debug.LogWarning("xcurl: " + xCurlPath);
+                Debug.LogWarning("requires: " + requiresXCurl);
+                if (!File.Exists(XsapiLibPath))
+                {
+                    Debug.LogError("Could not find the GDK DLLs. Make sure you have the Microsoft GDK installed.");
+                    return;
+                }
+
+                File.Copy(XsapiLibPath, Path.Combine(PluginDllPath, XsapiLibName), true);
+
+                if (File.Exists(XCurlLibPath))
+                {
+                    File.Copy(XCurlLibPath, Path.Combine(PluginDllPath, XCurlLibName), true);
+                }
+            }
+        }
 
         #region RegHelper
         private static class RegUtil

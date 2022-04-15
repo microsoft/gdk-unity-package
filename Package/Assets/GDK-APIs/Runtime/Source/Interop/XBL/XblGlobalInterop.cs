@@ -56,7 +56,7 @@ namespace XGamingRuntime.Interop
         internal const Int32 XBL_SOCIAL_MANAGER_MAX_AFFECTED_USERS_PER_EVENT = 10;
         #endregion
 
-        private const string ThunkDllName = "Microsoft_Xbox_Services_141_GDK_C_Thunks";
+        private const string ThunkDllName = "Microsoft.Xbox.Services.141.GDK.C.Thunks";
 
         //XBL_DLLEXPORT HRESULT XBL_CALLING_CONV XblWrapper_XblInitialize(
         //    _In_z_ const char* scid,
