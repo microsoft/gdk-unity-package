@@ -245,5 +245,13 @@ namespace XGamingRuntime.Interop
         [DllImport("Microsoft.Xbox.Services.141.GDK.C.Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("HRESULT")]
         public static extern int XblMultiplayerSendInvitesResult([NativeTypeName("XAsyncBlock *")] XAsyncBlockPtr async, [NativeTypeName("size_t")] SizeT handlesCount, XblMultiplayerInviteHandle* handles);
+
+        [DllImport("Microsoft.Xbox.Services.141.GDK.C.Thunks", CallingConvention = CallingConvention.StdCall, ExactSpelling = true)]
+        [return: NativeTypeName("HRESULT")]
+        public static extern int XblMultiplayerSetTransferHandleAsync([NativeTypeName("XblContextHandle")] IntPtr xblContext, XblMultiplayerSessionReference targetSessionReference, XblMultiplayerSessionReference originSessionReference, XAsyncBlockPtr async);
+
+        [DllImport("Microsoft.Xbox.Services.141.GDK.C.Thunks", CallingConvention = CallingConvention.StdCall, ExactSpelling = true)]
+        [return: NativeTypeName("HRESULT")]
+        public static extern int XblMultiplayerSetTransferHandleResult(XAsyncBlockPtr async, XblMultiplayerSessionHandleId* handleId);
     }
 }

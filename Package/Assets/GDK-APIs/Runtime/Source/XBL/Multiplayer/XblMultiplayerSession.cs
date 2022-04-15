@@ -21,6 +21,8 @@ namespace XGamingRuntime
     {
         public partial class XBL
         {
+            public delegate void XblMultiplayerSetTransferHandleResult(Int32 hresult, string transferHandle);
+            
             /// <summary>
             /// Wraps the underlying native XblMultiplayerSessionMatchmakingServer API:
             /// https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/reference/live/xsapi-c/multiplayer_c/functions/xblmultiplayersessionmatchmakingserver
@@ -1506,6 +1508,39 @@ namespace XGamingRuntime
                                 new SizeT(1));
                         }
                     }
+                }
+
+                return result;
+            }
+
+            public static int XblMultiplayerSetTransferHandleAsync(XblContextHandle xblContext,
+                XblMultiplayerSessionReference targetSessionReference,
+                XblMultiplayerSessionReference originSessionReference,
+                XblMultiplayerSetTransferHandleResult completionCallback)
+            {
+                int result;
+
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(SDK.defaultQueue.handle, (XAsyncBlockPtr block) =>
+                {
+                    unsafe
+                    {
+                        XblMultiplayerSessionHandleId handleId = default(XblMultiplayerSessionHandleId);
+                        var hresult = Multiplayer.XblMultiplayerSetTransferHandleResult(block, &handleId);
+
+                        var resultSessionHandleId = Converters.NullTerminatedBytePointerToString((byte*)handleId.value);
+                        if (completionCallback != null)
+                        {
+                            completionCallback.Invoke(hresult, resultSessionHandleId);
+                        }
+                    }
+                });
+
+                unsafe
+                {
+                    var interopTargetSessionReference = new Interop.XblMultiplayerSessionReference(targetSessionReference);
+                    var interopOriginSessionReference = new Interop.XblMultiplayerSessionReference(originSessionReference);
+
+                    result = Multiplayer.XblMultiplayerSetTransferHandleAsync(xblContext.InteropHandle.handle, interopTargetSessionReference, interopOriginSessionReference, asyncBlock);
                 }
 
                 return result;
