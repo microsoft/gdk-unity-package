@@ -162,7 +162,7 @@ namespace XGamingRuntime
                 }
             }
 
-            public static void XblAchievementsUpdateAchievementAsync(
+            public static void XblAchievementsUpdateAchievementForTitleIdAsync(
                 XblContextHandle xboxLiveContext,
                 UInt64 xboxUserId,
                 UInt32 titleId,

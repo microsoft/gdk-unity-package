@@ -47,6 +47,15 @@ namespace XGamingRuntime.Interop
         //    _In_ size_t xuidsCount,
         //    _In_ XAsyncBlock* async
         //) XBL_NOEXCEPT;
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="xblContext"></param>
+        /// <param name="scid"></param>
+        /// <param name="xuids"></param>
+        /// <param name="xuidsCount"></param>
+        /// <param name="async"></param>
+        /// <returns></returns>
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblMultiplayerGetActivitiesForUsersAsync(
             XblContextHandle xblContext,
@@ -90,6 +99,15 @@ namespace XGamingRuntime.Interop
         //    _In_ const char* socialGroup,
         //    _In_ XAsyncBlock* async
         //) XBL_NOEXCEPT;
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="xboxLiveContext"></param>
+        /// <param name="scid"></param>
+        /// <param name="socialGroupOwnerXuid"></param>
+        /// <param name="socialGroup"></param>
+        /// <param name="async"></param>
+        /// <returns></returns>
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblMultiplayerGetActivitiesForSocialGroupAsync(
             XblContextHandle xboxLiveContext,

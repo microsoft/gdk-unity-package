@@ -183,6 +183,13 @@ namespace XGamingRuntime.Interop
         //     _In_ uint64_t xuid,
         //     _Out_ XblRealTimeActivitySubscriptionHandle* subscriptionHandle
         // ) XBL_NOEXCEPT;
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="xblContextHandle"></param>
+        /// <param name="xuid"></param>
+        /// <param name="subscriptionHandle"></param>
+        /// <returns></returns>
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblPresenceSubscribeToDevicePresenceChange(
             XblContextHandle xblContextHandle,
@@ -193,6 +200,12 @@ namespace XGamingRuntime.Interop
         //     _In_ XblContextHandle xblContextHandle,
         //     _In_ XblRealTimeActivitySubscriptionHandle subscriptionHandle
         // ) XBL_NOEXCEPT;
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="xblContextHandle"></param>
+        /// <param name="subscriptionHandle"></param>
+        /// <returns></returns>
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblPresenceUnsubscribeFromDevicePresenceChange(
             XblContextHandle xblContextHandle,
@@ -204,6 +217,14 @@ namespace XGamingRuntime.Interop
         //     _In_ uint32_t titleId,
         //     _Out_ XblRealTimeActivitySubscriptionHandle* subscriptionHandle
         // ) XBL_NOEXCEPT;
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="xblContextHandle"></param>
+        /// <param name="xuid"></param>
+        /// <param name="titleId"></param>
+        /// <param name="subscriptionHandle"></param>
+        /// <returns></returns>
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblPresenceSubscribeToTitlePresenceChange(
             XblContextHandle xblContextHandle,
@@ -215,6 +236,12 @@ namespace XGamingRuntime.Interop
         //     _In_ XblContextHandle xblContextHandle,
         //     _In_ XblRealTimeActivitySubscriptionHandle subscriptionHandle
         // ) XBL_NOEXCEPT;
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="xblContext"></param>
+        /// <param name="subscriptionHandle"></param>
+        /// <returns></returns>
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblPresenceUnsubscribeFromTitlePresenceChange(
             XblContextHandle xblContext,

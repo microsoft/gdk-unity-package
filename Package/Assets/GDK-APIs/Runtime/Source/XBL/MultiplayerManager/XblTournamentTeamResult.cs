@@ -3,6 +3,9 @@ using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
+    /// <summary>
+    /// Deprecated
+    /// </summary>
     public class XblTournamentTeamResult
     {
         internal XblTournamentTeamResult(Interop.XblTournamentTeamResult interopStruct)

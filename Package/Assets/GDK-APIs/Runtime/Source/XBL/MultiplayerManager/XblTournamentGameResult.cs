@@ -12,6 +12,9 @@ namespace XGamingRuntime
     //    Rank,
     //    NoShow,
     //};
+    /// <summary>
+    /// Deprecated
+    /// </summary>
     public enum XblTournamentGameResult : UInt32
     {
         NoContest = 0,
