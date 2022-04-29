@@ -31,7 +31,13 @@ namespace XGamingRuntime
         SessionJoinabilityChange = 64,
         CustomPropertyChange = 128,
         MemberCustomPropertyChange = 256,
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         TournamentPropertyChange = 512,
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         ArbitrationPropertyChange = 1024,
     }
 }

@@ -22,6 +22,9 @@ namespace XGamingRuntime
         }
 
         public UInt32 MemberId { get; private set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public string TeamId { get; private set; }
         public string InitialTeam { get; private set; }
         public UInt64 Xuid { get; private set; }

@@ -12,6 +12,9 @@ namespace XGamingRuntime
     //    TeamEliminated,
     //    TournamentCompleted
     //};
+    /// <summary>
+    /// Deprecated
+    /// </summary>
     public enum XblTournamentRegistrationReason : UInt32
     {
         Unknown = 0,

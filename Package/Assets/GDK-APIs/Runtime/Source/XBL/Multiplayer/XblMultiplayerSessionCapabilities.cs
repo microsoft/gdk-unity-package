@@ -23,7 +23,13 @@ namespace XGamingRuntime
         }
 
         public bool Connectivity { get; set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public bool Team { get; set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public bool Arbitration { get; set; }
         public bool SuppressPresenceActivityCheck { get; set; }
         public bool Gameplay { get; set; }

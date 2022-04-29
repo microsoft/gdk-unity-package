@@ -38,8 +38,14 @@ namespace XGamingRuntime
         }
 
         public UInt32 MemberId { get; private set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public string TeamId { get; private set; }
         public string InitialTeam { get; private set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public XblTournamentArbitrationStatus ArbitrationStatus { get; private set; }
         public UInt64 Xuid { get; private set; }
         public string CustomConstantsJson { get; private set; }
@@ -63,6 +69,9 @@ namespace XGamingRuntime
         public XblMultiplayerMeasurementFailure InitializationFailureCause { get; private set; }
         public string[] Groups { get; private set; }
         public string[] Encounters { get; private set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public XblMultiplayerSessionReference TournamentTeamSessionReference { get; private set; }
         public IntPtr Internal { get; private set; }
     }

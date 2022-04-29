@@ -12,6 +12,9 @@ namespace XGamingRuntime
     //    Incomplete,
     //    Joining
     //};
+    /// <summary>
+    /// Deprecated
+    /// </summary>
     public enum XblTournamentArbitrationStatus : UInt32
     {
         Waiting = 0,

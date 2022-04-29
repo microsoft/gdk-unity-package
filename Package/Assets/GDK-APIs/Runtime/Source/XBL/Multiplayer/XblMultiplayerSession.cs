@@ -285,6 +285,7 @@ namespace XGamingRuntime
             /// <param name="arbitrationTimeout"></param>
             /// <param name="forfeitTimeout"></param>
             /// <returns>HR.S_OK on success, otherwise HR.FAILED(...) is true</returns>
+            /// <remarks>Deprecated</remarks>
             public static int XblMultiplayerSessionConstantsSetArbitrationTimeouts(
                 XblMultiplayerSessionHandle sessionHandle,
                 TimeSpan arbitrationTimeout,

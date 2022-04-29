@@ -51,8 +51,17 @@ namespace XGamingRuntime
         JoinLobbyCompleted = 17,
         ClientDisconnectedFromMultiplayerService = 18,
         InviteSent = 19,
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         TournamentRegistrationStateChanged = 20,
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         TournamentGameSessionReady = 21,
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         ArbitrationComplete = 22,
     }
 }
