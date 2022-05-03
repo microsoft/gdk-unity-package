@@ -83,7 +83,7 @@ namespace Microsoft.GameCore.Tools
         private static void CreatePackage()
         {
             GdkBuildEditorWindow window = EditorWindow.GetWindow<GdkBuildEditorWindow>();
-            window.minSize = new Vector2(400, 600);
+            window.minSize = new Vector2(600, 450);
             GUIContent titleContent = new GUIContent("GDK - PC Build and Run");
             window.titleContent = titleContent;
             window.Show();
