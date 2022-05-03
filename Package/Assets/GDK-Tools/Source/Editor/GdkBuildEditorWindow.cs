@@ -85,8 +85,6 @@ namespace Microsoft.GameCore.Tools
 
                 EditorGUILayout.Separator();
 
-                //EditorGUILayout.LabelField("Using PC, Mac & Linux Standalone platform and build settings.", EditorStyles.largeLabel);
-
                 // Action buttons
                 if (GUILayout.Button("Select scenes and edit Build Settings", GUILayout.MaxWidth(240)))
                 {
