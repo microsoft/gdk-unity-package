@@ -47,10 +47,10 @@ namespace Microsoft.GameCore.Utilities
             {
                 if (!File.Exists(_xsapiLibPath))
                 {
-                    _xsapiLibPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
-                                                 GdkVersion, 
-                                                 @"GRDK\ExtensionLibraries\Xbox.Services.API.C\DesignTime\CommonConfiguration\Neutral\Lib\Release", 
-                                                 XsapiLibName);
+                    _xsapiLibPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
+                                                 GdkVersion), 
+                                                 Path.Combine(@"GRDK\ExtensionLibraries\Xbox.Services.API.C\DesignTime\CommonConfiguration\Neutral\Lib\Release", 
+                                                 XsapiLibName));
                 }
 
                 return _xsapiLibPath;
