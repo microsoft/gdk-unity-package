@@ -8,8 +8,8 @@ namespace Microsoft.GameCore.Utilities
 {
     public class GdkUtilities
     {
-        public static string XsapiLibName => "Microsoft.Xbox.Services.141.GDK.C.Thunks.dll";
-        public static string XCurlLibName => "XCurl.dll";
+        public static string XsapiLibName { get { return "Microsoft.Xbox.Services.141.GDK.C.Thunks.dll"; } }
+        public static string XCurlLibName { get { return "XCurl.dll"; } }
 
         public static string GdkToolsPath
         {
@@ -47,10 +47,10 @@ namespace Microsoft.GameCore.Utilities
             {
                 if (!File.Exists(_xsapiLibPath))
                 {
-                    _xsapiLibPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
-                                                 GdkVersion, 
-                                                 @"GRDK\ExtensionLibraries\Xbox.Services.API.C\DesignTime\CommonConfiguration\Neutral\Lib\Release", 
-                                                 XsapiLibName);
+                    _xsapiLibPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
+                                                 GdkVersion), 
+                                                 Path.Combine(@"GRDK\ExtensionLibraries\Xbox.Services.API.C\DesignTime\CommonConfiguration\Neutral\Lib\Release", 
+                                                 XsapiLibName));
                 }
 
                 return _xsapiLibPath;
@@ -63,10 +63,10 @@ namespace Microsoft.GameCore.Utilities
             {
                 if (!File.Exists(_xCurlLibPath))
                 {
-                    _xCurlLibPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
-                                                 GdkVersion, 
-                                                 @"GRDK\ExtensionLibraries\Xbox.XCurl.API\Redist\CommonConfiguration\neutral", 
-                                                 XCurlLibName);
+                    _xCurlLibPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
+                                                 GdkVersion), 
+                                                 Path.Combine(@"GRDK\ExtensionLibraries\Xbox.XCurl.API\Redist\CommonConfiguration\neutral", 
+                                                 XCurlLibName));
                 }
 
                 return _xCurlLibPath;
