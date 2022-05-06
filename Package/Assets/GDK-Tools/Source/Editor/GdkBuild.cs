@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.GameCore.Tools;
 using Microsoft.GameCore.Utilities;
 using UnityEditor;
+
 #if UNITY_2018_4_OR_NEWER
 using UnityEditor.Build.Reporting;
 #endif
@@ -32,7 +33,7 @@ public static class GdkBuild
     private const string Win32OutputDirectory = "Win32";
     private const string GameCorePlatformDefine = "MICROSOFT_GAME_CORE";
 
-    internal static bool Build(bool buildOnly, bool createPackageForStoreUpload)
+    internal static bool Build(bool buildOnly, bool createPackageForStoreUpload, BuildOptions compressionMethod)
     {
         bool succeeded = ChooseOutputFolder();
         if (succeeded)
@@ -41,7 +42,7 @@ public static class GdkBuild
         }
         if (succeeded)
         {
-            succeeded = BuildWin32(createPackageForStoreUpload);
+            succeeded = BuildWin32(createPackageForStoreUpload, compressionMethod);
         }
         if (succeeded)
         {
@@ -223,7 +224,7 @@ public static class GdkBuild
         return true;
     }
 
-    internal static bool BuildWin32(bool createPackageForStoreUpload)
+    internal static bool BuildWin32(bool createPackageForStoreUpload, BuildOptions compressionMethod)
     {
         EditorBuildSettingsScene[] buildScenes = EditorBuildSettings.scenes;
         if (buildScenes.Count() <= 0)
@@ -251,7 +252,7 @@ public static class GdkBuild
             scenes = scenePaths.ToArray(),
             locationPathName = buildWin32OutputFolderPath + "/" + PlayerSettings.productName + ".exe",
             target = BuildTarget.StandaloneWindows64,
-            options = ImportWin32BuildSettings(createPackageForStoreUpload)
+            options = ImportWin32BuildSettings(createPackageForStoreUpload, compressionMethod)
         };
 
 #if UNITY_2018_4_OR_NEWER
@@ -292,9 +293,9 @@ public static class GdkBuild
         return true;
     }
 
-    private static BuildOptions ImportWin32BuildSettings(bool createPackageForStoreUpload)
+    private static BuildOptions ImportWin32BuildSettings(bool createPackageForStoreUpload, BuildOptions compressionMethod)
     {
-        BuildOptions buildOptions = BuildOptions.None;
+        BuildOptions buildOptions = compressionMethod;
 
         if (EditorUserBuildSettings.development && !createPackageForStoreUpload)
         {
