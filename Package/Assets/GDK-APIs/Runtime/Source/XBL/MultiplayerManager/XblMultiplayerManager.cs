@@ -167,6 +167,13 @@ namespace XGamingRuntime
                     new SizeT(xuids.Length));
             }
 
+            /// <summary>
+            /// Deprecated
+            /// </summary>
+            /// <param name="argsHandle"></param>
+            /// <param name="registrationState"></param>
+            /// <param name="registrationReason"></param>
+            /// <returns></returns>
             public static Int32 XblMultiplayerEventArgsTournamentRegistrationStateChanged(
                 XblMultiplayerEventArgsHandle argsHandle,
                 out XblTournamentRegistrationState registrationState,
@@ -232,6 +239,12 @@ namespace XGamingRuntime
                 return XblInterop.XblMultiplayerEventArgsXuid(argsHandle.InteropHandle, out xuid);
             }
 
+            /// <summary>
+            /// Deprecated
+            /// </summary>
+            /// <param name="argsHandle"></param>
+            /// <param name="startTime"></param>
+            /// <returns></returns>
             public static Int32 XblMultiplayerEventArgsTournamentGameSessionReady(XblMultiplayerEventArgsHandle argsHandle, out DateTime startTime)
             {
                 startTime = default(DateTime);

@@ -133,6 +133,10 @@ namespace XGamingRuntime
                 return XblInterop.XblMultiplayerManagerLobbySessionRemoveLocalUser(user.InteropHandle);
             }
 
+            /// <summary>
+            /// Deprecated
+            /// </summary>
+            /// <returns></returns>
             public static XblTournamentTeamResult XblMultiplayerManagerLobbySessionLastTournamentTeamResult()
             {
                 unsafe

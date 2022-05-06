@@ -39,7 +39,13 @@ namespace XGamingRuntime
         public UInt64 MemberInactiveTimeout { get; private set; }
         public UInt64 MemberReadyTimeout { get; private set; }
         public UInt64 SessionEmptyTimeout { get; private set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public UInt64 ArbitrationTimeout { get; private set; }
+        /// <summary>
+        /// Deprecated
+        /// </summary>
         public UInt64 ForfeitTimeout { get; private set; }
         public bool EnableMetricsLatency { get; private set; }
         public bool EnableMetricsBandwidthDown { get; private set; }
