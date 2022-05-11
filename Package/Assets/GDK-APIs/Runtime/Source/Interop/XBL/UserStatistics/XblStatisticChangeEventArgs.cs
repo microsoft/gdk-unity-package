@@ -11,11 +11,11 @@ namespace XGamingRuntime.Interop
     // } XblStatisticChangeEventArgs;
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblStatisticChangeEventArgs
+    internal struct XblStatisticChangeEventArgsInternal
     {
         internal readonly UInt64 xboxUserId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = XblInterop.XBL_SCID_LENGTH)]
         internal readonly byte[] serviceConfigurationId;
-        internal readonly XblStatistic latestStatistic;
+        internal readonly XblStatisticInternal latestStatistic;
     }
 }

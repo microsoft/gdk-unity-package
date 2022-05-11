@@ -7,7 +7,7 @@ namespace XGamingRuntime
 {
     public class XblServiceConfigurationStatistic
     {
-        internal XblServiceConfigurationStatistic(Interop.XblServiceConfigurationStatistic interopStatistic)
+        internal XblServiceConfigurationStatistic(Interop.XblServiceConfigurationStatisticInternal interopStatistic)
         {
             this.ServiceConfigurationId = Interop.Converters.ByteArrayToString(interopStatistic.serviceConfigurationId);
             this.Statistics = interopStatistic.GetStatistics(s =>new XblStatistic(s));

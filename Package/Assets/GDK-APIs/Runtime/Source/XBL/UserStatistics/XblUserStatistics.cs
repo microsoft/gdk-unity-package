@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
@@ -8,6 +7,14 @@ namespace XGamingRuntime
     public delegate void XblUserStatisticsGetSingleUserStatisticsCompleted(Int32 hresult, XblUserStatisticsResult result);
     public delegate void XblUserStatisticsGetMultipleUserStatisticsCompleted(Int32 hresult, XblUserStatisticsResult[] results);
     public delegate void XblUserStatisticsGetMultipleUserStatisticsForMultipleServiceConfigurationsCompleted(Int32 hresult, XblUserStatisticsResult[] results);
+    
+    public struct XblStatisticChangeEventArgs
+    {
+        public ulong xboxUserId;
+        public string serviceConfigurationId;
+        public XblStatistic latestStatistic;
+    }
+    public delegate void XblStatisticChangedCallback(XblStatisticChangeEventArgs statisticChangeEventArgs);
 
     public partial class SDK
     {
@@ -53,7 +60,7 @@ namespace XGamingRuntime
                             return;
                         }
 
-                        XblUserStatisticsResult result = Converters.PtrToClass<XblUserStatisticsResult, Interop.XblUserStatisticsResult>(ptrToBuffer, r =>new XblUserStatisticsResult(r));
+                        XblUserStatisticsResult result = Converters.PtrToClass<XblUserStatisticsResult, Interop.XblUserStatisticsResultInternal>(ptrToBuffer, r =>new XblUserStatisticsResult(r));
                         completionRoutine(hr, result);
                     }
                 });
@@ -111,7 +118,7 @@ namespace XGamingRuntime
                             return;
                         }
 
-                        XblUserStatisticsResult result = Converters.PtrToClass<XblUserStatisticsResult, Interop.XblUserStatisticsResult>(ptrToBuffer, r =>new XblUserStatisticsResult(r));
+                        XblUserStatisticsResult result = Converters.PtrToClass<XblUserStatisticsResult, Interop.XblUserStatisticsResultInternal>(ptrToBuffer, r =>new XblUserStatisticsResult(r));
                         completionRoutine(hr, result);
                     }
                 });
@@ -174,7 +181,7 @@ namespace XGamingRuntime
                             return;
                         }
 
-                        XblUserStatisticsResult[] result = Converters.PtrToClassArray(ptrToBuffer, resultsCount, (Interop.XblUserStatisticsResult r) =>new XblUserStatisticsResult(r));
+                        XblUserStatisticsResult[] result = Converters.PtrToClassArray(ptrToBuffer, resultsCount, (Interop.XblUserStatisticsResultInternal r) =>new XblUserStatisticsResult(r));
                         completionRoutine(hr, result);
                     }
                 });
@@ -237,7 +244,7 @@ namespace XGamingRuntime
                             return;
                         }
 
-                        XblUserStatisticsResult[] result = Converters.PtrToClassArray(results, resultsCount, (Interop.XblUserStatisticsResult r) =>new XblUserStatisticsResult(r));
+                        XblUserStatisticsResult[] result = Converters.PtrToClassArray(results, resultsCount, (Interop.XblUserStatisticsResultInternal r) =>new XblUserStatisticsResult(r));
                         completionRoutine(hr, result);
                     }
                 });
@@ -247,7 +254,7 @@ namespace XGamingRuntime
                     SizeT requestedStatisticsCount;
                     IntPtr interopRequestedStatistics = Converters.ClassArrayToPtr(
                         requestedServiceConfigurationStatisticsCollection,
-                        (request, disposables) =>new Interop.XblRequestedStatistics(request, disposables),
+                        (request, disposables) =>new Interop.XblRequestedStatisticsInternal(request, disposables),
                         disposableCollection,
                         out requestedStatisticsCount);
 
@@ -262,6 +269,162 @@ namespace XGamingRuntime
                     if (HR.FAILED(hresult))
                     {
                         completionRoutine(hresult, default(XblUserStatisticsResult[]));
+                    }
+                }
+            }
+
+            public static int XblUserStatisticsAddStatisticChangedHandler(
+                XblContextHandle xblContextHandle,
+                XblStatisticChangedCallback eventCallback)
+            {
+                int callbackFunctionId;
+
+                unsafe
+                {
+                    var context = _userStatisticsChangeCallbackManager.GetUniqueContext();
+                    callbackFunctionId = UserStatistics.XblUserStatisticsAddStatisticChangedHandler(
+                        xblContextHandle.InteropHandle.handle,
+                        UserStatisticsChangeCallbackManager.InteropPInvokeCallback,
+                        context.ToPointer());
+
+                    if (callbackFunctionId != 0)
+                    {
+                        _userStatisticsChangeCallbackManager.AddCallbackForId(
+                            callbackFunctionId, context, eventCallback);
+                    }
+                }
+
+                return callbackFunctionId;
+            }
+
+            public static void XblUserStatisticsRemoveStatisticChangedHandler(
+                XblContextHandle xblContextHandle,
+                int callbackFunctionId)
+            {
+                unsafe
+                {
+                    UserStatistics.XblUserStatisticsRemoveStatisticChangedHandler(
+                        xblContextHandle.InteropHandle.handle,
+                        callbackFunctionId);
+
+                    _userStatisticsChangeCallbackManager.RemoveCallbackForId(
+                        callbackFunctionId);
+                }
+            }
+
+            public static void XblUserStatisticsTrackStatistics(
+                XblContextHandle xblContextHandle,
+                ulong[] xuids,
+                string serviceConfigurationId,
+                string[] statisticNames)
+            {
+                unsafe
+                {
+                    var scidLen = Converters.GetSizeRequiredToEncodeStringToUTF8(serviceConfigurationId);
+                    sbyte[] scidAsBytes = new sbyte[scidLen];
+
+                    fixed (ulong* xuidsPtr = &xuids[0])
+                    fixed (sbyte* scidPtr = &scidAsBytes[0])
+                    {
+                        using (DisposableBuffer statisticNamesBuffer = Converters.StringArrayToUTF8StringArray(statisticNames))
+                        {
+                            Converters.StringToNullTerminatedUTF8FixedPointer(serviceConfigurationId, (byte*)scidPtr, serviceConfigurationId.Length);
+
+
+                            UserStatistics.XblUserStatisticsTrackStatistics(xblContextHandle.InteropHandle.handle,
+                                                                            xuidsPtr,
+                                                                            new UIntPtr((uint)xuids.Length),
+                                                                            scidPtr,
+                                                                            (sbyte**)statisticNamesBuffer.IntPtr,
+                                                                            new UIntPtr((uint)statisticNames.Length));
+                        }
+                    }
+                }
+            }
+
+            public static void XblUserStatisticsStopTrackingStatistics(
+                XblContextHandle xblContextHandle,
+                ulong[] xuids,
+                string serviceConfigurationId,
+                string[] statisticNames)
+            {
+                unsafe
+                {
+                    var scidLen = Converters.GetSizeRequiredToEncodeStringToUTF8(serviceConfigurationId);
+                    sbyte[] scidAsBytes = new sbyte[scidLen];
+
+                    fixed (ulong* xuidsPtr = &xuids[0])
+                    fixed (sbyte* scidPtr = &scidAsBytes[0])
+                    {
+                        using (DisposableBuffer statisticNamesBuffer = Converters.StringArrayToUTF8StringArray(statisticNames))
+                        {
+                            Converters.StringToNullTerminatedUTF8FixedPointer(serviceConfigurationId, (byte*)scidPtr, serviceConfigurationId.Length);
+
+                            UserStatistics.XblUserStatisticsStopTrackingStatistics(xblContextHandle.InteropHandle.handle,
+                                                                                   xuidsPtr,
+                                                                                   new UIntPtr((uint)xuids.Length),
+                                                                                   scidPtr,
+                                                                                   (sbyte**)statisticNamesBuffer.IntPtr,
+                                                                                   new UIntPtr((uint)statisticNames.Length));
+                        }
+                    }
+                }
+            }
+
+            public static void XblUserStatisticsStopTrackingUsers(
+                XblContextHandle xblContextHandle,
+                ulong[] xuids)
+            {
+                unsafe
+                {
+                    fixed (ulong* xuidsPtr = &xuids[0])
+                    {
+                        UserStatistics.XblUserStatisticsStopTrackingUsers(xblContextHandle.InteropHandle.handle, xuidsPtr, new UIntPtr((uint)xuids.Length));
+                    }
+                }
+            }
+
+            private static UserStatisticsChangeCallbackManager _userStatisticsChangeCallbackManager =
+                new UserStatisticsChangeCallbackManager();
+
+            private class UserStatisticsChangeCallbackManager :
+                InteropCallbackManager<XblStatisticChangedCallback>
+            {
+                [MonoPInvokeCallback]
+                internal static unsafe void InteropPInvokeCallback(
+                    Interop.XblStatisticChangeEventArgs eventArgs,
+                    void* context)
+                {
+                    if (!_userStatisticsChangeCallbackManager._contextToFunctionId.ContainsKey(new IntPtr(context)))
+                    {
+                        return;
+                    }
+
+                    var functionId = _userStatisticsChangeCallbackManager._contextToFunctionId[new IntPtr(context)];
+                    _userStatisticsChangeCallbackManager.IssueEventCallback(functionId, eventArgs);
+                }
+
+                private unsafe void IssueEventCallback(
+                    int functionId,
+                    Interop.XblStatisticChangeEventArgs eventArgs)
+                {
+                    if (!_functionIdToHandler.ContainsKey(functionId))
+                    {
+                        return;
+                    }
+
+                    var eventHandler = _functionIdToHandler[functionId];
+
+                    var callbackEventArgs = new XblStatisticChangeEventArgs
+                    {
+                        latestStatistic = new XblStatistic(eventArgs.latestStatistic),
+                        serviceConfigurationId = Converters.NullTerminatedBytePointerToString((byte*)eventArgs.serviceConfigurationId),
+                        xboxUserId = eventArgs.xboxUserId
+                    };
+
+                    if (eventHandler.Callback != null)
+                    {
+                        eventHandler.Callback.Invoke(callbackEventArgs);
                     }
                 }
             }

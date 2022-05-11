@@ -12,7 +12,7 @@ namespace XGamingRuntime
 
         public static Int32 Create(string serviceConfigurationId, string[] statistics, out XblRequestedStatistics requestedStatistics)
         {
-            if (!Interop.XblRequestedStatistics.ValidateFields(serviceConfigurationId))
+            if (!Interop.XblRequestedStatisticsInternal.ValidateFields(serviceConfigurationId))
             {
                 requestedStatistics = default(XblRequestedStatistics);
                 return Interop.HR.E_INVALIDARG;

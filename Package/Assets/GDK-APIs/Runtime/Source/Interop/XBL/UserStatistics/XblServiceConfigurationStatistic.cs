@@ -11,9 +11,9 @@ namespace XGamingRuntime.Interop
     // } XblServiceConfigurationStatistic;
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblServiceConfigurationStatistic
+    internal struct XblServiceConfigurationStatisticInternal
     {
-        internal T[] GetStatistics<T>(Func<XblStatistic, T> ctor) { return Converters.PtrToClassArray(this.statistics, this.statisticsCount, ctor); }
+        internal T[] GetStatistics<T>(Func<XblStatisticInternal, T> ctor) { return Converters.PtrToClassArray(this.statistics, this.statisticsCount, ctor); }
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = XblInterop.XBL_SCID_LENGTH)]
         internal readonly byte[] serviceConfigurationId;

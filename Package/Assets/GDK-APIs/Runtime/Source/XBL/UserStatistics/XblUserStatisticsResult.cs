@@ -7,7 +7,7 @@ namespace XGamingRuntime
 {
     public class XblUserStatisticsResult
     {
-        internal XblUserStatisticsResult(Interop.XblUserStatisticsResult interopResult)
+        internal XblUserStatisticsResult(Interop.XblUserStatisticsResultInternal interopResult)
         {
             this.XboxUserId = interopResult.xboxUserId;
             this.ServiceConfigStatistics = interopResult.GetServiceConfigStatistics(scs =>new XblServiceConfigurationStatistic(scs));
