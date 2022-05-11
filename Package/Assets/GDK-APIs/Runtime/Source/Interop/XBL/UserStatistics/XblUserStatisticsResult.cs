@@ -11,9 +11,9 @@ namespace XGamingRuntime.Interop
     // } XblUserStatisticsResult;
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblUserStatisticsResult
+    internal struct XblUserStatisticsResultInternal
     {
-        internal T[] GetServiceConfigStatistics<T>(Func<XblServiceConfigurationStatistic, T> ctor)
+        internal T[] GetServiceConfigStatistics<T>(Func<XblServiceConfigurationStatisticInternal, T> ctor)
         {
             return Converters.PtrToClassArray(this.serviceConfigStatistics, this.serviceConfigStatisticsCount, ctor);
         }

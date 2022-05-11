@@ -11,14 +11,14 @@ namespace XGamingRuntime.Interop
     // } XblRequestedStatistics;
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct XblRequestedStatistics
+    internal struct XblRequestedStatisticsInternal
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = XblInterop.XBL_SCID_LENGTH)]
         internal readonly byte[] serviceConfigurationId;
         private readonly IntPtr statistics;
         private readonly UInt32 statisticsCount;
 
-        internal XblRequestedStatistics(XGamingRuntime.XblRequestedStatistics requestedStatistics, DisposableCollection disposableCollection)
+        internal XblRequestedStatisticsInternal(XGamingRuntime.XblRequestedStatistics requestedStatistics, DisposableCollection disposableCollection)
         {
             this.serviceConfigurationId = Converters.StringToNullTerminatedUTF8ByteArray(requestedStatistics.ServiceConfigurationId, XblInterop.XBL_SCID_LENGTH);
             SizeT statisticsCount;
