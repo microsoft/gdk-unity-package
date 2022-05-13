@@ -2,9 +2,9 @@
 // Licensed under the MIT license.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Microsoft.Xbox;
 
 #if UNITY_GAMECORE
@@ -18,9 +18,11 @@ public class StoreSampleLogic : MonoBehaviour {
 
     public GameObject inGamePurchasableItemPrefab;
     public Transform canvasTransform;
+    public Text gameDlcName;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
     }
 
     public void ShowDLC()
@@ -34,6 +36,7 @@ public class StoreSampleLogic : MonoBehaviour {
 #if MICROSOFT_GAME_CORE || UNITY_GAMECORE
     public void GetAssociatedProductsAsyncCallback(Int32 hresult, List<XStoreProduct> associatedProducts)
     {
+        gameDlcName.text = "Hresult: " + hresult.ToString("X");
         for (int i = 0; i < associatedProducts.Count; i++)
         {
             XStoreProduct product = associatedProducts[i];
