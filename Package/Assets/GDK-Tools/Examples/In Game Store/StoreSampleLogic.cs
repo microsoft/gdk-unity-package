@@ -18,7 +18,7 @@ public class StoreSampleLogic : MonoBehaviour {
 
     public GameObject inGamePurchasableItemPrefab;
     public Transform canvasTransform;
-    public Text gameDlcName;
+    public Text hresultText;
 
     // Use this for initialization
     void Start()
@@ -36,7 +36,7 @@ public class StoreSampleLogic : MonoBehaviour {
 #if MICROSOFT_GAME_CORE || UNITY_GAMECORE
     public void GetAssociatedProductsAsyncCallback(Int32 hresult, List<XStoreProduct> associatedProducts)
     {
-        gameDlcName.text = "Hresult: " + hresult.ToString("X");
+        hresultText.text = "Hresult: " + hresult.ToString("X");
         for (int i = 0; i < associatedProducts.Count; i++)
         {
             XStoreProduct product = associatedProducts[i];
