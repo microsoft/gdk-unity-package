@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.GameCore.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Microsoft.Xbox
 {
@@ -53,6 +54,11 @@ namespace Microsoft.Xbox
 
         [Tooltip("Will automatically sign the user in after XGameRuntime initialization if checked")]
         public bool signInOnStart = true;
+
+        /// <summary>
+        /// Used to display gamertag in Sign-In sample
+        /// </summary>
+        public Text gamertagLabel;
 
         private static Gdk _xboxHelpers;
         private static bool _initialized;
@@ -109,7 +115,7 @@ namespace Microsoft.Xbox
 #pragma warning disable 0067 // Called when MICROSOFT_GAME_CORE is defined
         public event OnGameSaveLoadedHandler OnGameSaveLoaded;
 #pragma warning restore 0067
-                
+
         public delegate void OnErrorHandler(object sender, ErrorEventArgs e);
         public event OnErrorHandler OnError;
 
@@ -119,7 +125,7 @@ namespace Microsoft.Xbox
             if (groups.Length != 5) return false;
 
             if (!groups.Select(str => str.Length).SequenceEqual(new[] { 8, 4, 4, 4, 12 })) return false;
-            
+
             if (!guid.All(c => "1234567890abcdef-".Contains(c))) return false;
 
             return true;
@@ -130,7 +136,7 @@ namespace Microsoft.Xbox
             if (scid == _lastScid) return;
 
             // Ensure guid formatted with only dashes
-            if (scid.Length != 36 || 
+            if (scid.Length != 36 ||
                 !ValidateGuid(scid))
             {
                 Debug.LogError("Invalid SCID given");
@@ -195,13 +201,13 @@ namespace Microsoft.Xbox
             int hresult = SDK.XStoreCreateContext(out _storeContext);
             if (Succeeded(hresult, "Create store context"))
             {
-               SDK.XStoreQueryGameAndDlcPackageUpdatesAsync(_storeContext, HandleQueryForUpdatesComplete);
+                SDK.XStoreQueryGameAndDlcPackageUpdatesAsync(_storeContext, HandleQueryForUpdatesComplete);
             }
 
             _gameSaveHelper = new XGameSaveWrapper();
             if (signInOnStart)
             {
-               SignIn();
+                SignIn();
             }
 #endif
         }
@@ -284,11 +290,17 @@ namespace Microsoft.Xbox
 
         private void CompletePostSignInInitialization()
         {
+            string gamertag = string.Empty;
+            if (gamertagLabel != null &&
+                Succeeded(SDK.XUserGetGamertag(_userHandle, XUserGamertagComponent.UniqueModern, out gamertag), "Get gamertag."))
+            {
+                gamertagLabel.text = gamertag;
+            }
             Succeeded(SDK.XBL.XblInitialize(
                 scid
                 ), "Initialize Xbox Live");
             Succeeded(SDK.XBL.XblContextCreateHandle(
-                    _userHandle, 
+                    _userHandle,
                     out _xblContextHandle
                 ), "Create Xbox Live context");
             InitializeGameSaves();
@@ -403,9 +415,9 @@ namespace Microsoft.Xbox
                     null,
                     null,
                     (Int32 hresult) =>
-            {
-                callback(hresult, storeProduct);
-            });
+                    {
+                        callback(hresult, storeProduct);
+                    });
         }
 
         private void HandleQueryForUpdatesComplete(int hresult, XStorePackageUpdate[] packageUpdates)
@@ -413,7 +425,7 @@ namespace Microsoft.Xbox
             List<string> _packageIdsToUpdate = new List<string>();
             if (hresult >= 0)
             {
-                if (packageUpdates != null && 
+                if (packageUpdates != null &&
                     packageUpdates.Length > 0)
                 {
                     foreach (XStorePackageUpdate packageUpdate in packageUpdates)
