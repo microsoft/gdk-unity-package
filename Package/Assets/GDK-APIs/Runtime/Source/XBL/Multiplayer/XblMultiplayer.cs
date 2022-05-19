@@ -8,6 +8,7 @@ namespace XGamingRuntime
     {
         public partial class XBL
         {
+            public delegate void XblMultiplayerQuerySessionsResult(int hresult, XblMultiplayerSessionQueryResult[] sessionsQueryResult);
             public delegate void XblMultiplayerWriteSessionHandleResult(Int32 hresult, XblMultiplayerSessionHandle handle);
             public delegate void XblMultiplayerCreateSearchHandleResult(Int32 hresult, XblMultiplayerSearchHandle handle);
             public delegate void XblMultiplayerDeleteSearchHandleResult(Int32 hresult);
@@ -38,6 +39,145 @@ namespace XGamingRuntime
                 if (handle != null)
                 {
                     XblInterop.XblMultiplayerSessionCloseHandle(handle.InteropHandle);
+                }
+            }
+
+            public static int XblMultiplayerQuerySessionsAsync(XblContextHandle xblContext, XblMultiplayerSessionQuery sessionQuery, XblMultiplayerQuerySessionsResult completionRoutine)
+            {
+                if (xblContext == null || sessionQuery == null) return HR.E_INVALIDARG;
+
+                unsafe
+                {
+                    XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
+                    {
+                        Interop.XblMultiplayerSessionQueryResult[] interopResult;
+                        SizeT sessionCount = new SizeT(0);
+                        int hresult = Multiplayer.XblMultiplayerQuerySessionsResultCount(block, &sessionCount);
+
+                        if (HR.SUCCEEDED(hresult))
+                        {
+                            interopResult = new Interop.XblMultiplayerSessionQueryResult[sessionCount.ToInt32()];
+                            fixed (Interop.XblMultiplayerSessionQueryResult* resultPtr = &interopResult[0])
+                            {
+                                hresult = Multiplayer.XblMultiplayerQuerySessionsResult(block, sessionCount, &resultPtr[0]);
+                                
+                                if (HR.SUCCEEDED(hresult))
+                                {
+                                    var result = Array.ConvertAll(interopResult, r => new XblMultiplayerSessionQueryResult(r));
+                                    completionRoutine(hresult, result);
+                                    return;
+                                }
+                            }
+                        }
+
+                        completionRoutine(hresult, new XblMultiplayerSessionQueryResult[0]);
+                    });
+
+                    int keywordLen = Converters.GetSizeRequiredToEncodeStringToUTF8(sessionQuery.KeywordFilter);
+                    var keywordBuffer = new sbyte[keywordLen];
+
+                    fixed (sbyte* keywordPtr = &keywordBuffer[0])
+                    fixed (ulong* interopFilters = &sessionQuery.XuidFilters[0])
+                    {
+                        var interopQuery = new Interop.XblMultiplayerSessionQuery
+                        {
+                            MaxItems = sessionQuery.MaxItems,
+                            IncludePrivateSessions = sessionQuery.IncludePrivateSessions,
+                            IncludeReservations = sessionQuery.IncludeReservations,
+                            IncludeInactiveSessions = sessionQuery.IncludeInactiveSessions,
+                            XuidFilters = interopFilters,
+                            XuidFiltersCount = new SizeT(sessionQuery.XuidFiltersCount),
+                            KeywordFilter = keywordPtr,
+                            VisibilityFilter = sessionQuery.VisibilityFilter,
+                            ContractVersionFilter = sessionQuery.ContractVersionFilter
+                        };
+
+                        Converters.StringToNullTerminatedUTF8FixedPointer(sessionQuery.Scid, (byte*)interopQuery.Scid, 40);
+                        Converters.StringToNullTerminatedUTF8FixedPointer(sessionQuery.KeywordFilter, (byte*)interopQuery.KeywordFilter, keywordLen);
+                        Converters.StringToNullTerminatedUTF8FixedPointer(sessionQuery.SessionTemplateNameFilter, (byte*)interopQuery.SessionTemplateNameFilter, 100);
+
+                        int hr = Multiplayer.XblMultiplayerQuerySessionsAsync(xblContext.InteropHandle.handle, &interopQuery, asyncBlock);
+
+                        if (HR.FAILED(hr))
+                        {
+                            AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                        }
+
+                        return hr;
+                    }
+                }
+            }
+
+            public static int XblMultiplayerSessionCurrentUserSetEncounters(XblMultiplayerSessionHandle handle, string[] encounters)
+            {
+                if (handle == null || encounters == null) return HR.E_INVALIDARG;
+
+                unsafe
+                {
+                    using (var interopEncounters = Converters.StringArrayToUTF8StringArray(encounters))
+                    {
+                        return Multiplayer.XblMultiplayerSessionCurrentUserSetEncounters(handle.InteropHandle.handle, (sbyte**)interopEncounters.IntPtr, new SizeT(encounters.Length));
+                    }
+                }
+            }
+
+            public static int XblMultiplayerSessionCurrentUserSetGroups(XblMultiplayerSessionHandle handle, string[] groups)
+            {
+                if (handle == null || groups == null) return HR.E_INVALIDARG;
+
+                unsafe
+                {
+                    using (var interopGroups = Converters.StringArrayToUTF8StringArray(groups))
+                    {
+                        return Multiplayer.XblMultiplayerSessionCurrentUserSetGroups(handle.InteropHandle.handle, (sbyte**)interopGroups.IntPtr, new SizeT(groups.Length));
+                    }
+                }
+            }
+
+            public static int XblMultiplayerSessionPropertiesSetTurnCollection(XblMultiplayerSessionHandle handle, uint[] turnCollectionMemberIds)
+            {
+                if (handle == null || turnCollectionMemberIds == null) return HR.E_INVALIDARG;
+
+                unsafe
+                {
+                    fixed (uint* idsPtr = &turnCollectionMemberIds[0])
+                    {
+                        return Multiplayer.XblMultiplayerSessionPropertiesSetTurnCollection(handle.InteropHandle.handle, idsPtr, new SizeT(turnCollectionMemberIds.Length));
+                    }
+                }
+            }
+
+            public static int XblMultiplayerSessionReferenceToUriPath(XblMultiplayerSessionReference sessionReference, out string sessionReferenceUri)
+            {
+                sessionReferenceUri = null;
+                if (sessionReference == null) return HR.E_INVALIDARG;
+
+                unsafe
+                {
+                    var interopReference = new Interop.XblMultiplayerSessionReference(sessionReference);
+                    var interopUri = default(Interop.XblMultiplayerSessionReferenceUri);
+
+                    int hresult = Multiplayer.XblMultiplayerSessionReferenceToUriPath(&interopReference, &interopUri);
+
+                    if (HR.SUCCEEDED(hresult))
+                    {
+                        sessionReferenceUri = Converters.BytePointerToString((byte*)interopUri.value, 284);
+                    }
+
+                    return hresult;
+                }
+            }
+
+            public static int XblMultiplayerSessionSetServerConnectionStringCandidates(XblMultiplayerSessionHandle handle, string[] serverConnectionStringCandidates)
+            {
+                if (handle == null || serverConnectionStringCandidates == null) return HR.E_INVALIDARG;
+
+                unsafe
+                {
+                    using (var interopCandidates = Converters.StringArrayToUTF8StringArray(serverConnectionStringCandidates))
+                    {
+                        return Multiplayer.XblMultiplayerSessionCurrentUserSetGroups(handle.InteropHandle.handle, (sbyte**)interopCandidates.IntPtr, new SizeT(serverConnectionStringCandidates.Length));
+                    }
                 }
             }
 
