@@ -160,10 +160,6 @@ namespace Microsoft.GameCore.Utilities
                 !File.Exists(xsapiPath) || 
                 (requiresXCurl && !File.Exists(xCurlPath)))
             {
-
-                Debug.LogWarning("xsapi: " + xsapiPath);
-                Debug.LogWarning("xcurl: " + xCurlPath);
-                Debug.LogWarning("requires: " + requiresXCurl);
                 if (!File.Exists(XsapiLibPath))
                 {
                     Debug.LogError("Could not find the GDK DLLs. Make sure you have the Microsoft GDK installed.");

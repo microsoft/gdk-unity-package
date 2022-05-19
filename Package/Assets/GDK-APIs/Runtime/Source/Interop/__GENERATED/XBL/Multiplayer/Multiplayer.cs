@@ -5,6 +5,10 @@ namespace XGamingRuntime.Interop
 {
     public static unsafe partial class Multiplayer
     {
+        [DllImport("Microsoft.Xbox.Services.141.GDK.C.Thunks", CallingConvention = CallingConvention.StdCall, ExactSpelling = true)]
+        [return: NativeTypeName("HRESULT")]
+        public static extern int XblMultiplayerSessionReferenceToUriPath([NativeTypeName("const XblMultiplayerSessionReference *")] XblMultiplayerSessionReference* sessionReference, XblMultiplayerSessionReferenceUri* sessionReferenceUri);
+
         [DllImport("Microsoft.Xbox.Services.141.GDK.C.Thunks", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         [return: NativeTypeName("HRESULT")]
         public static extern int XblMultiplayerSessionDuplicateHandle([NativeTypeName("XblMultiplayerSessionHandle")] IntPtr handle, [NativeTypeName("XblMultiplayerSessionHandle *")] IntPtr* duplicatedHandle);
