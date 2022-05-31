@@ -16,9 +16,11 @@ The GDK Unity package supports Unity 2017.4 and newer.
 
 1. Make sure you have the [GDK](https://aka.ms/gdk) installed.
 
-2. Download the Unity package that matches the installed GDK version from the [releases](https://github.com/microsoft/gdk-unity-package/releases) tab. 
+2. Download the Unity package from the [releases](https://github.com/microsoft/gdk-unity-package/releases) tab. 
 
 3. Import the Unity package into your Unity project. 
+
+4. Follow our [Unity E2E guide](https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/get-started-with-pc-dev/get-started-with-unity-pc/gdk-unity-end-to-end-guide) for info on everything from setup to shipping.
 
 ## What's inside
 
