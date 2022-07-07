@@ -155,6 +155,31 @@ namespace Microsoft.GameCore.Tools
             return succeeded;
         }
 
+        internal static bool StartCmdProcessAsAdmin(string arguments)
+        {
+            var processStartInfo = new ProcessStartInfo("cmd.exe");
+            processStartInfo.Arguments = arguments;
+            //processStartInfo.CreateNoWindow = true;
+            processStartInfo.UseShellExecute = true;
+            processStartInfo.RedirectStandardOutput = false;
+            processStartInfo.RedirectStandardError = false;
+            processStartInfo.Verb = "runas";
+
+            try
+            {
+                var process = Process.Start(processStartInfo);
+                process.WaitForExit();
+                process.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
+                return false;
+            }
+
+            return true;
+        }
+
         internal static void SyncScidToGameConfig()
         {
             string configScid = string.Empty;

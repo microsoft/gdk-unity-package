@@ -24,7 +24,6 @@ namespace Microsoft.GameCore.Tools
         {
             if (state == PlayModeStateChange.ExitingEditMode)
             {
-                Debug.LogError("PullGdkDlls state: " + state);
                 GdkUtilities.PullGdkDlls();
             }
         }
@@ -67,7 +66,7 @@ namespace Microsoft.GameCore.Tools
                 GdkEditorHelpers.SyncScidToGameConfig();
             }
         }
-        
+
         [MenuItem("GDK/PC/Switch sandbox")]
         private static void SwitchToTestSandbox()
         {
@@ -77,6 +76,12 @@ namespace Microsoft.GameCore.Tools
             GUIContent titleContent = new GUIContent("GDK - Switch PC Sandbox");
             window.titleContent = titleContent;
             window.Show();
+        }
+
+        [MenuItem("GDK/PC/Update Editor Game Config")]
+        private static void CopyConfigToEditorLocation()
+        {
+            GdkEditorHelpers.StartCmdProcessAsAdmin($"/C copy \"{GdkUtilities.GameConfigPath}\" \"{Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)}\"");
         }
 
         [MenuItem("GDK/PC/Build and Run")]

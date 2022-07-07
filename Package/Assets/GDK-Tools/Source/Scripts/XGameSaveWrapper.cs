@@ -15,7 +15,7 @@ namespace Microsoft.Xbox
 {
     public class XGameSaveWrapper
     {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE)
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
         private XUserHandle m_userHandle;
         private XGameSaveProviderHandle m_gameSaveProviderHandle;
 #else
@@ -27,7 +27,7 @@ namespace Microsoft.Xbox
 
         ~XGameSaveWrapper()
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE)
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             SDK.XGameSaveCloseProvider(m_gameSaveProviderHandle);
             SDK.XUserCloseHandle(m_userHandle);
 #endif
@@ -47,11 +47,10 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. InitializeCallback(Int32 hresult)</param>
         public void InitializeAsync(XUserHandle userHandle, string scid, InitializeCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE)
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             m_userHandle = null;
             m_gameSaveProviderHandle = null;
-#endif
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+
             Int32 hr = SDK.XUserDuplicateHandle(userHandle, out m_userHandle);
             if (HR.FAILED(hr))
             {
@@ -82,7 +81,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. GetQuotaCallback(Int32 hresult, Int64 remainingQuota)</param>
         public void GetQuotaAsync(GetQuotaCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             SDK.XGameSaveGetRemainingQuotaAsync(m_gameSaveProviderHandle, new XGameSaveGetRemainingQuotaCompleted(callback));
 #else
             callback(0, 0);
@@ -104,7 +103,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. QueryContainersCallback(Int32 hresult, string[] containerNames)</param>
         public void QueryContainers(string containerNamePrefix, QueryContainersCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             XGameSaveContainerInfo[] containerInfos;
             Int32 hr = SDK.XGameSaveEnumerateContainerInfoByName(m_gameSaveProviderHandle, containerNamePrefix, out containerInfos);
 
@@ -138,7 +137,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. QueryBlobsCallback(Int32 hresult, Dictionary<string, UInt32> blobInfos)</param>
         public void QueryContainerBlobs(string containerName, QueryBlobsCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             XGameSaveContainerHandle containerHandle;
             Int32 hr = SDK.XGameSaveCreateContainer(m_gameSaveProviderHandle, containerName, out containerHandle);
             if (HR.FAILED(hr))
@@ -180,7 +179,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. LoadCallback(Int32 hresult, byte[] blobData)</param>
         public void Load(string containerName, string blobName, LoadCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             XGameSaveContainerHandle containerHandle;
             Int32 hr = SDK.XGameSaveCreateContainer(m_gameSaveProviderHandle, containerName, out containerHandle);
             if (HR.FAILED(hr))
@@ -225,7 +224,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. SaveCallback(Int32 hresult)</param>
         public void Save(string containerName, string blobName, byte[] blobData, SaveCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             Dictionary<string, byte[]> blobsToSave = new Dictionary<string, byte[]>();
             blobsToSave.Add(blobName, blobData);
             Update(containerName, blobsToSave, null, new UpdateCallback(callback));
@@ -247,7 +246,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. DeleteCallback(Int32 hresult)</param>
         public void Delete(string containerName, DeleteCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             SDK.XGameSaveDeleteContainerAsync(m_gameSaveProviderHandle, containerName, new XGameSaveDeleteContainerCompleted(callback));
 #else
             callback(0);
@@ -262,7 +261,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. DeleteCallback(Int32 hresult)</param>
         public void Delete(string containerName, string blobName, DeleteCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             Delete(containerName, new string[1] { blobName }, callback);
 #else
             callback(0);
@@ -277,7 +276,7 @@ namespace Microsoft.Xbox
         /// <param name="callback">Callback invoked when the async task completes. DeleteCallback(Int32 hresult)</param>
         public void Delete(string containerName, string[] blobNames, DeleteCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             Update(containerName, null, blobNames, new UpdateCallback(callback));
 #else
             callback(0);
@@ -289,7 +288,7 @@ namespace Microsoft.Xbox
         private delegate void UpdateCallback(Int32 hresult);
         private void Update(string containerName, IDictionary<string, byte[]> blobsToSave, IList<string> blobsToDelete, UpdateCallback callback)
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             XGameSaveContainerHandle containerHandle;
             Int32 hr = SDK.XGameSaveCreateContainer(m_gameSaveProviderHandle, containerName, out containerHandle);
             if (HR.FAILED(hr))
