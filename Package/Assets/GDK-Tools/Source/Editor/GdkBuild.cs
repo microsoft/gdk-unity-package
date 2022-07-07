@@ -8,8 +8,6 @@ using Microsoft.GameCore.Tools;
 using Microsoft.GameCore.Utilities;
 using UnityEditor;
 using UnityEditor.Build;
-using Codice.Client.Common.GameUI;
-using System.Runtime.Remoting.Messaging;
 
 #if UNITY_2018_4_OR_NEWER
 using UnityEditor.Build.Reporting;
