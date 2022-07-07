@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.GameCore.Tools;
 using Microsoft.GameCore.Utilities;
 using UnityEditor;
+using UnityEditor.Build;
 
 #if UNITY_2018_4_OR_NEWER
 using UnityEditor.Build.Reporting;
@@ -449,5 +450,15 @@ public static class GdkBuild
     {
         string arguments = "/c wdapp.exe launch " + aumid;
         return GdkEditorHelpers.StartCmdProcess(arguments);
+    }
+}
+
+public class GdkPostBuild : IPostprocessBuildWithReport
+{
+    public int callbackOrder => 0;
+
+    public void OnPostprocessBuild(BuildReport report)
+    {
+        File.Copy(GdkUtilities.GameConfigPath, Path.Combine(Path.GetDirectoryName(report.summary.outputPath), Path.GetFileName(GdkUtilities.GameConfigPath)));
     }
 }

@@ -103,7 +103,7 @@ namespace Microsoft.Xbox
                     }
                     else
                     {
-                        _LogError("Error: Could not find Xbox prefab. Make sure you have added the Xbox prefab to your scene.");
+                        Debug.LogError("Error: Could not find Xbox prefab. Make sure you have added the Xbox prefab to your scene.");
                     }
                 }
 
@@ -194,6 +194,9 @@ namespace Microsoft.Xbox
 #if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             if (!Succeeded(SDK.XGameRuntimeInitialize(), "Initialize gaming runtime"))
             {
+#if UNITY_EDITOR
+                Debug.LogError("You may need to update your config file for the editor. GDK -> PC -> Update Editor Game Config will copy your current game config to the Unity.exe location to enable GDK features when playing in-editor.");
+#endif
                 return;
             }
 
@@ -393,7 +396,7 @@ namespace Microsoft.Xbox
         {
             if (callback == null)
             {
-                _LogError("Callback cannot be null.");
+                Debug.LogError("Callback cannot be null.");
             }
 
             _associatedProducts = new List<XStoreProduct>();
@@ -454,7 +457,7 @@ namespace Microsoft.Xbox
         // Update is called once per frame
         void Update()
         {
-#if (MICROSOFT_GAME_CORE || UNITY_GAMECORE) && !UNITY_EDITOR
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
             SDK.XTaskQueueDispatch();
 #endif
         }
@@ -480,7 +483,7 @@ namespace Microsoft.Xbox
                     errorMessage = operationFriendlyName + " failed.";
                 }
                 string formattedErrorString = string.Format("{0} Error code: hr=0x{1}", errorMessage, errorCode);
-                _LogError(formattedErrorString);
+                Debug.LogError(formattedErrorString);
                 if (Helpers.OnError != null)
                 {
                     Helpers.OnError(Helpers, new ErrorEventArgs(errorCode, errorMessage));
@@ -488,11 +491,6 @@ namespace Microsoft.Xbox
             }
 
             return succeeded;
-        }
-
-        private static void _LogError(string message)
-        {
-            Debug.Log(message);
         }
     }
 }
