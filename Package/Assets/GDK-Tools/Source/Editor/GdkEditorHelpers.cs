@@ -159,7 +159,6 @@ namespace Microsoft.GameCore.Tools
         {
             var processStartInfo = new ProcessStartInfo("cmd.exe");
             processStartInfo.Arguments = arguments;
-            //processStartInfo.CreateNoWindow = true;
             processStartInfo.UseShellExecute = true;
             processStartInfo.RedirectStandardOutput = false;
             processStartInfo.RedirectStandardError = false;
