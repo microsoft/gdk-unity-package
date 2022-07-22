@@ -453,6 +453,7 @@ public static class GdkBuild
     }
 }
 
+#if UNITY_2018_4_OR_NEWER
 public class GdkPostBuild : IPostprocessBuildWithReport
 {
     public int callbackOrder => 0;
@@ -462,3 +463,14 @@ public class GdkPostBuild : IPostprocessBuildWithReport
         File.Copy(GdkUtilities.GameConfigPath, Path.Combine(Path.GetDirectoryName(report.summary.outputPath), Path.GetFileName(GdkUtilities.GameConfigPath)));
     }
 }
+#else
+public class GdkPostBuild : IPostprocessBuild
+{
+    public int callbackOrder { get { return 0; } }
+
+    public void OnPostprocessBuild(BuildTarget target, string outputPath)
+    {
+        File.Copy(GdkUtilities.GameConfigPath, Path.Combine(Path.GetDirectoryName(outputPath), Path.GetFileName(GdkUtilities.GameConfigPath)));
+    }
+}
+#endif

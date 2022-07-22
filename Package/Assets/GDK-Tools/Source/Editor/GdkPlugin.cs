@@ -81,7 +81,7 @@ namespace Microsoft.GameCore.Tools
         [MenuItem("GDK/PC/Update Editor Game Config")]
         private static void CopyConfigToEditorLocation()
         {
-            GdkEditorHelpers.StartCmdProcessAsAdmin($"/C copy \"{GdkUtilities.GameConfigPath}\" \"{Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)}\"");
+            GdkEditorHelpers.StartCmdProcessAsAdmin(string.Format("/C copy \"{0}\" \"{1}\"", GdkUtilities.GameConfigPath, Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName)));
         }
 
         [MenuItem("GDK/PC/Build and Run")]
