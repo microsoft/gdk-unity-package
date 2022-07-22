@@ -8,6 +8,7 @@ using UnityEditor;
 using UnityEngine;
 
 using Debug = UnityEngine.Debug;
+using XGamingRuntime;
 
 namespace Microsoft.GameCore.Tools
 {
@@ -17,16 +18,24 @@ namespace Microsoft.GameCore.Tools
         static GdkPlugin()
         {
             GdkUtilities.PullGdkDlls();
-            EditorApplication.playModeStateChanged += PullGdkDlls;
+#if MICROSOFT_GAME_CORE
+            EditorApplication.playModeStateChanged += OnPlayModeChange;
+#endif
         }
 
-        private static void PullGdkDlls(PlayModeStateChange state)
+#if MICROSOFT_GAME_CORE
+        private static void OnPlayModeChange(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.ExitingEditMode)
             {
                 GdkUtilities.PullGdkDlls();
             }
+            else if (state == PlayModeStateChange.ExitingPlayMode)
+            {
+                SDK.XBL.XblCleanup((int hresult) => { });
+            }
         }
+#endif
 
         [MenuItem("GDK/Documentation/Developer Portal (GDK)")]
         private static void OpenDeveloperPortal()
