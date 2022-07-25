@@ -460,7 +460,7 @@ public class GdkPostBuild : IPostprocessBuildWithReport
 
     public void OnPostprocessBuild(BuildReport report)
     {
-        File.Copy(GdkUtilities.GameConfigPath, Path.Combine(Path.GetDirectoryName(report.summary.outputPath), Path.GetFileName(GdkUtilities.GameConfigPath)));
+        File.Copy(GdkUtilities.GameConfigPath, Path.Combine(Path.GetDirectoryName(report.summary.outputPath), Path.GetFileName(GdkUtilities.GameConfigPath)), true);
     }
 }
 #else
@@ -470,7 +470,7 @@ public class GdkPostBuild : IPostprocessBuild
 
     public void OnPostprocessBuild(BuildTarget target, string outputPath)
     {
-        File.Copy(GdkUtilities.GameConfigPath, Path.Combine(Path.GetDirectoryName(outputPath), Path.GetFileName(GdkUtilities.GameConfigPath)));
+        File.Copy(GdkUtilities.GameConfigPath, Path.Combine(Path.GetDirectoryName(outputPath), Path.GetFileName(GdkUtilities.GameConfigPath)), true);
     }
 }
 #endif
