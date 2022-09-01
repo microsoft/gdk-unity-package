@@ -17,7 +17,7 @@ namespace Microsoft.GameCore.Utilities
             {
                 if (!File.Exists(_gdkToolsPath))
                 {
-                    _gdkToolsPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), "bin");
+                    _gdkToolsPath = Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "GRDKInstallPath"), "bin");
                 }
 
                 return _gdkToolsPath;
@@ -47,7 +47,7 @@ namespace Microsoft.GameCore.Utilities
             {
                 if (!File.Exists(_xsapiLibPath))
                 {
-                    _xsapiLibPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
+                    _xsapiLibPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "GRDKInstallPath"), 
                                                  GdkVersion), 
                                                  Path.Combine(@"GRDK\ExtensionLibraries\Xbox.Services.API.C\DesignTime\CommonConfiguration\Neutral\Lib\Release", 
                                                  XsapiLibName));
@@ -63,7 +63,7 @@ namespace Microsoft.GameCore.Utilities
             {
                 if (!File.Exists(_xCurlLibPath))
                 {
-                    _xCurlLibPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "InstallPath"), 
+                    _xCurlLibPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "GRDKInstallPath"), 
                                                  GdkVersion), 
                                                  Path.Combine(@"GRDK\ExtensionLibraries\Xbox.XCurl.API\Redist\CommonConfiguration\neutral", 
                                                  XCurlLibName));
