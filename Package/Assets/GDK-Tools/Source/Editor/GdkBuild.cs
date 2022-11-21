@@ -374,7 +374,7 @@ public static class GdkBuild
 
         var doc = XDocument.Load(layoutPath);
         var ignoredNodes = (from node in doc.Descendants()
-                            where node.Name == "FileGroup" && node.Attribute("SourcePath").Value.Contains("Package_BackUpThisFolder_ButDontShipItWithYourGame")
+                            where node.Name == "FileGroup" && node.Attribute("SourcePath").Value.Contains("BackUpThisFolder_ButDontShipItWithYourGame")
                             select node).ToArray();
 
         for (int i = 0; i < ignoredNodes.Length; ++i)
