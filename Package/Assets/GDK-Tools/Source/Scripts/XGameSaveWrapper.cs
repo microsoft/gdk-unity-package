@@ -143,6 +143,7 @@ namespace Microsoft.Xbox
             if (HR.FAILED(hr))
             {
                 callback(hr, new Dictionary<string, UInt32>());
+                return;
             }
 
             XGameSaveBlobInfo[] blobInfos;
@@ -185,6 +186,7 @@ namespace Microsoft.Xbox
             if (HR.FAILED(hr))
             {
                 callback(hr, default(byte[]));
+                return;
             }
 
             string[] blobNames = new string[] { blobName };
@@ -294,6 +296,7 @@ namespace Microsoft.Xbox
             if (HR.FAILED(hr))
             {
                 callback(hr);
+                return;
             }
 
             XGameSaveUpdateHandle updateHandle;
@@ -302,6 +305,7 @@ namespace Microsoft.Xbox
             {
                 SDK.XGameSaveCloseContainer(containerHandle);
                 callback(hr);
+                return;
             }
 
             if (blobsToSave != null)
@@ -314,6 +318,7 @@ namespace Microsoft.Xbox
                         SDK.XGameSaveCloseUpdateHandle(updateHandle);
                         SDK.XGameSaveCloseContainer(containerHandle);
                         callback(hr);
+                        return;
                     }
                 }
             }
@@ -328,6 +333,7 @@ namespace Microsoft.Xbox
                         SDK.XGameSaveCloseUpdateHandle(updateHandle);
                         SDK.XGameSaveCloseContainer(containerHandle);
                         callback(hr);
+                        return;
                     }
                 }
             }
