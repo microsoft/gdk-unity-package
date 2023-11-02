@@ -206,9 +206,13 @@ namespace TestGame
             string item = packageEnumList.SelectedItem.ToString();
             string packageId = item.Split(':')[1];
             LOG(string.Format("Mounting package {0}", packageId));
-            Int32 hresult = SDK.XPackageMount(packageId, out XPackageMountHandle mountHandle);
-            LOG("Mount complete", hresult);
-            mountedPackagesList.Items.Add(new MountItem { packageId = packageId, mountHandle = mountHandle });
+            Int32 hresult = SDK.XPackageMountWithUiAsync(
+                packageId, 
+                (int hr, XPackageMountHandle mountHandle) =>
+            { 
+                LOG("Mount complete", hr);
+                mountedPackagesList.Items.Add(new MountItem { packageId = packageId, mountHandle = mountHandle });
+            });
         }
 
         private void mountedPackagesList_SelectedIndexChanged(object sender, EventArgs e)
