@@ -144,7 +144,7 @@ namespace XGamingRuntime
                 return;
             }
 
-            XGRInterop.XPackageUnregisterPackageInstalled(token.Token,  new NativeBool(true));
+            XGRInterop.XPackageUnregisterPackageInstalled(token.Token, new NativeBool(true));
             token.CallbackHandle.Free();
         }
 
@@ -156,8 +156,8 @@ namespace XGamingRuntime
                 GCHandle resultsHandle = GCHandle.Alloc(results);
 
                 Int32 hr = XGRInterop.XPackageEnumerateFeatures(
-                    Converters.StringToNullTerminatedUTF8ByteArray(packageIdentifier), 
-                    GCHandle.ToIntPtr(resultsHandle), 
+                    Converters.StringToNullTerminatedUTF8ByteArray(packageIdentifier),
+                    GCHandle.ToIntPtr(resultsHandle),
                     FeatureEnumerationCallback);
                 features = results.ToArray();
 
@@ -376,7 +376,7 @@ namespace XGamingRuntime
             return hr;
         }
         #endregion
-        
+
         public static Int32 XPackageGetWriteStats(out XPackageWriteStats writeStats)
         {
             Interop.XPackageWriteStats writeStatsInternal;
@@ -384,7 +384,7 @@ namespace XGamingRuntime
             writeStats = new XPackageWriteStats(writeStatsInternal);
             return hr;
         }
-        
+
         public static Int32 XPackageUninstallUWPInstance(string packageName)
         {
             return XGRInterop.XPackageUninstallUWPInstance(Converters.StringToNullTerminatedUTF8ByteArray(packageName));
