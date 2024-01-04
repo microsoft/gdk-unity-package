@@ -66,6 +66,7 @@ EXPORTS
 	XUserGetDefaultAudioEndpointUtf16
 	XUserRegisterForDefaultAudioEndpointUtf16Changed
 	XUserUnregisterForDefaultAudioEndpointUtf16Changed
+	XUserIsStoreUser
 	XAppBroadcastShowUI
 	XAppBroadcastGetStatus
 	XAppBroadcastIsAppBroadcasting
@@ -258,6 +259,10 @@ EXPORTS
 	XStoreQueryLicenseTokenAsync
 	XStoreQueryLicenseTokenResultSize
 	XStoreQueryLicenseTokenResult
+	XStoreShowAssociatedProductsUIAsync
+	XStoreShowAssociatedProductsUIResult
+	XStoreShowProductPageUIAsync
+	XStoreShowProductPageUIResult
 	XStoreShowPurchaseUIAsync
 	XStoreShowPurchaseUIResult
 	XStoreShowRateAndReviewUIAsync

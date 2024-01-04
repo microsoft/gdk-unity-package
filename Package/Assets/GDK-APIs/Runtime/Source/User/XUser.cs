@@ -438,5 +438,10 @@ namespace XGamingRuntime
             XGRInterop.XUserCloseSignOutDeferralHandle(deferral.InteropHandle);
             return HR.S_OK;
         }
+
+        public static bool XUserIsStoreUser(XUserHandle user)
+        {
+            return XGRInterop.XUserIsStoreUser(user.InteropHandle);
+        }
     }
 }
