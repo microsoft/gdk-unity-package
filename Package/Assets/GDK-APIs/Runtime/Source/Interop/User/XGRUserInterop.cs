@@ -282,5 +282,12 @@ namespace XGamingRuntime.Interop
         //     ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern void XUserCloseSignOutDeferralHandle(XUserSignOutDeferralHandle deferral);
+
+        // STDAPI_(bool) XUserIsStoreUser(
+        //     _In_ XUserHandle user,
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool XUserIsStoreUser(XUserHandle user);
     }
 }

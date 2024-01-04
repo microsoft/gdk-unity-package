@@ -134,6 +134,24 @@ namespace XGamingRuntime.Interop
             Byte[] packageIdentifier,
             out XPackageMountHandle mount);
 
+        //STDAPI XPackageMountWithUiAsync(
+        //    _In_z_ const char* packageIdentifier,
+        //    _Inout_ XAsyncBlock* async
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XPackageMountWithUiAsync(
+            Byte[] packageIdentifier,
+            XAsyncBlockPtr asyncBlock);
+
+        //STDAPI XPackageMountWithUiResult(
+        //    _Inout_ XAsyncBlock* async,
+        //    _Out_ XPackageMountHandle* mount
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XPackageMountWithUiResult(
+            XAsyncBlockPtr asyncBlock,
+            out XPackageMountHandle mount);
+
         //STDAPI XPackageGetCurrentProcessPackageIdentifier(
         //    _In_ size_t bufferSize,
         //    _Out_writes_(bufferSize) char* buffer

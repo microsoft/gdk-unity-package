@@ -7,6 +7,7 @@ namespace XGamingRuntime
 {
     public delegate void XPackageInstalledCallback(XPackageDetails details);
     public delegate void XPackageInstallationProgressCallback(XPackageInstallationMonitorHandle installationMonitor);
+    public delegate void XPackageMountWithUiAsyncCompleted(Int32 hresult, XPackageMountHandle mountHandle);
 
     partial class SDK
     {
@@ -143,7 +144,7 @@ namespace XGamingRuntime
                 return;
             }
 
-            XGRInterop.XPackageUnregisterPackageInstalled(token.Token,  new NativeBool(true));
+            XGRInterop.XPackageUnregisterPackageInstalled(token.Token, new NativeBool(true));
             token.CallbackHandle.Free();
         }
 
@@ -155,8 +156,8 @@ namespace XGamingRuntime
                 GCHandle resultsHandle = GCHandle.Alloc(results);
 
                 Int32 hr = XGRInterop.XPackageEnumerateFeatures(
-                    Converters.StringToNullTerminatedUTF8ByteArray(packageIdentifier), 
-                    GCHandle.ToIntPtr(resultsHandle), 
+                    Converters.StringToNullTerminatedUTF8ByteArray(packageIdentifier),
+                    GCHandle.ToIntPtr(resultsHandle),
                     FeatureEnumerationCallback);
                 features = results.ToArray();
 
@@ -167,6 +168,7 @@ namespace XGamingRuntime
         #endregion
 
         #region Mounting
+        [Obsolete("This method is deprecated, use XPackageMountWithUiAsync instead.", false)]
         public static Int32 XPackageMount(string packageIdentifier, out XPackageMountHandle mountHandle)
         {
             mountHandle = null;
@@ -176,6 +178,34 @@ namespace XGamingRuntime
             {
                 mountHandle = new XPackageMountHandle(mh);
             }
+            return hr;
+        }
+
+        public static Int32 XPackageMountWithUiAsync(string packageIdentifier, XPackageMountWithUiAsyncCompleted completionRoutine)
+        {
+            XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) =>
+            {
+                Interop.XPackageMountHandle mh;
+                Int32 hresult = XGRInterop.XPackageMountWithUiResult(block, out mh);
+                if (HR.SUCCEEDED(hresult))
+                {
+                    XPackageMountHandle mountHandle = new XPackageMountHandle(mh);
+                    completionRoutine(hresult, mountHandle);
+                }
+                else
+                {
+                    completionRoutine(hresult, null);
+                }
+            });
+
+            Int32 hr = XGRInterop.XPackageMountWithUiAsync(Converters.StringToNullTerminatedUTF8ByteArray(packageIdentifier), asyncBlock);
+
+            if (HR.FAILED(hr))
+            {
+                AsyncHelpers.CleanupAsyncBlock(asyncBlock);
+                completionRoutine(hr, null);
+            }
+
             return hr;
         }
 
@@ -346,7 +376,7 @@ namespace XGamingRuntime
             return hr;
         }
         #endregion
-        
+
         public static Int32 XPackageGetWriteStats(out XPackageWriteStats writeStats)
         {
             Interop.XPackageWriteStats writeStatsInternal;
@@ -354,7 +384,7 @@ namespace XGamingRuntime
             writeStats = new XPackageWriteStats(writeStatsInternal);
             return hr;
         }
-        
+
         public static Int32 XPackageUninstallUWPInstance(string packageName)
         {
             return XGRInterop.XPackageUninstallUWPInstance(Converters.StringToNullTerminatedUTF8ByteArray(packageName));
