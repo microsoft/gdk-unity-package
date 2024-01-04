@@ -185,7 +185,7 @@ namespace TestGame
             {
 
                 LOG("Attempting to award 100% progress for achievement id## " + currentlySelectedAchievement.Id + " \"" + currentlySelectedAchievement.Name + "\"");
-                SDK.XBL.XblAchievementsUpdateAchievementAsync(xblContextHandle, userId, TitleId, SCID, currentlySelectedAchievement.Id, 100, (achievementUpdateResult) => {
+                SDK.XBL.XblAchievementsUpdateAchievementAsync(xblContextHandle, userId, currentlySelectedAchievement.Id, 100, (achievementUpdateResult) => {
                     LOG("XblAchievementsUpdateAchievementAsync result", achievementUpdateResult);
                     if (achievementUpdateResult == HTTP_E_STATUS_NOT_MODIFIED) //  0x80190130
                     {
