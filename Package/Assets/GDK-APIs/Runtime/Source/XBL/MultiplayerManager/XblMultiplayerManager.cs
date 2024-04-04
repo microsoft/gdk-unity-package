@@ -49,7 +49,7 @@ namespace XGamingRuntime
 
                 return XblInterop.XblMultiplayerManagerJoinLobby(
                     Converters.StringToNullTerminatedUTF8ByteArray(handleId),
-                    user.InteropHandle);
+                    user.Handle);
             }
 
             public static Int32 XblMultiplayerManagerSetQosMeasurements(string measurementsJson)

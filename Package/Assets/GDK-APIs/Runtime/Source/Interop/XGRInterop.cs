@@ -33,6 +33,12 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern void XTaskQueueCloseHandle(XTaskQueueHandle queue);
 
+        //STDAPI_(void) XTaskQueueCloseHandle(
+        //    _In_ XTaskQueueHandle queue
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern void XTaskQueueCloseHandle(IntPtr queue);
+
         //STDAPI_(bool) XTaskQueueDispatch(
         //    _In_ XTaskQueueHandle queue,
         //    _In_ XTaskQueuePort port,

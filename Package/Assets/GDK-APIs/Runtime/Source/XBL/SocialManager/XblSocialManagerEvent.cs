@@ -6,7 +6,7 @@ namespace XGamingRuntime
     {
         internal XblSocialManagerEvent(Interop.XblSocialManagerEvent interopEvent)
         {
-            this.User = new XUserHandle(interopEvent.user);
+            this.User = new XUserHandle(interopEvent.user.Ptr);
             this.EventType = interopEvent.eventType;
             this.Hr = interopEvent.hr;
             this.LoadedGroup = new XblSocialManagerUserGroupHandle(interopEvent.loadedGroup);

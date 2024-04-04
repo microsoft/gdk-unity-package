@@ -32,6 +32,15 @@ namespace XGamingRuntime.Interop
             XUserHandle user,
             out XblContextHandle context);
 
+        //STDAPI XblContextCreateHandle(
+        //    _In_ XblUserHandle user,
+        //    _Out_ XblContextHandle* context
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblContextCreateHandle(
+            IntPtr user,
+            out XblContextHandle context);
+
         /// <summary>
         /// Closes the XblContextHandle.
         /// When all outstanding handles have been closed, XblContextCloseHandle() will free the memory 

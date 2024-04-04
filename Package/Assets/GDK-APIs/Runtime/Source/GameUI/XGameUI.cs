@@ -28,7 +28,7 @@ namespace XGamingRuntime
                 completionRoutine(result);
             });
 
-            int hr = XGRInterop.XGameUiShowAchievementsAsync(asyncBlock, requestingUser.InteropHandle, titleId);
+            int hr = XGRInterop.XGameUiShowAchievementsAsync(asyncBlock, requestingUser.Handle, titleId);
 
             if (HR.FAILED(hr))
             {
@@ -69,6 +69,18 @@ namespace XGamingRuntime
                 AsyncHelpers.CleanupAsyncBlock(asyncBlock);
                 completionRoutine(hr, default(XGameUiMessageDialogButton));
             }
+        }
+
+        public static Int32 XGameUiShowMultiplayerActivityGameInviteAsync(XAsyncBlock async, XUserHandle requestingUser)
+        {
+            IntPtr userHandle = (requestingUser != null) ? requestingUser.Handle : IntPtr.Zero;
+
+            return XGRInterop.XGameUiShowMultiplayerActivityGameInviteAsync(async.InteropPtr, userHandle);
+        }
+
+        public static Int32 XGameUiShowMultiplayerActivityGameInviteResult(XAsyncBlock async)
+        {
+            return XGRInterop.XGameUiShowMultiplayerActivityGameInviteResult(async.InteropPtr);
         }
 
         public static void XGameUiShowErrorDialogAsync(Int32 errorCode, string context, XGameUiShowErrorDialogCompleted completionRoutine)
@@ -165,7 +177,7 @@ namespace XGamingRuntime
 
             Int32 hr = XGRInterop.XGameUiShowSendGameInviteAsync(
                     asyncBlock,
-                    requestingUser.InteropHandle,
+                    requestingUser.Handle,
                     Converters.StringToNullTerminatedUTF8ByteArray(sessionConfigurationId),
                     Converters.StringToNullTerminatedUTF8ByteArray(sessionTemplateName),
                     Converters.StringToNullTerminatedUTF8ByteArray(sessionId),
@@ -226,7 +238,7 @@ namespace XGamingRuntime
 
             Int32 hr = XGRInterop.XGameUiShowWebAuthenticationAsync(
                     asyncBlock,
-                    requestingUser.InteropHandle,
+                    requestingUser.Handle,
                     Converters.StringToNullTerminatedUTF8ByteArray(requestUri),
                     Converters.StringToNullTerminatedUTF8ByteArray(completionUri));
 
@@ -256,7 +268,7 @@ namespace XGamingRuntime
 
             Int32 hr = XGRInterop.XGameUiShowPlayerProfileCardAsync(
                     asyncBlock,
-                    requestingUser.InteropHandle,
+                    requestingUser.Handle,
                     targetPlayer);
 
             if (HR.FAILED(hr))
@@ -307,7 +319,7 @@ namespace XGamingRuntime
 
             Int32 hr = XGRInterop.XGameUiShowPlayerPickerAsync(
                     asyncBlock,
-                    requestingUser.InteropHandle,
+                    requestingUser.Handle,
                     Converters.StringToNullTerminatedUTF8ByteArray(promptText),
                     (uint)selectFromPlayers.Length,
                     selectFromPlayers,

@@ -82,7 +82,7 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                return XblInterop.XblSocialManagerAddLocalUser(user.InteropHandle, extraLevelDetail, defaultQueue.handle);
+                return XblInterop.XblSocialManagerAddLocalUser(user.Handle, extraLevelDetail, defaultQueue.handle);
             }
 
             public static Int32 XblSocialManagerRemoveLocalUser(
@@ -94,7 +94,7 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                return XblInterop.XblSocialManagerRemoveLocalUser(user.InteropHandle);
+                return XblInterop.XblSocialManagerRemoveLocalUser(user.Handle);
             }
 
             public static Int32 XblSocialManagerDoWork(out XblSocialManagerEvent[] socialEvents)
@@ -134,7 +134,7 @@ namespace XGamingRuntime
 
                 Interop.XblSocialManagerUserGroupHandle interopGroupPtr;
                 Int32 hresult = XblInterop.XblSocialManagerCreateSocialUserGroupFromFilters(
-                    user.InteropHandle,
+                    user.Handle,
                     presenceDetailLevel,
                     filter,
                     out interopGroupPtr);
@@ -161,7 +161,7 @@ namespace XGamingRuntime
                 }
 
                 Int32 hresult = XblInterop.XblSocialManagerCreateSocialUserGroupFromList(
-                    user.InteropHandle,
+                    user.Handle,
                     xboxUserIdList,
                     xboxUserIdListCount,
                     out interopGroupPtr);
@@ -190,7 +190,7 @@ namespace XGamingRuntime
             {
                 SizeT userCount = XblInterop.XblSocialManagerGetLocalUserCount();
 
-                Interop.XUserHandle[] interopUsers = new Interop.XUserHandle[userCount.ToInt32()];
+                IntPtr[] interopUsers = new IntPtr[userCount.ToInt32()];
                 int hresult = XblInterop.XblSocialManagerGetLocalUsers(userCount, interopUsers);
                 if (HR.FAILED(hresult))
                 {
@@ -224,7 +224,7 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                return XblInterop.XblSocialManagerSetRichPresencePollingStatus(user.InteropHandle, shouldEnablePolling);
+                return XblInterop.XblSocialManagerSetRichPresencePollingStatus(user.Handle, shouldEnablePolling);
             }
 
             public static Int32 XblSocialManagerUserGroupGetType(XblSocialManagerUserGroupHandle group, out XblSocialUserGroupType type)
@@ -246,7 +246,7 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                Interop.XUserHandle interopUser;
+                IntPtr interopUser;
                 Int32 hr = XblInterop.XblSocialManagerUserGroupGetLocalUser(group.InteropHandle, out interopUser);
                 return XUserHandle.WrapAndReturnHResult(hr, interopUser, out localUser);
             }

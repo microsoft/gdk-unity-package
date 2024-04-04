@@ -167,15 +167,37 @@ namespace XGamingRuntime
         #endregion
 
         #region Mounting
+        [Obsolete("XPackageMount is deprecated, please use XPackageMountWithUiAsync instead.", true)]
         public static Int32 XPackageMount(string packageIdentifier, out XPackageMountHandle mountHandle)
         {
             mountHandle = null;
-            Interop.XPackageMountHandle mh;
+            IntPtr mh;
             Int32 hr = XGRInterop.XPackageMount(Converters.StringToNullTerminatedUTF8ByteArray(packageIdentifier), out mh);
             if (HR.SUCCEEDED(hr))
             {
                 mountHandle = new XPackageMountHandle(mh);
             }
+            return hr;
+        }
+
+        public static Int32 XPackageMountWithUiAsync(string packageIdentifier, XAsyncBlock asyncBlock)
+        {
+            return XGRInterop.XPackageMountWithUiAsync(packageIdentifier, asyncBlock.InteropPtr);
+        }
+
+        public static Int32 XPackageMountWithUiResult(XAsyncBlock async,
+            out XPackageMountHandle mount)
+        {
+            mount = null;
+
+            IntPtr mountHandle;
+            int hr = XGRInterop.XPackageMountWithUiResult(async.InteropPtr, out mountHandle);
+
+            if (Interop.HR.SUCCEEDED(hr))
+            {
+                mount = new XPackageMountHandle(mountHandle);
+            }
+
             return hr;
         }
 
@@ -207,13 +229,7 @@ namespace XGamingRuntime
 
         public static void XPackageCloseMountHandle(XPackageMountHandle mountHandle)
         {
-            if (mountHandle == null)
-            {
-                return;
-            }
-
-            XGRInterop.XPackageCloseMountHandle(mountHandle.Handle);
-            mountHandle.Handle = new Interop.XPackageMountHandle { handle = IntPtr.Zero };
+            mountHandle.Close();
         }
         #endregion
 

@@ -33,7 +33,7 @@ namespace XGamingRuntime
                 }
 
                 return XblInterop.XblMultiplayerManagerLobbySessionInviteUsers(
-                    user.InteropHandle,
+                    user.Handle,
                     xuids,
                     new SizeT(xuids.Length),
                     Converters.StringToNullTerminatedUTF8ByteArray(contextStringId),
@@ -51,7 +51,7 @@ namespace XGamingRuntime
                 }
 
                 return XblInterop.XblMultiplayerManagerLobbySessionInviteFriends(
-                    requestingUser.InteropHandle,
+                    requestingUser.Handle,
                     Converters.StringToNullTerminatedUTF8ByteArray(contextStringId),
                     Converters.StringToNullTerminatedUTF8ByteArray(customActivationContext));
             }
@@ -63,7 +63,7 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                return XblInterop.XblMultiplayerManagerLobbySessionAddLocalUser(user.InteropHandle);
+                return XblInterop.XblMultiplayerManagerLobbySessionAddLocalUser(user.Handle);
             }
             
             public static Int32 XblMultiplayerManagerLobbySessionMembers(out XblMultiplayerManagerMember[] members)
@@ -130,7 +130,7 @@ namespace XGamingRuntime
                     return HR.E_INVALIDARG;
                 }
 
-                return XblInterop.XblMultiplayerManagerLobbySessionRemoveLocalUser(user.InteropHandle);
+                return XblInterop.XblMultiplayerManagerLobbySessionRemoveLocalUser(user.Handle);
             }
 
             /// <summary>
@@ -217,7 +217,7 @@ namespace XGamingRuntime
 
                 return SessionSetInternalWithMarshalledContext(
                     (ctx) =>XblInterop.XblMultiplayerManagerLobbySessionSetLocalMemberProperties(
-                                user.InteropHandle,
+                                user.Handle,
                                 Converters.StringToNullTerminatedUTF8ByteArray(name),
                                 Converters.StringToNullTerminatedUTF8ByteArray(valueJson),
                                 ctx),
@@ -246,7 +246,7 @@ namespace XGamingRuntime
 
                 return SessionSetInternalWithMarshalledContext(
                     (ctx) =>XblInterop.XblMultiplayerManagerLobbySessionSetLocalMemberConnectionAddress(
-                        user.InteropHandle,
+                        user.Handle,
                         Converters.StringToNullTerminatedUTF8ByteArray(connectionAddress),
                         ctx),
                     context);
@@ -261,7 +261,7 @@ namespace XGamingRuntime
 
                 return SessionSetInternalWithMarshalledContext(
                     (ctx) =>XblInterop.XblMultiplayerManagerLobbySessionDeleteLocalMemberProperties(
-                        user.InteropHandle,
+                        user.Handle,
                         Converters.StringToNullTerminatedUTF8ByteArray(name),
                         ctx),
                     context);

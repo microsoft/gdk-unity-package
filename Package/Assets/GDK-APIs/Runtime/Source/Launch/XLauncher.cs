@@ -12,7 +12,7 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            return XGRInterop.XLaunchUri(requestingUser.InteropHandle, Converters.StringToNullTerminatedUTF8ByteArray(uri));
+            return XGRInterop.XLaunchUri(requestingUser.Handle, Converters.StringToNullTerminatedUTF8ByteArray(uri));
         }
     }
 }

@@ -44,7 +44,7 @@ namespace XGamingRuntime
                 }
 
                 Interop.XblContextHandle interopContext;
-                Int32 hresult = XblInterop.XblContextCreateHandle(user.InteropHandle, out interopContext);
+                Int32 hresult = XblInterop.XblContextCreateHandle(user.Handle, out interopContext);
                 if (HR.SUCCEEDED(hresult))
                 {
                     context = new XblContextHandle(interopContext);
@@ -123,7 +123,7 @@ namespace XGamingRuntime
 
                 if (HR.SUCCEEDED(result))
                 {
-                    dstUserHandle = new XUserHandle(resultUserHandle);
+                    dstUserHandle = new XUserHandle(resultUserHandle.Ptr);
                 }
                 else
                 {

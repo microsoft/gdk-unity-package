@@ -44,7 +44,7 @@ namespace XGamingRuntime.Interop
         //    ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern void XPackageCloseMountHandle(
-            XPackageMountHandle mount);
+            IntPtr mount);
 
         //STDAPI XPackageEnumerateFeatures(
         //    _In_z_ const char* packageIdentifier,
@@ -104,7 +104,19 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XPackageGetWriteStats(
             out XPackageWriteStats writeStats);
-        
+
+        // STDAPI XPackageMountWithUiAsync(
+        //     _In_z_ const char* packageIdentifier,
+        //     _Inout_ XAsyncBlock* async) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XPackageMountWithUiAsync([MarshalAs(UnmanagedType.LPStr)] string packageIdentifier, IntPtr async);
+
+        // STDAPI XPackageMountWithUiResult(
+        //     _Inout_ XAsyncBlock* async,
+        //     _Out_ XPackageMountHandle* mount) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XPackageMountWithUiResult(IntPtr async, out IntPtr mount);
+
         //STDAPI XPackageUninstallUWPInstance(
         //    _In_z_ const char* packageName
         //    ) noexcept;
@@ -132,7 +144,7 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XPackageMount(
             Byte[] packageIdentifier,
-            out XPackageMountHandle mount);
+            out IntPtr mount);
 
         //STDAPI XPackageGetCurrentProcessPackageIdentifier(
         //    _In_ size_t bufferSize,
@@ -150,7 +162,7 @@ namespace XGamingRuntime.Interop
         //    ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XPackageGetMountPath(
-            XPackageMountHandle mount,
+            IntPtr mount,
             SizeT pathSize,
             Byte[] path);
 
@@ -208,7 +220,7 @@ namespace XGamingRuntime.Interop
         //    ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XPackageGetMountPathSize(
-            XPackageMountHandle mount,
+            IntPtr mount,
             out SizeT pathSize);
 
         //STDAPI XPackageGetUserLocale(

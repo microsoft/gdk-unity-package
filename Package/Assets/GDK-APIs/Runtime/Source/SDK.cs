@@ -13,7 +13,7 @@ namespace XGamingRuntime
             Int32 hr = XGRInterop.XGameRuntimeInitialize();
             if (HR.SUCCEEDED(hr))
             {
-                XTaskQueueHandle handle;
+                Interop.XTaskQueueHandle handle;
                 hr = XGRInterop.XTaskQueueCreate(XTaskQueueDispatchMode.ThreadPool, XTaskQueueDispatchMode.Manual, out handle);
                 defaultQueue = new XTaskQueue { handle = handle };
             }

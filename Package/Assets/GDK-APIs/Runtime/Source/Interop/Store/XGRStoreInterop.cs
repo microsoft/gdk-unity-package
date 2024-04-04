@@ -16,6 +16,11 @@ namespace XGamingRuntime.Interop
             XUserHandle user,
             out XStoreContextHandle storeContextHandle);
 
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XStoreCreateContext(
+            IntPtr user,
+            out XStoreContextHandle storeContextHandle);
+
         //STDAPI_(void) XStoreCloseContextHandle(
         //    _In_ XStoreContextHandle storeContextHandle
         //    ) noexcept;

@@ -49,6 +49,21 @@ namespace XGamingRuntime.Interop
             Byte[] contextStringId,
             Byte[] customActivationContext);
 
+        //STDAPI XblMultiplayerManagerLobbySessionInviteUsers(
+        //    _In_ XblUserHandle user,
+        //    _In_ const uint64_t* xuids,
+        //    _In_ size_t xuidsCount,
+        //    _In_opt_z_ const char* contextStringId,
+        //    _In_opt_z_ const char* customActivationContext
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerLobbySessionInviteUsers(
+            IntPtr user,
+            [In] UInt64[] xuids,
+            SizeT xuidsCount,
+            Byte[] contextStringId,
+            Byte[] customActivationContext);
+
         //STDAPI XblMultiplayerManagerJoinLobby(
         //    _In_z_ const char* handleId,
         //    _In_ XblUserHandle user
@@ -58,6 +73,15 @@ namespace XGamingRuntime.Interop
             Byte[] handleId,
             XUserHandle user);
 
+        //STDAPI XblMultiplayerManagerJoinLobby(
+        //    _In_z_ const char* handleId,
+        //    _In_ XblUserHandle user
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerJoinLobby(
+            Byte[] handleId,
+            IntPtr user);
+
         //STDAPI XblMultiplayerManagerLobbySessionInviteFriends(
         //    _In_ XblUserHandle requestingUser,
         //    _In_opt_z_ const char* contextStringId,
@@ -66,6 +90,17 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblMultiplayerManagerLobbySessionInviteFriends(
             XUserHandle requestingUser,
+            Byte[] contextStringId,
+            Byte[] customActivationContext);
+
+        //STDAPI XblMultiplayerManagerLobbySessionInviteFriends(
+        //    _In_ XblUserHandle requestingUser,
+        //    _In_opt_z_ const char* contextStringId,
+        //    _In_opt_z_ const char* customActivationContext
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerLobbySessionInviteFriends(
+            IntPtr requestingUser,
             Byte[] contextStringId,
             Byte[] customActivationContext);
 
@@ -91,6 +126,13 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblMultiplayerManagerLobbySessionAddLocalUser(
             XUserHandle user);
+
+        //STDAPI XblMultiplayerManagerLobbySessionAddLocalUser(
+        //    _In_ XblUserHandle user
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerLobbySessionAddLocalUser(
+            IntPtr user);
 
         //STDAPI XblMultiplayerEventArgsMembersCount(
         //    _In_ XblMultiplayerEventArgsHandle argsHandle,
@@ -165,6 +207,19 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblMultiplayerManagerLobbySessionSetLocalMemberProperties(
             XUserHandle user,
+            Byte[] name,
+            Byte[] valueJson,
+            IntPtr context);
+
+        //STDAPI XblMultiplayerManagerLobbySessionSetLocalMemberProperties(
+        //    _In_ XblUserHandle user,
+        //    _In_z_ const char* name,
+        //    _In_z_ const char* valueJson,
+        //    _In_opt_ void* context
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerLobbySessionSetLocalMemberProperties(
+            IntPtr user,
             Byte[] name,
             Byte[] valueJson,
             IntPtr context);
@@ -266,6 +321,13 @@ namespace XGamingRuntime.Interop
         internal static extern Int32 XblMultiplayerManagerLobbySessionRemoveLocalUser(
             XUserHandle user);
 
+        //STDAPI XblMultiplayerManagerLobbySessionRemoveLocalUser(
+        //    _In_ XblUserHandle user
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerLobbySessionRemoveLocalUser(
+            IntPtr user);
+
         //STDAPI XblMultiplayerManagerLobbySessionDeleteLocalMemberProperties(
         //    _In_ XblUserHandle user,
         //    _In_z_ const char* name,
@@ -274,6 +336,17 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblMultiplayerManagerLobbySessionDeleteLocalMemberProperties(
             XUserHandle user,
+            Byte[] name,
+            IntPtr context);
+
+        //STDAPI XblMultiplayerManagerLobbySessionDeleteLocalMemberProperties(
+        //    _In_ XblUserHandle user,
+        //    _In_z_ const char* name,
+        //    _In_opt_ void* context
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerLobbySessionDeleteLocalMemberProperties(
+            IntPtr user,
             Byte[] name,
             IntPtr context);
 
@@ -430,6 +503,17 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XblMultiplayerManagerLobbySessionSetLocalMemberConnectionAddress(
             XUserHandle user,
+            Byte[] connectionAddress,
+            IntPtr context);
+
+        //STDAPI XblMultiplayerManagerLobbySessionSetLocalMemberConnectionAddress(
+        //    _In_ XblUserHandle user,
+        //    _In_z_ const char* connectionAddress,
+        //    _In_opt_ void* context
+        //) XBL_NOEXCEPT;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XblMultiplayerManagerLobbySessionSetLocalMemberConnectionAddress(
+            IntPtr user,
             Byte[] connectionAddress,
             IntPtr context);
 

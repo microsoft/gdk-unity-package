@@ -702,7 +702,7 @@ namespace XGamingRuntime
                     return;
                 }
 
-                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(SDK.defaultQueue.handle, (XAsyncCompletionRoutine)(block =>completionRoutine(XGRInterop.XAsyncGetStatus(block, false))));
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(SDK.defaultQueue.handle, (Interop.XAsyncCompletionRoutine)(block =>completionRoutine(XGRInterop.XAsyncGetStatus(block, false))));
                 int hr = XblInterop.XblMultiplayerDeleteSearchHandleAsync(xblContext.InteropHandle, Converters.StringToNullTerminatedUTF8ByteArray(handleId), asyncBlock);
 
                 if (HR.FAILED(hr))
@@ -728,7 +728,7 @@ namespace XGamingRuntime
                     return;
                 }
 
-                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(SDK.defaultQueue.handle, (XAsyncCompletionRoutine)(block =>
+                XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(SDK.defaultQueue.handle, (Interop.XAsyncCompletionRoutine)(block =>
                 {
                     SizeT searchHandleCount;
                     int handlesResultCount = XblInterop.XblMultiplayerGetSearchHandlesResultCount(block, out searchHandleCount);

@@ -21,9 +21,17 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XGameSaveInitializeProvider(XUserHandle userContext, Byte[] configurationId, [MarshalAs(UnmanagedType.U1)] bool syncOnDemand, out XGameSaveProviderHandle provider);
 
+        //STDAPI XGameSaveInitializeProvider(_In_ XUserHandle userContext, _In_opt_z_ const char* configurationId, _In_ bool syncOnDemand, _Outptr_result_nullonfailure_ XGameSaveProviderHandle* provider) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XGameSaveInitializeProvider(IntPtr userContext, Byte[] configurationId, [MarshalAs(UnmanagedType.U1)] bool syncOnDemand, out XGameSaveProviderHandle provider);
+
         //STDAPI XGameSaveInitializeProviderAsync(_In_ XUserHandle userContext, _In_opt_z_ const char* configurationId, _In_ bool syncOnDemand, _In_ XAsyncBlock* async) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XGameSaveInitializeProviderAsync(XUserHandle userContext, Byte[] configurationId, [MarshalAs(UnmanagedType.U1)] bool syncOnDemand, XAsyncBlockPtr asyncBlock);
+
+        //STDAPI XGameSaveInitializeProviderAsync(_In_ XUserHandle userContext, _In_opt_z_ const char* configurationId, _In_ bool syncOnDemand, _In_ XAsyncBlock* async) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XGameSaveInitializeProviderAsync(IntPtr userContext, Byte[] configurationId, [MarshalAs(UnmanagedType.U1)] bool syncOnDemand, XAsyncBlockPtr asyncBlock);
 
         //STDAPI XGameSaveInitializeProviderResult(_In_ XAsyncBlock* async, _Outptr_result_nullonfailure_ XGameSaveProviderHandle* provider) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
