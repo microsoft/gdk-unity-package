@@ -5,7 +5,7 @@ namespace XGamingRuntime.Interop
 {
     partial class XGRInterop
     {
-        const string ThunkDllName = "XGamingRuntimeThunks";
+        const string ThunkDllName = "xgameRuntime.thunks";
 
         //STDAPI XGameRuntimeInitialize();
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
