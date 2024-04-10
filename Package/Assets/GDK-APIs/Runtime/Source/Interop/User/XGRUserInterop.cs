@@ -20,11 +20,24 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserDuplicateHandle(XUserHandle handle, out XUserHandle duplicatedHandle);
 
+        // STDAPI XUserDuplicateHandle(
+        //     _In_ XUserHandle handle,
+        //     _Out_ XUserHandle* duplicatedHandle
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserDuplicateHandle(IntPtr handle, out IntPtr duplicatedHandle);
+
         // STDAPI_(void) XUserCloseHandle(
         //     _In_ XUserHandle user
         //     ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern void XUserCloseHandle(XUserHandle user);
+
+        // STDAPI_(void) XUserCloseHandle(
+        //     _In_ XUserHandle user
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern void XUserCloseHandle(IntPtr user);
 
         // STDAPI_(int32_t) XUserCompare(
         //     _In_ XUserHandle user1,
@@ -32,6 +45,9 @@ namespace XGamingRuntime.Interop
         //     ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserCompare(XUserHandle user1, XUserHandle user2);
+
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserCompare(IntPtr user1, IntPtr user2);
 
         // STDAPI XUserGetMaxUsers(
         //     _Out_ uint32_t* maxUsers
@@ -53,12 +69,26 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserAddResult(XAsyncBlockPtr asyncBlock, out XUserHandle newUser);
 
+        // STDAPI XUserAddResult(
+        //     _Inout_ XAsyncBlock* async,
+        //     _Out_ XUserHandle* newUser
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserAddResult(XAsyncBlockPtr asyncBlock, out IntPtr newUser);
+
         // STDAPI XUserGetId(
         //     _In_ XUserHandle user,
         //     _Out_ uint64_t* userId
         //     ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserGetId(XUserHandle user, out UInt64 userId);
+
+        // STDAPI XUserGetId(
+        //     _In_ XUserHandle user,
+        //     _Out_ uint64_t* userId
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetId(IntPtr user, out UInt64 userId);
 
         // STDAPI XUserFindUserById(
         //     _In_ uint64_t userId,
@@ -67,12 +97,26 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserFindUserById(UInt64 userId, out XUserHandle handle);
 
+        // STDAPI XUserFindUserById(
+        //     _In_ uint64_t userId,
+        //     _Out_ XUserHandle* handle
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserFindUserById(UInt64 userId, out IntPtr handle);
+
         // STDAPI XUserGetLocalId(
         //     _In_ XUserHandle user,
         //     _Out_ XUserLocalId* userLocalId
         //     ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserGetLocalId(XUserHandle user, out XUserLocalId userId);
+
+        // STDAPI XUserGetLocalId(
+        //     _In_ XUserHandle user,
+        //     _Out_ XUserLocalId* userLocalId
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetLocalId(IntPtr user, out XUserLocalId userId);
 
         // STDAPI XUserFindUserByLocalId(
         //     _In_ XUserLocalId userLocalId,
@@ -81,6 +125,13 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserFindUserByLocalId(XUserLocalId userLocalId, out XUserHandle handle);
 
+        // STDAPI XUserFindUserByLocalId(
+        //     _In_ XUserLocalId userLocalId,
+        //     _Out_ XUserHandle* handle
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserFindUserByLocalId(XUserLocalId userLocalId, out IntPtr handle);
+
         // STDAPI XUserGetIsGuest(
         //     _In_ XUserHandle user,
         //     _Out_ bool* isGuest
@@ -88,12 +139,26 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserGetIsGuest(XUserHandle user, [MarshalAs(UnmanagedType.U1)] out bool isGuest);
 
+        // STDAPI XUserGetIsGuest(
+        //     _In_ XUserHandle user,
+        //     _Out_ bool* isGuest
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetIsGuest(IntPtr user, [MarshalAs(UnmanagedType.U1)] out bool isGuest);
+
         // STDAPI XUserGetState(
         //     _In_ XUserHandle user,
         //     _Out_ XUserState* state
         //     ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserGetState(XUserHandle user, out XUserState state);
+
+        // STDAPI XUserGetState(
+        //     _In_ XUserHandle user,
+        //     _Out_ XUserState* state
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetState(IntPtr user, out XUserState state);
 
         // const size_t XUserGamertagComponentClassicMaxBytes = 16;
         // const size_t XUserGamertagComponentModernMaxBytes = 97;
@@ -119,6 +184,21 @@ namespace XGamingRuntime.Interop
             [Out] Byte[] gamertag,
             out SizeT gamertagUsed);
 
+        // STDAPI XUserGetGamertag(
+        //     _In_ XUserHandle user,
+        //     _In_ XUserGamertagComponent gamertagComponent,
+        //     _In_ size_t gamertagSize,
+        //     _Out_writes_bytes_to_(gamertagSize, *gamertagUsed) char* gamertag,
+        //     _Out_opt_ size_t* gamertagUsed
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetGamertag(
+            IntPtr user,
+            XUserGamertagComponent gamertagComponent,
+            SizeT gamertagSize,
+            [Out] Byte[] gamertag,
+            out SizeT gamertagUsed);
+
         // STDAPI XUserGetGamerPictureAsync(
         //     _In_ XUserHandle user,
         //     _In_ XUserGamerPictureSize pictureSize,
@@ -126,6 +206,14 @@ namespace XGamingRuntime.Interop
         //     ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserGetGamerPictureAsync(XUserHandle user, XUserGamerPictureSize pictureSize, XAsyncBlockPtr asyncBlock);
+
+        // STDAPI XUserGetGamerPictureAsync(
+        //     _In_ XUserHandle user,
+        //     _In_ XUserGamerPictureSize pictureSize,
+        //     _Inout_ XAsyncBlock* async
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetGamerPictureAsync(IntPtr user, XUserGamerPictureSize pictureSize, XAsyncBlockPtr asyncBlock);
 
         // STDAPI XUserGetGamerPictureResultSize(
         //     _Inout_ XAsyncBlock* async,
@@ -154,6 +242,13 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserGetAgeGroup(XUserHandle userLocalId, out XUserAgeGroup ageGroup);
 
+        // STDAPI XUserGetAgeGroup(
+        //     _In_ XUserHandle user,
+        //     _Out_ XUserAgeGroup* ageGroup
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetAgeGroup(IntPtr userLocalId, out XUserAgeGroup ageGroup);
+
         // STDAPI XUserCheckPrivilege(
         //     _In_ XUserHandle user,
         //     _In_ XUserPrivilegeOptions options,
@@ -169,6 +264,21 @@ namespace XGamingRuntime.Interop
             [MarshalAs(UnmanagedType.U1)] out bool hasPrivilege,
             out XUserPrivilegeDenyReason reason);
 
+        // STDAPI XUserCheckPrivilege(
+        //     _In_ XUserHandle user,
+        //     _In_ XUserPrivilegeOptions options,
+        //     _In_ XUserPrivilege privilege,
+        //     _Out_ bool* hasPrivilege,
+        //     _Out_opt_ XUserPrivilegeDenyReason* reason
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserCheckPrivilege(
+            IntPtr user,
+            XUserPrivilegeOptions options,
+            XUserPrivilege privilege,
+            [MarshalAs(UnmanagedType.U1)] out bool hasPrivilege,
+            out XUserPrivilegeDenyReason reason);
+
         // STDAPI XUserResolvePrivilegeWithUiAsync(
         //     _In_ XUserHandle user,
         //     _In_ XUserPrivilegeOptions options,
@@ -178,6 +288,19 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserResolvePrivilegeWithUiAsync(
             XUserHandle user,
+            XUserPrivilegeOptions options,
+            XUserPrivilege privilege,
+            XAsyncBlockPtr asyncBlock);
+
+        // STDAPI XUserResolvePrivilegeWithUiAsync(
+        //     _In_ XUserHandle user,
+        //     _In_ XUserPrivilegeOptions options,
+        //     _In_ XUserPrivilege privilege,
+        //     _Inout_ XAsyncBlock* async
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserResolvePrivilegeWithUiAsync(
+            IntPtr user,
             XUserPrivilegeOptions options,
             XUserPrivilege privilege,
             XAsyncBlockPtr asyncBlock);
@@ -202,6 +325,29 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserGetTokenAndSignatureUtf16Async(
             XUserHandle user,
+            XUserGetTokenAndSignatureOptions options,
+            [MarshalAs(UnmanagedType.LPWStr)] string method,
+            [MarshalAs(UnmanagedType.LPWStr)] string url,
+            SizeT headerCount,
+            [Optional] XUserGetTokenAndSignatureUtf16HttpHeader[] headers,
+            SizeT bodySize,
+            [Optional] Byte[] body,
+            XAsyncBlockPtr asyncBlock);
+
+        // STDAPI XUserGetTokenAndSignatureUtf16Async(
+        //     _In_ XUserHandle user,
+        //     _In_ XUserGetTokenAndSignatureOptions options,
+        //     _In_z_ const wchar_t* method,
+        //     _In_z_ const wchar_t* url,
+        //     _In_ size_t headerCount,
+        //     _In_reads_opt_(headerCount) const XUserGetTokenAndSignatureUtf16HttpHeader* headers,
+        //     _In_ size_t bodySize,
+        //     _In_reads_bytes_opt_(bodySize) const void* bodyBuffer,
+        //     _Inout_ XAsyncBlock* async
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserGetTokenAndSignatureUtf16Async(
+            IntPtr user,
             XUserGetTokenAndSignatureOptions options,
             [MarshalAs(UnmanagedType.LPWStr)] string method,
             [MarshalAs(UnmanagedType.LPWStr)] string url,
@@ -241,6 +387,17 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern Int32 XUserResolveIssueWithUiUtf16Async(
             XUserHandle user,
+            [Optional, MarshalAs(UnmanagedType.LPWStr)] string url,
+            XAsyncBlockPtr asyncBlock);
+
+        // STDAPI XUserResolveIssueWithUiUtf16Async(
+        //     _In_ XUserHandle user,
+        //     _In_opt_z_ const wchar_t* url,
+        //     _Inout_ XAsyncBlock* async
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern Int32 XUserResolveIssueWithUiUtf16Async(
+            IntPtr user,
             [Optional, MarshalAs(UnmanagedType.LPWStr)] string url,
             XAsyncBlockPtr asyncBlock);
 

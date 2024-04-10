@@ -13,6 +13,14 @@ namespace XGamingRuntime.Interop
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         internal static extern Int32 XGameUiShowAchievementsAsync(XAsyncBlockPtr asyncBlock, XUserHandle requestingUser, UInt32 titleId);
 
+        //STDAPI XGameUiShowAchievementsAsync(
+        //    _In_ XAsyncBlock* async,
+        //    _In_ XUserHandle requestingUser,
+        //    _In_ uint32_t titleId
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XGameUiShowAchievementsAsync(XAsyncBlockPtr asyncBlock, IntPtr requestingUser, UInt32 titleId);
+
         //STDAPI XGameUiShowAchievementsResult(
         //    _In_ XAsyncBlock * async
         //    ) noexcept;
@@ -48,6 +56,19 @@ namespace XGamingRuntime.Interop
         internal static extern Int32 XGameUiShowMessageDialogResult(
             XAsyncBlockPtr asyncBlock,
             out XGameUiMessageDialogButton resultButton);
+
+        // STDAPI XGameUiShowMultiplayerActivityGameInviteAsync(
+        //     _In_ XAsyncBlock* async,
+        //     _In_ XUserHandle requestingUser
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XGameUiShowMultiplayerActivityGameInviteAsync(IntPtr async, IntPtr requestingUser);
+
+        // STDAPI XGameUiShowMultiplayerActivityGameInviteResult(
+        //     _In_ XAsyncBlock* async
+        //     ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XGameUiShowMultiplayerActivityGameInviteResult(IntPtr async);
 
         //STDAPI XGameUiShowErrorDialogAsync(
         //    _In_ XAsyncBlock* async,
@@ -85,6 +106,25 @@ namespace XGamingRuntime.Interop
             byte[] invitationText,
             byte[] customActivationContext);
 
+        //STDAPI XGameUiShowSendGameInviteAsync(
+        //    _In_ XAsyncBlock* async,
+        //    _In_ XUserHandle requestingUser,
+        //    _In_z_ const char* sessionConfigurationId,
+        //    _In_z_ const char* sessionTemplateName,
+        //    _In_z_ const char* sessionId,
+        //    _In_opt_z_ const char* invitationText,
+        //    _In_opt_z_ const char* customActivationContext
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XGameUiShowSendGameInviteAsync(
+            XAsyncBlockPtr asyncBlock,
+            IntPtr requestingUser,
+            byte[] sessionConfigurationId,
+            byte[] sessionTemplateName,
+            byte[] sessionId,
+            byte[] invitationText,
+            byte[] customActivationContext);
+
         //STDAPI XGameUiShowSendGameInviteResult(
         //    _In_ XAsyncBlock* async
         //    ) noexcept;
@@ -100,6 +140,17 @@ namespace XGamingRuntime.Interop
         internal static extern Int32 XGameUiShowPlayerProfileCardAsync(
             XAsyncBlockPtr asyncBlock,
             XUserHandle requestingUser,
+            UInt64 targetPlayer);
+
+        //STDAPI XGameUiShowPlayerProfileCardAsync(
+        //    _In_ XAsyncBlock* async,
+        //    _In_ XUserHandle requestingUser,
+        //    _In_ uint64_t targetPlayer
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XGameUiShowPlayerProfileCardAsync(
+            XAsyncBlockPtr asyncBlock,
+            IntPtr requestingUser,
             UInt64 targetPlayer);
 
         //STDAPI XGameUiShowPlayerProfileCardResult(
@@ -123,6 +174,29 @@ namespace XGamingRuntime.Interop
         internal static extern Int32 XGameUiShowPlayerPickerAsync(
             XAsyncBlockPtr asyncBlock,
             XUserHandle requestingUser,
+            byte[] promptText,
+            UInt32 selectFromPlayersCount,
+            [In] UInt64[] selectFromPlayers,
+            UInt32 preSelectedPlayersCount,
+            [In] UInt64[] preSelectedPlayers,
+            UInt32 minSelectionCount,
+            UInt32 maxSelectionCount);
+
+        //STDAPI XGameUiShowPlayerPickerAsync(
+        //    _In_ XAsyncBlock* async,
+        //    _In_ XUserHandle requestingUser,
+        //    _In_z_ const char* promptText,
+        //    _In_ uint32_t selectFromPlayersCount,
+        //    _In_reads_(selectFromPlayersCount) const uint64_t* selectFromPlayers,
+        //    _In_ uint32_t preSelectedPlayersCount,
+        //    _In_reads_opt_(preSelectedPlayersCount) const uint64_t* preSelectedPlayers,
+        //    _In_ uint32_t minSelectionCount,
+        //    _In_ uint32_t maxSelectionCount
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XGameUiShowPlayerPickerAsync(
+            XAsyncBlockPtr asyncBlock,
+            IntPtr requestingUser,
             byte[] promptText,
             UInt32 selectFromPlayersCount,
             [In] UInt64[] selectFromPlayers,
@@ -209,6 +283,19 @@ namespace XGamingRuntime.Interop
         internal static extern Int32 XGameUiShowWebAuthenticationAsync(
             XAsyncBlockPtr asyncBlock,
             XUserHandle requestingUser,
+            byte[] requestUri,
+            byte[] completionUri);
+
+        //STDAPI XGameUiShowWebAuthenticationAsync(
+        //    _In_ XAsyncBlock* async,
+        //    _In_ XUserHandle requestingUser,
+        //    _In_z_ const char* requestUri,
+        //    _In_z_ const char* completionUri
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        internal static extern Int32 XGameUiShowWebAuthenticationAsync(
+            XAsyncBlockPtr asyncBlock,
+            IntPtr requestingUser,
             byte[] requestUri,
             byte[] completionUri);
 

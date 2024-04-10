@@ -8,7 +8,7 @@ namespace Microsoft.GameCore.Utilities
 {
     public class GdkUtilities
     {
-        public static string XsapiLibName { get { return "Microsoft.Xbox.Services.141.GDK.C.Thunks.dll"; } }
+        public static string XsapiLibName { get { return "Microsoft.Xbox.Services.GDK.C.Thunks.dll"; } }
         public static string XCurlLibName { get { return "XCurl.dll"; } }
 
         public static string GdkToolsPath

@@ -5,7 +5,7 @@ namespace XGamingRuntime.Interop
 {
     partial class XGRInterop
     {
-        const string ThunkDllName = "XGamingRuntimeThunks";
+        const string ThunkDllName = "xgameRuntime.thunks";
 
         //STDAPI XGameRuntimeInitialize();
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
@@ -32,6 +32,12 @@ namespace XGamingRuntime.Interop
         //    ) noexcept;
         [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
         public static extern void XTaskQueueCloseHandle(XTaskQueueHandle queue);
+
+        //STDAPI_(void) XTaskQueueCloseHandle(
+        //    _In_ XTaskQueueHandle queue
+        //    ) noexcept;
+        [DllImport(ThunkDllName, CallingConvention = CallingConvention.StdCall)]
+        public static extern void XTaskQueueCloseHandle(IntPtr queue);
 
         //STDAPI_(bool) XTaskQueueDispatch(
         //    _In_ XTaskQueueHandle queue,

@@ -4,33 +4,37 @@ using XGamingRuntime.Interop;
 
 namespace XGamingRuntime
 {
-    public class XUserHandle : EquatableHandle
+    public class XUserHandle : SafeEquatableHandle
     {
-        internal XUserHandle(Interop.XUserHandle interopHandle)
+
+        internal XUserHandle(IntPtr interopHandle) :
+            base(IntPtr.Zero, true, interopHandle)
         {
-            this.InteropHandle = interopHandle;
         }
 
-        internal static Int32 WrapAndReturnHResult(Int32 hresult, Interop.XUserHandle interopHandle, out XUserHandle handle)
+        internal static Int32 WrapAndReturnHResult(Int32 hresult, IntPtr interopHandle, out XUserHandle handle)
         {
-            if (Interop.HR.SUCCEEDED(hresult))
+            if (Interop.HR.SUCCEEDED(hresult) && interopHandle != IntPtr.Zero)
             {
                 handle = new XUserHandle(interopHandle);
             }
             else
             {
-                handle = default(XUserHandle);
+                handle = null;
             }
             return hresult;
         }
 
-        internal void ClearInteropHandle()
+        protected override bool ReleaseHandle()
         {
-            this.InteropHandle = new Interop.XUserHandle();
+            XGRInterop.XUserCloseHandle(this.handle);
+            SetHandle(IntPtr.Zero);
+            return true;
         }
 
-        internal override IntPtr GetInternalPtr() { return InteropHandle.Ptr; }
-
-        internal Interop.XUserHandle InteropHandle { get; private set; }
+        public override bool IsInvalid
+        {
+            get { return this.handle == IntPtr.Zero; }
+        }
     }
 }

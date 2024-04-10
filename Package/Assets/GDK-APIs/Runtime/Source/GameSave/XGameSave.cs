@@ -55,7 +55,7 @@ namespace XGamingRuntime
             }
 
             Interop.XGameSaveProviderHandle interopProviderHandle;
-            Int32 hr = XGRInterop.XGameSaveInitializeProvider(userHandle.InteropHandle, Converters.StringToNullTerminatedUTF8ByteArray(configurationId), syncOnDemand, out interopProviderHandle);
+            Int32 hr = XGRInterop.XGameSaveInitializeProvider(userHandle.Handle, Converters.StringToNullTerminatedUTF8ByteArray(configurationId), syncOnDemand, out interopProviderHandle);
             return XGameSaveProviderHandle.WrapInteropHandleAndReturnHResult(hr, interopProviderHandle, out gameSaveProviderHandle);
         }
 
@@ -78,7 +78,7 @@ namespace XGamingRuntime
 
             });
 
-            Int32 hr = XGRInterop.XGameSaveInitializeProviderAsync(userHandle.InteropHandle, Converters.StringToNullTerminatedUTF8ByteArray(configurationId), syncOnDemand, asyncBlock);
+            Int32 hr = XGRInterop.XGameSaveInitializeProviderAsync(userHandle.Handle, Converters.StringToNullTerminatedUTF8ByteArray(configurationId), syncOnDemand, asyncBlock);
 
             if (HR.FAILED(hr))
             {

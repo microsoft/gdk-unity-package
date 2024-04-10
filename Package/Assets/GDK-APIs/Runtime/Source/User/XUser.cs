@@ -34,8 +34,8 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            Interop.XUserHandle duplicatedInteropHandle;
-            Int32 hr = XGRInterop.XUserDuplicateHandle(handle.InteropHandle, out duplicatedInteropHandle);
+            IntPtr duplicatedInteropHandle;
+            Int32 hr = XGRInterop.XUserDuplicateHandle(handle.Handle, out duplicatedInteropHandle);
             return XUserHandle.WrapAndReturnHResult(hr, duplicatedInteropHandle, out duplicatedHandle);
         }
 
@@ -46,8 +46,7 @@ namespace XGamingRuntime
                 return;
             }
 
-            XGRInterop.XUserCloseHandle(user.InteropHandle);
-            user.ClearInteropHandle();
+            user.Close();
         }
 
         public static Int32 XUserCompare(XUserHandle user1, XUserHandle user2, out Int32 comparisonResult)
@@ -58,7 +57,7 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            comparisonResult = XGRInterop.XUserCompare(user1.InteropHandle, user2.InteropHandle);
+            comparisonResult = XGRInterop.XUserCompare(user1.Handle, user2.Handle);
             return HR.S_OK;
         }
 
@@ -71,7 +70,7 @@ namespace XGamingRuntime
         {
             XAsyncBlockPtr asyncBlock = AsyncHelpers.WrapAsyncBlock(defaultQueue.handle, (XAsyncBlockPtr block) => 
             {
-                Interop.XUserHandle interopUserHandle;
+                IntPtr interopUserHandle;
                 Int32 hresult = XGRInterop.XUserAddResult(block, out interopUserHandle);
 
                 XUserHandle handle;
@@ -96,14 +95,14 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            return XGRInterop.XUserGetId(user.InteropHandle, out userId);
+            return XGRInterop.XUserGetId(user.Handle, out userId);
         }
 
         public static Int32 XUserFindUserById(UInt64 userId, out XUserHandle handle)
         {
-            Interop.XUserHandle interopHandle;
+            IntPtr interopHandle;
             Int32 hr = XGRInterop.XUserFindUserById(userId, out interopHandle);
-            if (hr == HR.S_OK && interopHandle.Ptr == IntPtr.Zero)
+            if (hr == HR.S_OK && interopHandle == IntPtr.Zero)
             {
                 // MSFT:21489553: Underlying XUserFindUserById API has a bug where invalid ids return S_OK
                 // but a null XUserHandle; don't wrap a null interopHandle in the public XUserHandle.
@@ -121,14 +120,14 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            return XGRInterop.XUserGetLocalId(user.InteropHandle, out userLocalId);
+            return XGRInterop.XUserGetLocalId(user.Handle, out userLocalId);
         }
 
         public static Int32 XUserFindUserByLocalId(XUserLocalId userLocalId, out XUserHandle handle)
         {
-            Interop.XUserHandle interopHandle;
+            IntPtr interopHandle;
             Int32 hr = XGRInterop.XUserFindUserByLocalId(userLocalId, out interopHandle);
-            if (hr == HR.S_OK && interopHandle.Ptr == IntPtr.Zero)
+            if (hr == HR.S_OK && interopHandle == IntPtr.Zero)
             {
                 // MSFT:21489553: Underlying XUserFindUserByLocalId API has a bug where invalid ids return S_OK
                 // but a null XUserHandle; don't wrap a null interopHandle in the public XUserHandle.
@@ -146,7 +145,7 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            return XGRInterop.XUserGetIsGuest(user.InteropHandle, out isGuest);
+            return XGRInterop.XUserGetIsGuest(user.Handle, out isGuest);
         }
         
         public static Int32 XUserGetState(XUserHandle user, out XUserState state)
@@ -157,7 +156,7 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            return XGRInterop.XUserGetState(user.InteropHandle, out state);
+            return XGRInterop.XUserGetState(user.Handle, out state);
         }
 
         public static Int32 XUserGetGamertag(XUserHandle user, XUserGamertagComponent gamertagComponent, out string gamertag)
@@ -187,7 +186,7 @@ namespace XGamingRuntime
 
             Byte[] gamertagBuffer = new Byte[size];
             SizeT gamertagUsed;
-            Int32 hr = XGRInterop.XUserGetGamertag(user.InteropHandle, gamertagComponent, new SizeT(gamertagBuffer.Length), gamertagBuffer, out gamertagUsed);
+            Int32 hr = XGRInterop.XUserGetGamertag(user.Handle, gamertagComponent, new SizeT(gamertagBuffer.Length), gamertagBuffer, out gamertagUsed);
 
             if (HR.SUCCEEDED(hr))
             {
@@ -226,7 +225,7 @@ namespace XGamingRuntime
                 completionRoutine(hresult, buffer);
             });
 
-            Int32 hr = XGRInterop.XUserGetGamerPictureAsync(user.InteropHandle, pictureSize, asyncBlock);
+            Int32 hr = XGRInterop.XUserGetGamerPictureAsync(user.Handle, pictureSize, asyncBlock);
 
             if (HR.FAILED(hr))
             {
@@ -243,7 +242,7 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            return XGRInterop.XUserGetAgeGroup(user.InteropHandle, out ageGroup);
+            return XGRInterop.XUserGetAgeGroup(user.Handle, out ageGroup);
         }
 
         public static Int32 XUserCheckPrivilege(XUserHandle user, XUserPrivilegeOptions options, XUserPrivilege privilege, out bool hasPrivilege, out XUserPrivilegeDenyReason reason)
@@ -255,7 +254,7 @@ namespace XGamingRuntime
                 return HR.E_INVALIDARG;
             }
 
-            return XGRInterop.XUserCheckPrivilege(user.InteropHandle, options, privilege, out hasPrivilege, out reason);
+            return XGRInterop.XUserCheckPrivilege(user.Handle, options, privilege, out hasPrivilege, out reason);
         }
 
         public static void XUserResolvePrivilegeWithUiAsync(XUserHandle user, XUserPrivilegeOptions options, XUserPrivilege privilege, XUserResolvePrivilegeWithUiCompleted completionRoutine)
@@ -272,7 +271,7 @@ namespace XGamingRuntime
                 completionRoutine(hresult);
             });
 
-            Int32 hr = XGRInterop.XUserResolvePrivilegeWithUiAsync(user.InteropHandle, options, privilege, asyncBlock);
+            Int32 hr = XGRInterop.XUserResolvePrivilegeWithUiAsync(user.Handle, options, privilege, asyncBlock);
 
             if (HR.FAILED(hr))
             {
@@ -342,7 +341,7 @@ namespace XGamingRuntime
                 }
             }
             SizeT bodyCount = new SizeT(body == null ? 0 : body.Length);
-            Int32 hr = XGRInterop.XUserGetTokenAndSignatureUtf16Async(user.InteropHandle, options, method, url, new SizeT(headerCount), interopHeaders, bodyCount, body, asyncBlock);
+            Int32 hr = XGRInterop.XUserGetTokenAndSignatureUtf16Async(user.Handle, options, method, url, new SizeT(headerCount), interopHeaders, bodyCount, body, asyncBlock);
 
             if (HR.FAILED(hr))
             {
@@ -365,7 +364,7 @@ namespace XGamingRuntime
                 completionRoutine(hresult);
             });
 
-            Int32 hr = XGRInterop.XUserResolveIssueWithUiUtf16Async(user.InteropHandle, url, asyncBlock);
+            Int32 hr = XGRInterop.XUserResolveIssueWithUiUtf16Async(user.Handle, url, asyncBlock);
 
             if (HR.FAILED(hr))
             {

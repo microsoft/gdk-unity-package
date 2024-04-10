@@ -24,7 +24,7 @@ namespace XGamingRuntime
         {
             storeContext = null;
             XStoreContextHandle context;
-            Int32 hr = XGRInterop.XStoreCreateContext(user == null ? new Interop.XUserHandle() : user.InteropHandle, out context);
+            Int32 hr = XGRInterop.XStoreCreateContext(user == null ? IntPtr.Zero : user.Handle, out context);
             if (HR.SUCCEEDED(hr))
             {
                 storeContext = new XStoreContext { handle = context };
