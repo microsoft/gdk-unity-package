@@ -316,10 +316,12 @@ namespace Microsoft.Xbox
 
         private void XGameSaveInitializeCompleted(int hresult)
         {
-            if (!Succeeded(hresult, "Initialize game save provider"))
+            if (HR.SUCCEEDED(hresult) || hresult == HR.E_GS_USER_CANCELED)
             {
                 return;
             }
+
+            Debug.LogError(string.Format("Fail XGameSaveInitialize", hresult));
         }
 
         private void GameSaveSaveCompleted(int hresult)
@@ -359,6 +361,47 @@ namespace Microsoft.Xbox
         private void UnlockAchievementComplete(int hresult)
         {
             Succeeded(hresult, "Unlock achievement");
+        }
+
+        private void SendMultiplayerGameInviteImpl()
+        {
+            XblMultiplayerActivityInfo info = new XblMultiplayerActivityInfo();
+            info.ConnectionString = "dummyConnectionString";
+            info.JoinRestriction = XblMultiplayerActivityJoinRestriction.Followed;
+            info.MaxPlayers = 10;
+            info.CurrentPlayers = 1;
+            info.GroupId = "dummyGroupId";
+
+            SDK.XBL.XblMultiplayerActivitySetActivityAsync(_xblContextHandle, info, false, (Int32 hr) =>
+            {
+                if(HR.FAILED(hr))
+                { 
+
+                    return; 
+                }
+            });
+
+            XAsyncBlock asyncBlock = new XAsyncBlock(SDK.SafeDefaultQueue, (XGamingRuntime.XAsyncBlock block) =>
+            {
+                Int32 hr = SDK.XGameUiShowMultiplayerActivityGameInviteResult(block);
+                if(HR.FAILED(hr))
+                {
+                    // Likely will only happen during development - usually indicates 
+                    // an invalid user was passed in or that there is no multiplayer activity set
+                    return;
+                }
+
+
+            }, IntPtr.Zero);
+
+            SDK.XGameUiShowMultiplayerActivityGameInviteAsync(asyncBlock, _userHandle);
+        }
+        
+        public void SendMultiplayerGameInvite()
+        {
+#if MICROSOFT_GAME_CORE || UNITY_GAMECORE
+            SendMultiplayerGameInviteImpl();
+#endif
         }
 
         private void ProcessAssociatedProductsResults(Int32 hresult, XStoreQueryResult result)

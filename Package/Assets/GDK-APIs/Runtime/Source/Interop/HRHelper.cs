@@ -6,6 +6,7 @@ namespace XGamingRuntime.Interop
     {
         public const Int32 S_OK = 0x00000000;
         public const Int32 E_INVALIDARG = unchecked((Int32)0x80070057);
+        public const Int32 E_GS_USER_CANCELED = unchecked((Int32)0x80830004);
 
         public static bool SUCCEEDED(Int32 hr)
         {

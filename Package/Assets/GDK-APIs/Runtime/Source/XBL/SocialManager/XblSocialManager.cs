@@ -198,7 +198,8 @@ namespace XGamingRuntime
                     return hresult;
                 }
 
-                users = Array.ConvertAll(interopUsers, u =>new XUserHandle(u));
+                // These user handles do not need to be closed
+                users = Array.ConvertAll(interopUsers, u =>new XUserHandle(u, false));
                 return hresult;
             }
 
@@ -248,7 +249,18 @@ namespace XGamingRuntime
 
                 IntPtr interopUser;
                 Int32 hr = XblInterop.XblSocialManagerUserGroupGetLocalUser(group.InteropHandle, out interopUser);
-                return XUserHandle.WrapAndReturnHResult(hr, interopUser, out localUser);
+
+                if (HR.SUCCEEDED(hr) && interopUser != IntPtr.Zero)
+                {
+                    // This user handle does not need to be closed
+                    localUser = new XUserHandle(interopUser, false);
+                }
+                else
+                {
+                    localUser = null;
+                }
+
+                return hr;
             }
 
             public static Int32 XblSocialManagerUserGroupGetFilters(

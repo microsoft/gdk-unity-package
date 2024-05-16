@@ -17,6 +17,8 @@ namespace XGamingRuntime.Interop
     internal struct XblSocialManagerPresenceTitleRecord
     {
         internal readonly UInt32 titleId;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = XblInterop.XBL_TITLE_NAME_CHAR_SIZE)]
+        internal readonly byte[] titleName;
         [MarshalAs(UnmanagedType.U1)]
         internal readonly bool isTitleActive;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = XblInterop.XBL_RICH_PRESENCE_CHAR_SIZE)]
@@ -30,6 +32,7 @@ namespace XGamingRuntime.Interop
         internal XblSocialManagerPresenceTitleRecord(XGamingRuntime.XblSocialManagerPresenceTitleRecord titleRecord)
         {
             this.titleId = titleRecord.TitleId;
+            this.titleName = Converters.StringToNullTerminatedUTF8ByteArray(titleRecord.TitleName, XblInterop.XBL_TITLE_NAME_CHAR_SIZE);
             this.isTitleActive = titleRecord.IsTitleActive;
             this.presenceText = Converters.StringToNullTerminatedUTF8ByteArray(titleRecord.PresenceText, XblInterop.XBL_RICH_PRESENCE_CHAR_SIZE);
             this.isBroadcasting = titleRecord.IsBroadcasting;

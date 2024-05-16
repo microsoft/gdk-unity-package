@@ -9,6 +9,7 @@ namespace XGamingRuntime
         internal XblSocialManagerPresenceTitleRecord(Interop.XblSocialManagerPresenceTitleRecord interopRecord)
         {
             this.TitleId = interopRecord.titleId;
+            this.TitleName = Converters.ByteArrayToString(interopRecord.titleName);
             this.IsTitleActive = interopRecord.isTitleActive;
             this.PresenceText = Converters.ByteArrayToString(interopRecord.presenceText);
             this.IsBroadcasting = interopRecord.isBroadcasting;
@@ -17,6 +18,7 @@ namespace XGamingRuntime
         }
 
         public UInt32 TitleId { get; private set; }
+        public string TitleName { get; private set; }
         public bool IsTitleActive { get; private set; }
         public string PresenceText { get; private set; }
         public bool IsBroadcasting { get; private set; }

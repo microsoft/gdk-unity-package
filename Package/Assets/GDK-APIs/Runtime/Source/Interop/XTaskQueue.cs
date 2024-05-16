@@ -20,7 +20,7 @@ namespace XGamingRuntime.Interop
     [StructLayout(LayoutKind.Sequential)]
     public struct XTaskQueueHandle
     {
-        private readonly IntPtr intPtr;
+        internal readonly IntPtr intPtr;
     }
 
     //struct XTaskQueueRegistrationToken

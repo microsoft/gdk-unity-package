@@ -16,5 +16,7 @@ namespace Microsoft.Xbox
         {
             return hr < 0;
         }
+
+        internal const Int32 E_GS_USER_CANCELED = unchecked((Int32)0x80830004);
     }
 }

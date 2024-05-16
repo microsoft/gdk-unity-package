@@ -43,6 +43,9 @@ namespace XGamingRuntime.Interop
         //#define XBL_RICH_PRESENCE_CHAR_SIZE             (100 * 3)
         internal const Int32 XBL_RICH_PRESENCE_CHAR_SIZE = (100 * 3);
 
+        //#define XBL_TITLE_NAME_CHAR_SIZE
+        internal const Int32 XBL_TITLE_NAME_CHAR_SIZE = (100 * 3);
+
         //#define XBL_XBOX_USER_ID_CHAR_SIZE              (21 * 3)
         internal const Int32 XBL_XBOX_USER_ID_CHAR_SIZE = (21 * 3);
 
