@@ -12,6 +12,11 @@ namespace XGamingRuntime
         {
         }
 
+        internal XUserHandle(IntPtr interopHandle, bool ownsHandle) :
+            base(IntPtr.Zero, ownsHandle, interopHandle)
+        {
+        }
+        
         internal static Int32 WrapAndReturnHResult(Int32 hresult, IntPtr interopHandle, out XUserHandle handle)
         {
             if (Interop.HR.SUCCEEDED(hresult) && interopHandle != IntPtr.Zero)

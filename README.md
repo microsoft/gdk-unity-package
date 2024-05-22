@@ -1,3 +1,5 @@
+***Update:*** This GDK Unity package will be deprecated by December 31, 2024. It is superseded by the new Microsoft GDK Packages for Unity, available via the Package Manager in [Unity 6](https://unity.com/releases/editor/whats-new/6000.0.0). See this [forum post](https://forum.unity.com/threads/unity-and-microsoft-announce-the-microsoft-gdk-packages-for-unity-for-unity-2021-and-2022-lts.1590543/#post-9817860) for more information.
+
 # GDK Unity Package (PC Only)
 
 > This package is developed and supported by Microsoft and is not affiliated with Unity Technologies. 
