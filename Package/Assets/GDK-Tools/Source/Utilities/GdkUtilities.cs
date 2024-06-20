@@ -10,7 +10,7 @@ namespace Microsoft.GameCore.Utilities
     {
         public static string XsapiLibName { get { return "Microsoft.Xbox.Services.GDK.C.Thunks.dll"; } }
         public static string XCurlLibName { get { return "XCurl.dll"; } }
-
+        public static string HttpClientName { get { return "libHttpClient.GDK.dll"; } } 
         public static string GdkToolsPath
         {
             get
@@ -33,7 +33,7 @@ namespace Microsoft.GameCore.Utilities
                     // Reset paths to get new versions
                     _xsapiLibPath = "";
                     _xCurlLibPath = "";
-
+                    _httpClientPath = "";
                     _gdkVersion = RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "GRDKLatest");
                 }
 
@@ -70,6 +70,22 @@ namespace Microsoft.GameCore.Utilities
                 }
 
                 return _xCurlLibPath;
+            }
+        }
+
+        public static string HttpClientPath
+        {
+            get
+            {
+                if (!File.Exists(_httpClientPath))
+                {
+                    _httpClientPath = Path.Combine(Path.Combine(RegUtil.GetRegKey(RegUtil.HKEY_LOCAL_MACHINE, @"SOFTWARE\WOW6432Node\Microsoft\GDK", "GRDKInstallPath"), 
+                                                 GdkVersion), 
+                                                 Path.Combine(@"GRDK\ExtensionLibraries\Xbox.LibHttpClient\Redist\CommonConfiguration\neutral", 
+                                                 HttpClientName));
+                }
+
+                return _httpClientPath;
             }
         }
 
@@ -139,6 +155,7 @@ namespace Microsoft.GameCore.Utilities
         private static string _gdkVersion;
         private static string _xsapiLibPath;
         private static string _xCurlLibPath;
+        private static string _httpClientPath;
         private static string _gdkToolsPath;
         private static string _pluginDllPath;
         private static string _rootPluginPath;
@@ -154,11 +171,16 @@ namespace Microsoft.GameCore.Utilities
 
             string xsapiPath = Path.Combine(PluginDllPath, XsapiLibName);
             string xCurlPath = Path.Combine(PluginDllPath, XCurlLibName);
-            bool requiresXCurl = int.Parse(GdkVersion.Substring(0, 4)) >= 2110;
+            string httpClientPath = Path.Combine(PluginDllPath, HttpClientName);
+            
+            int gdkMajorVersion = int.Parse(GdkVersion.Substring(0, 4)); 
+            bool requiresXCurl = gdkMajorVersion >= 2110;
+            bool requiresHttpClient = gdkMajorVersion >= 2406;
 
             if (!oldGdkVersion.Equals(GdkVersion) ||
                 !File.Exists(xsapiPath) || 
-                (requiresXCurl && !File.Exists(xCurlPath)))
+                (requiresXCurl && !File.Exists(xCurlPath)) ||
+                (requiresHttpClient && !File.Exists(httpClientPath)))
             {
                 if (!File.Exists(XsapiLibPath))
                 {
@@ -171,6 +193,11 @@ namespace Microsoft.GameCore.Utilities
                 if (File.Exists(XCurlLibPath))
                 {
                     File.Copy(XCurlLibPath, Path.Combine(PluginDllPath, XCurlLibName), true);
+                }
+
+                if (File.Exists(HttpClientPath))
+                {
+                    File.Copy(HttpClientPath, httpClientPath, true);
                 }
             }
         }
