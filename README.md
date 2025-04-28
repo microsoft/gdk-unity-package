@@ -1,50 +1,11 @@
-***Update:*** This GDK Unity package will be deprecated by December 31, 2024. It is superseded by the new Microsoft GDK Packages for Unity, available via the Package Manager in [Unity 6](https://unity.com/releases/editor/whats-new/6000.0.0). See this [forum post](https://forum.unity.com/threads/unity-and-microsoft-announce-the-microsoft-gdk-packages-for-unity-for-unity-2021-and-2022-lts.1590543/#post-9817860) for more information.
+# GDK Unity Package (PC Only) Deprecation
 
-# GDK Unity Package (PC Only)
+The GDK Unity Package (PC Only) provided by Microsoft via GitHub has been deprecated as of December 31st, 2024. Alongside the release of April 2025 GDK, the Microsoft GDK documentation and GitHub now point to the new Microsoft GDK packages for Unity that provide capabilities to build GDK games across PC & Consoles.
 
-> This package is developed and supported by Microsoft and is not affiliated with Unity Technologies. 
+If you are using Unity as your game engine and want to learn more about the supported GDK packages to use, please see these links:
 
-## Overview 
+*  [Unity and Microsoft announce the Microsoft GDK packages for Unity](https://aka.ms/unity_gdk_public_announce)
 
-The GDK Unity package provides a way for PC GDK developers to integrate Game Core runtime functionality and Xbox Live functionality into their [Unity](https://unity3d.com/) based game. 
+*  [Get started with Unity](http://aka.ms/unity_gdk_gettingstarted)
 
-[![Build](https://github.com/microsoft/gdk-unity-package/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/microsoft/gdk-unity-package/actions/workflows/main.yml) 
-
-## Supported Versions of Unity 
-
-The GDK Unity package supports Unity 2017.4 and newer. 
-
-## How to use 
-
-1. Make sure you have the [GDK](https://aka.ms/gdk) installed.
-
-2. Download the Unity package from the [releases](https://github.com/microsoft/gdk-unity-package/releases) tab. 
-
-3. Import the Unity package into your Unity project. 
-
-4. Follow our [Unity E2E guide](https://docs.microsoft.com/en-us/gaming/gdk/_content/gc/get-started-with-pc-dev/get-started-with-unity-pc/gdk-unity-end-to-end-guide) for info on everything from setup to shipping.
-
-## What's inside
-
-The plugin contains the following:
-
-- `/GDK-APIs` - This folder contains the C# projections of Game Core Runtime APIs and Xbox Live APIs.
-- `/GDK-Tools` - This folder contains developer tools to help integrate the GDK.
-- `/GDK-Tools/Examples` - This folder contains samples for some common GDK scenarios.
-- `/GDK-Tools/ProjectMetadata` - This folder contains the game's `MicrosoftGame.Config` file.
-
-## Contributing 
-
-This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit  [https://cla.opensource.microsoft.com](https://cla.opensource.microsoft.com/). 
-
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA. 
-
-### Having Trouble? 
-
-We'd love to get your review score, whether good or bad, but even more than that, we want to fix your problem. If you submit your issue as a Review, we won't be able to respond to your problem and ask any follow-up questions that may be necessary. The most efficient way to do that is to open a an issue in our [issue tracker](https://github.com/Microsoft/gdk-unity-package/issues).  The team will be engaged with the community and be continually improving our APIs, tools, and documentation based on the feedback received. 
-
-### GDK GitHub projects 
-
-*  [Playfab Party Unity Plugin](https://github.com/PlayFab/PlayFabPartyUnity) 
-
-This project has adopted the  [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the  [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/)  or contact  [opencode@microsoft.com](mailto:opencode@microsoft.com)  with any additional questions or comments. 
+If you have any questions, please reach out to your Microsoft representative.
